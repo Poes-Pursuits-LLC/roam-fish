@@ -1,0 +1,1 @@
+export const isProduction = Boolean($app.stage === 'production')
