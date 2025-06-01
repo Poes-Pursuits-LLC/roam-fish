@@ -1,2 +1,5 @@
-// import 
-// const app =  new Hono();
+import { Hono } from 'hono'
+
+const main = new Hono()
+
+export { main }
