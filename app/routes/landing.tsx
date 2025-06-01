@@ -17,7 +17,11 @@ export function meta({}: Route.MetaArgs) {
     ]
 }
 
-export default function LandingPage() {
+export const serverLoader = async () => {
+    // get destination
+}
+
+export default function LandingPage({ loaderData }) {
     return (
         <div className="min-h-screen bg-white">
             <Navbar />

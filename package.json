@@ -4,10 +4,11 @@
   "type": "module",
   "scripts": {
     "build": "react-router build",
-    "dev": "react-router dev",
+    "local": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc",
-    "deploy": "npx sst deploy --stage production"
+    "quality-check": "lint . && react-router typegen && tsc",
+    "deploy-dev": "npx sst deploy --stage production",
+    "deploy-prod": "npx sst deploy --stage production"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
