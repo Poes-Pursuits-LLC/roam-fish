@@ -4,3 +4,5 @@
 2. Tear down old version of app
 3. lambda server, "react" frontend, dynamo for data. maybe a queue for fun? we shall see.
 4. instantiate first page and import new lovable project.
+5. test suite for hono server and active dynamo elements via electroDB.
+6. finalize data model

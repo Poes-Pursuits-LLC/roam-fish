@@ -1,32 +1,32 @@
 import type { Route } from './+types/home'
-import { useNavigate } from 'react-router-dom'
-import { Fish, MapPin, Calendar } from 'lucide-react'
-import Navbar from '@/components/Navbar'
-import Hero from '@/components/Hero'
-import Features from '@/components/Features'
-import SearchBar from '@/components/SearchBar'
-import Destinations from '@/components/Destinations'
-import FAQ from '@/components/FAQ'
-import Footer from '@/components/Footer'
+import Navbar from '~/ui/components/Navbar'
+import Hero from '~/ui/components/Hero'
+import Features from '~/ui/components/Features'
+import { Search } from '~/ui/components/Search'
+import { Destinations } from '~/ui/components//Destinations'
+import { FAQ } from '~/ui/components/FAQ'
+import { Footer } from '~/ui/components/Footer'
 
 export function meta({}: Route.MetaArgs) {
     return [
-        { title: 'New React Router App' },
-        { name: 'description', content: 'Welcome to React Router!' },
+        { title: 'Roam.Fish' },
+        {
+            name: 'description',
+            content: 'The simplest fish trip planner in existence',
+        },
     ]
-}ut
+}
 
 export default function LandingPage() {
-        return (
-            <div className="min-h-screen bg-white">
-                <Navbar />
-                <Hero />
-                <Features />
-                <SearchBar />
-                <Destinations />
-                <FAQ />
-                <Footer />
-            </div>
-        )
-    }
+    return (
+        <div className="min-h-screen bg-white">
+            <Navbar />
+            <Hero />
+            <Features />
+            <Search />
+            <Destinations />
+            <FAQ />
+            <Footer />
+        </div>
+    )
 }

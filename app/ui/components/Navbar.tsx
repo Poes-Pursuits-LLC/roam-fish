@@ -1,26 +1,27 @@
+import { NavLink } from 'react-router'
+
 const Navbar = () => {
     return (
         <nav className="bg-stone-50 border-b-4 border-black px-6 py-4">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
-                <div
+                <NavLink
                     className="flex items-center space-x-2 cursor-pointer"
-                    onClick={() => navigate('/')}
+                    to="/"
                 >
                     <span className="text-2xl font-black uppercase tracking-wide text-slate-800">
                         Roam.Fish
                     </span>
-                </div>
+                </NavLink>
 
                 <div className="flex items-center space-x-4">
-                    <link href="/plan-trip" className="neo-button-primary">
+                    <NavLink to="/plan-trip" className="neo-button-primary">
                         Plan Trip
-                    </link>
-                    <button
-                        onClick={() => navigate('/login')}
-                        className="neo-button bg-emerald-700 text-white border-black"
-                    >
-                        Login
-                    </button>
+                    </NavLink>
+                    <NavLink to="/login">
+                        <button className="neo-button bg-emerald-700 text-white border-black">
+                            Login
+                        </button>
+                    </NavLink>
                 </div>
             </div>
         </nav>
