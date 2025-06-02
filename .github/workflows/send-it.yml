@@ -1,0 +1,50 @@
+# name: Deploy to Production
+
+# on:
+#   schedule:
+#     - cron: "0 0 * * *"
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout develop branch
+#         uses: actions/checkout@v4
+#         with:
+#           ref: develop
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: "20"
+#           cache: "npm"
+
+#       - name: Install dependencies
+#         run: npm ci
+
+#       - name: Run e2e tests
+#         run: npm run e2e
+
+#       - name: Merge develop into main
+#         if: success()
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         run: |
+#           git config --global user.name "github-actions[bot]"
+#           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+#           git fetch origin main
+#           git checkout main
+#           git merge --no-ff origin/develop -m "Automated merge of develop into main [skip ci]"
+#           git push origin main
+
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ${{ secrets.AWS_REGION }}
+
+#       - name: Deploy
+#         run: |
+#           # Replace with your actual deploy command
+#           npm run deploy

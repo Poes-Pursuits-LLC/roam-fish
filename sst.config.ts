@@ -1,6 +1,4 @@
-/// <reference path="./.sst/platform/config.d.ts" />
-
-import { readdirSync } from 'fs'
+import type {} from './.sst/platform/config'
 
 export default $config({
     app(input) {
@@ -14,7 +12,9 @@ export default $config({
     async run() {
         const outputs = {}
 
-        for (const value of readdirSync('./infrastructure/')) {
+        const fs = await import('fs')
+
+        for (const value of fs.readdirSync('./infrastructure/')) {
             const result = await import('./infrastructure/' + value)
             if (result.outputs) Object.assign(outputs, result.outputs)
         }

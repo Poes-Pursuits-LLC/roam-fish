@@ -81,71 +81,71 @@ body {
 }
 
 @layer utilities {
-  .border-border {
-    border-color: hsl(var(--border) / 1);
-  }
-  .bg-background {
-    background-color: hsl(var(--background) / 1);
-  }
-  .text-foreground {
-    color: hsl(var(--foreground) / 1);
-  }
-  .bg-card {
-    background-color: hsl(var(--card) / 1);
-  }
-  .text-card-foreground {
-    color: hsl(var(--card-foreground) / 1);
-  }
-  .bg-popover {
-    background-color: hsl(var(--popover) / 1);
-  }
-  .text-popover-foreground {
-    color: hsl(var(--popover-foreground) / 1);
-  }
-  .bg-primary {
-    background-color: hsl(var(--primary) / 1);
-  }
-  .text-primary-foreground {
-    color: hsl(var(--primary-foreground) / 1);
-  }
-  .bg-secondary {
-    background-color: hsl(var(--secondary) / 1);
-  }
-  .text-secondary-foreground {
-    color: hsl(var(--secondary-foreground) / 1);
-  }
-  .bg-muted {
-    background-color: hsl(var(--muted) / 1);
-  }
-  .text-muted-foreground {
-    color: hsl(var(--muted-foreground) / 1);
-  }
-  .bg-accent {
-    background-color: hsl(var(--accent) / 1);
-  }
-  .text-accent-foreground {
-    color: hsl(var(--accent-foreground) / 1);
-  }
-  .bg-destructive {
-    background-color: hsl(var(--destructive) / 1);
-  }
-  .text-destructive-foreground {
-    color: hsl(var(--destructive-foreground) / 1);
-  }
-  .border-input {
-    border-color: hsl(var(--input) / 1);
-  }
-  .ring-ring {
-    --tw-ring-color: hsl(var(--ring) / 1);
-  }
+    .border-border {
+        border-color: hsl(var(--border) / 1);
+    }
+    .bg-background {
+        background-color: hsl(var(--background) / 1);
+    }
+    .text-foreground {
+        color: hsl(var(--foreground) / 1);
+    }
+    .bg-card {
+        background-color: hsl(var(--card) / 1);
+    }
+    .text-card-foreground {
+        color: hsl(var(--card-foreground) / 1);
+    }
+    .bg-popover {
+        background-color: hsl(var(--popover) / 1);
+    }
+    .text-popover-foreground {
+        color: hsl(var(--popover-foreground) / 1);
+    }
+    .bg-primary {
+        background-color: hsl(var(--primary) / 1);
+    }
+    .text-primary-foreground {
+        color: hsl(var(--primary-foreground) / 1);
+    }
+    .bg-secondary {
+        background-color: hsl(var(--secondary) / 1);
+    }
+    .text-secondary-foreground {
+        color: hsl(var(--secondary-foreground) / 1);
+    }
+    .bg-muted {
+        background-color: hsl(var(--muted) / 1);
+    }
+    .text-muted-foreground {
+        color: hsl(var(--muted-foreground) / 1);
+    }
+    .bg-accent {
+        background-color: hsl(var(--accent) / 1);
+    }
+    .text-accent-foreground {
+        color: hsl(var(--accent-foreground) / 1);
+    }
+    .bg-destructive {
+        background-color: hsl(var(--destructive) / 1);
+    }
+    .text-destructive-foreground {
+        color: hsl(var(--destructive-foreground) / 1);
+    }
+    .border-input {
+        border-color: hsl(var(--input) / 1);
+    }
+    .ring-ring {
+        --tw-ring-color: hsl(var(--ring) / 1);
+    }
 }
 
 .neo-button {
-    @apply bg-slate-800 text-stone-100 border-4 border-black px-6 py-3 font-bold uppercase tracking-wide transform transition-transform hover:translate-x-1 hover:translate-y-1 active:translate-x-0 active:translate-y-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+    @apply cursor-pointer border-4 border-black px-6 py-3 font-bold uppercase tracking-wide transform transition-transform hover:translate-x-1 hover:translate-y-1 active:translate-x-0 active:translate-y-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
 }
 
-.neo-button-primary {
-    @apply bg-amber-400 text-black border-4 border-black px-6 py-3 font-bold uppercase tracking-wide transform transition-transform hover:translate-x-1 hover:translate-y-1 active:translate-x-0 active:translate-y-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+.neo-button-for-login {
+    @apply cursor-pointer bg-amber-400 text-black text-lg border-4 border-black px-6 py-3 font-bold uppercase tracking-wide transform transition-transform hover:translate-x-1 hover:translate-y-1 active:translate-x-0 active:translate-y-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
 }
 
 .neo-card {

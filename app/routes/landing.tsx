@@ -1,13 +1,15 @@
-import type { Route } from './+types/home'
-import Navbar from '~/ui/components/Navbar'
-import Hero from '~/ui/components/Hero'
-import Features from '~/ui/components/Features'
-import { Search } from '~/ui/components/Search'
-import { Destinations } from '~/ui/components//Destinations'
-import { FAQ } from '~/ui/components/FAQ'
-import { Footer } from '~/ui/components/Footer'
+import Hero from '~/ui/Hero'
+import Features from '~/ui/Features'
+import { Search } from '~/ui/Search'
+import { Destinations } from '~/ui/Destinations'
+import { FAQ } from '~/ui/FAQ'
+import { Footer } from '~/ui/Footer'
+import Navbar from '~/ui/Navbar'
+import type { Route } from './+types/landing'
+import { hc } from 'hono/client'
+import type { AppType } from '~/server/main'
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
     return [
         { title: 'Roam.Fish' },
         {
@@ -17,18 +19,21 @@ export function meta({}: Route.MetaArgs) {
     ]
 }
 
-export const serverLoader = async () => {
-    // get destination
+export async function loader() {
+    const client = hc<AppType>(process.env.SERVER_URL!)
+    const result = await client.destinations.$get()
+    const { destinations } = await result.json()
+    return destinations
 }
 
-export default function LandingPage({ loaderData }) {
+export default function LandingPage({ loaderData }: Route.ComponentProps) {
     return (
         <div className="min-h-screen bg-white">
             <Navbar />
             <Hero />
             <Features />
             <Search />
-            <Destinations />
+            <Destinations destinations={loaderData} />
             <FAQ />
             <Footer />
         </div>

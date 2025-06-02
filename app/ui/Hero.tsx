@@ -13,16 +13,17 @@ const Hero = () => {
                     fish of your dreams
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <NavLink to="/plan-trip">
-                        <button className="neo-button-primary text-xl px-8 py-4">
-                            Start Planning
-                        </button>
+                    <NavLink
+                        to="/plan-trip"
+                        className="neo-button text-xl px-8 py-4 bg-amber-400"
+                    >
+                        Start Planning
                     </NavLink>
                     <button
                         onClick={() =>
                             scrollToElement({ elementId: '#destinations' })
                         }
-                        className="neo-button text-xl px-8 py-4 bg-stone-100 text-black border-black"
+                        className="neo-button text-xl px-8 py-4 bg-slate-700 text-slate-100 cursor-pointer"
                     >
                         Explore Destinations
                     </button>

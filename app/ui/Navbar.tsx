@@ -14,13 +14,17 @@ const Navbar = () => {
                 </NavLink>
 
                 <div className="flex items-center space-x-4">
-                    <NavLink to="/plan-trip" className="neo-button-primary">
+                    <NavLink
+                        to="/plan-trip"
+                        className="neo-button bg-amber-400"
+                    >
                         Plan Trip
                     </NavLink>
-                    <NavLink to="/login">
-                        <button className="neo-button bg-emerald-700 text-white border-black">
-                            Login
-                        </button>
+                    <NavLink
+                        to="/login"
+                        className="neo-button bg-emerald-700 text-white border-black"
+                    >
+                        Login
                     </NavLink>
                 </div>
             </div>
