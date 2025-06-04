@@ -20,9 +20,7 @@ const Hero = () => {
                         Start Planning
                     </NavLink>
                     <button
-                        onClick={() =>
-                            scrollToElement({ elementId: '#destinations' })
-                        }
+                        onClick={() => scrollToElement('destinations')}
                         className="neo-button text-xl px-8 py-4 bg-slate-700 text-slate-100 cursor-pointer"
                     >
                         Explore Destinations
