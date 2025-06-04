@@ -1,12 +1,13 @@
 import Hero from '~/ui/Hero'
 import Features from '~/ui/Features'
-import { Destinations } from '~/ui/Destinations'
+import { Destinations, DestinationsFallback } from '~/ui/Destinations'
 import { FAQ } from '~/ui/FAQ'
 import { Footer } from '~/ui/Footer'
 import Navbar from '~/ui/Navbar'
 import type { Route } from './+types/landing'
 import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
+import { Suspense } from 'react'
 
 export function meta() {
     return [
@@ -20,18 +21,23 @@ export function meta() {
 
 export async function loader() {
     const client = hc<AppType>(process.env.SERVER_URL!)
-    const result = await client.destinations.$get()
-    const { destinations } = await result.json()
-    return destinations
+    const getDestinationsPromise = client.destinations
+        .$get()
+        .then((res) => res.json())
+        .then((data) => data.destinations)
+    return { getDestinationsPromise }
 }
 
 export default function LandingPage({ loaderData }: Route.ComponentProps) {
+    const { getDestinationsPromise } = loaderData
     return (
         <div className="min-h-screen bg-white">
             <Navbar />
             <Hero />
             <Features />
-            <Destinations destinations={loaderData} />
+            <Suspense fallback={<DestinationsFallback />}>
+                <Destinations promise={getDestinationsPromise} />
+            </Suspense>
             <FAQ />
             <Footer />
         </div>

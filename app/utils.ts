@@ -23,7 +23,6 @@ export const handleAsync = async <T>(
     }
 }
 
-// Debounce utility: returns a debounced version of the function
 export function debounce<T extends (...args: unknown[]) => void>(
     fn: T,
     delay: number,
