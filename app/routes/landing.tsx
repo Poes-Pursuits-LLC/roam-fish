@@ -1,6 +1,5 @@
 import Hero from '~/ui/Hero'
 import Features from '~/ui/Features'
-import { Search } from '~/ui/Search'
 import { Destinations } from '~/ui/Destinations'
 import { FAQ } from '~/ui/FAQ'
 import { Footer } from '~/ui/Footer'
@@ -32,7 +31,6 @@ export default function LandingPage({ loaderData }: Route.ComponentProps) {
             <Navbar />
             <Hero />
             <Features />
-            <Search />
             <Destinations destinations={loaderData} />
             <FAQ />
             <Footer />
