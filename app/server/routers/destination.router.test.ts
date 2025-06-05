@@ -17,7 +17,7 @@ describe('/getDestinations', () => {
     it('should successfully retrieve all destinations as requested', async () => {
         const destinations = [
             { destinationId: 'destinationId' },
-        ] as Destination[]
+        ] as unknown as Destination[]
         const mockedGetDestinations = vi
             .spyOn(destinationService, 'getDestinations')
             .mockResolvedValue(destinations)

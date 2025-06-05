@@ -1,20 +1,23 @@
 import { useState } from 'react'
 import { MapPin, Calendar, Fish, Clock } from 'lucide-react'
+import type { Destination } from '~/core/destination/destination.model'
 
 interface TripFormProps {
     onSubmit: (data: any) => void
 }
 
 const TripForm = ({ onSubmit }: TripFormProps) => {
-    const [location, setLocation] = useState('')
+    const [destination, setDestination] = useState<Destination['name']>('')
     const [date, setDate] = useState('')
     const [fishType, setFishType] = useState('')
     const [duration, setDuration] = useState('')
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
+        // zodSafeParse against schema
+        // if not valid,
         onSubmit({
-            location,
+            destination,
             date,
             fishType,
             duration,
@@ -33,8 +36,8 @@ const TripForm = ({ onSubmit }: TripFormProps) => {
                     </label>
                     <input
                         type="text"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
+                        value={destination}
+                        onChange={(e) => setDestination(e.target.value)}
                         className="neo-input w-full"
                         placeholder="Lake Tahoe, Pacific Ocean..."
                         required

@@ -39,3 +39,7 @@ export function debounce<T extends (...args: unknown[]) => void>(
     }
     return debounced as typeof debounced & { cancel: () => void }
 }
+
+export const createFormattedDate = () => {
+    return new Date().toISOString().slice(0, 10)
+}

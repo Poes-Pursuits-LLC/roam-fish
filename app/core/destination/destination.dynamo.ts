@@ -34,16 +34,6 @@ export const DynamoDestination = () => {
                     type: 'string',
                     required: true,
                 },
-                gsi1pk: {
-                    type: 'string',
-                    required: true,
-                    default: 'destination',
-                },
-                gsi1sk: {
-                    type: 'string',
-                    required: true,
-                    default: '',
-                },
                 createdAt: {
                     type: 'string',
                     required: true,
@@ -52,24 +42,21 @@ export const DynamoDestination = () => {
                     type: 'string',
                     required: true,
                 },
+                type: {
+                    type: 'string',
+                    required: true,
+                    default: () => 'destination',
+                },
             },
             indexes: {
-                byDestinationId: {
-                    pk: {
-                        field: 'pk',
-                        composite: ['destinationId'],
-                    },
-                    sk: {
-                        field: 'sk',
-                        composite: ['name'],
-                    },
+                primary: {
+                    pk: { field: 'pk', composite: ['destinationId'] },
+                    sk: { field: 'sk', composite: ['createdAt'] },
                 },
-                getAll: {
+                allDestinations: {
                     index: 'gsi1pk-gsi1sk-index',
-                    pk: {
-                        field: 'gsi1pk',
-                        composite: ['gsi1pk'],
-                    },
+                    pk: { field: 'gsi1pk', composite: ['type'] },
+                    sk: { field: 'gsi1sk', composite: ['createdAt'] },
                 },
             },
         },

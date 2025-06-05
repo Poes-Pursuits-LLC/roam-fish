@@ -3,8 +3,22 @@ import { ArrowLeft, Fish } from 'lucide-react'
 import TripForm from '~/ui/TripForm'
 import TripLoader from '~/ui/TripLoader'
 import { NavLink } from 'react-router'
+import type { Route } from './+types/plan-trip'
+import { hc } from 'hono/client'
+import { getAuth } from '@clerk/react-router/ssr.server'
 
-export default function PlanTripPage() {
+export async function loader(args: Route.LoaderArgs) {
+    // auth check
+}
+
+export async function clientAction({ request }: Route.ClientActionArgs) {
+    const formData = await request.formData()
+    const destinationName = formData.get('destinationName')
+    const startDate = formData.get('startDate')
+    const endDate = formData.get('endDate')
+}
+
+export default function PlanTripPage({ actionData }: Route.ComponentProps) {
     const [isLoading, setIsLoading] = useState(false)
 
     const handleTripSubmit = async () => {

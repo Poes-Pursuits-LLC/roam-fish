@@ -30,6 +30,14 @@ declare module "sst" {
       "type": "sst.aws.React"
       "url": string
     }
+    "XAiApiKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "XAiUrl": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
   }
 }
 /// <reference path="sst-env.d.ts" />

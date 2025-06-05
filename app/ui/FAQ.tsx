@@ -38,7 +38,7 @@ export const FAQ = () => {
                                         openIndex === index ? null : index,
                                     )
                                 }
-                                className="w-full text-left p-2 font-bold text-lg uppercase tracking-wide hover:text-emerald-700 transition-colors text-slate-800"
+                                className="cursor-pointer w-full text-left p-2 font-bold text-lg uppercase tracking-wide hover:text-emerald-700 transition-colors text-slate-800"
                             >
                                 {faq.question}
                             </button>

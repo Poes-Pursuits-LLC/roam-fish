@@ -3,8 +3,14 @@ import { scrollToElement } from '~/utils'
 
 const Hero = () => {
     return (
-        <section className="px-6 py-20 bg-gradient-to-br from-stone-200 to-stone-300 border-b-4 border-black">
-            <div className="max-w-4xl mx-auto text-center">
+        <section className="relative px-6 py-20 bg-gradient-to-br from-stone-200 to-stone-300 border-b-4 border-black">
+            <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+                style={{
+                    backgroundImage: `url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80')`,
+                }}
+            />
+            <div className="relative max-w-4xl mx-auto text-center">
                 <h1 className="neo-header mb-6 text-slate-800">
                     Plan Your Perfect Fishing Adventure
                 </h1>
