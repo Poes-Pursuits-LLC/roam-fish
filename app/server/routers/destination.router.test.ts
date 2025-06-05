@@ -1,7 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { destinationService } from '~/core/destination/destination.service'
-import { main } from '../main'
 import type { Destination } from '~/core/destination/destination.model'
+import { destinationRouter } from './destination.router'
+import { Hono } from 'hono'
+import { testClient } from 'hono/testing'
 
 vi.mock('~/core/destination/destination.service.ts', () => ({
     destinationService: {
@@ -9,26 +11,25 @@ vi.mock('~/core/destination/destination.service.ts', () => ({
     },
 }))
 
-beforeEach(() => {
-    vi.resetAllMocks()
-})
+vi.mock('../main', () => ({
+    main: new Hono().route('/', destinationRouter),
+}))
+import { main } from '../main'
 
 describe('/getDestinations', () => {
     it('should successfully retrieve all destinations as requested', async () => {
+        const client = testClient(main)
         const destinations = [
             { destinationId: 'destinationId' },
-        ] as unknown as Destination[]
-        const mockedGetDestinations = vi
-            .spyOn(destinationService, 'getDestinations')
+        ] as Destination[]
+        const getDestinations = vi
+            .mocked(destinationService.getDestinations)
             .mockResolvedValue(destinations)
 
-        const res = await main.request('/destinations', {
-            method: 'GET',
-        })
+        const response = await client.destinations.$get()
 
-        expect(mockedGetDestinations).toHaveBeenCalledOnce()
-        expect(res.status).toBe(200)
-        expect(await res.json()).toEqual({
+        expect(getDestinations).toHaveBeenCalledOnce()
+        expect(await response.json()).toEqual({
             destinations,
         })
     })

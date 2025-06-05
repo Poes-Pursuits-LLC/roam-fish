@@ -1,62 +1,124 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { main } from '../main'
+import { describe, expect, it, vi } from 'vitest'
+import { testClient } from 'hono/testing'
 import { tripService } from '~/core/trip/trip.service'
+import { tripRouter } from './trip.router'
+import { Hono } from 'hono'
 
-vi.mock('~/core/destination/trip.service.ts', () => ({
+vi.mock('../main', () => ({
+    main: new Hono().route('/', tripRouter),
+}))
+import { main } from '../main'
+import { TripStatusEnum, type Trip } from '~/core/trip/trip.model'
+
+vi.mock('~/core/trip/trip.service.ts', () => ({
     tripService: {
-        getUserTrips: vi.fn(),
+        getTrip: vi.fn(),
         createTrip: vi.fn(),
-        createTripDetails: vi.fn(),
+        submitTripDetails: vi.fn(),
+        getTripDetails: vi.fn(),
+        updateTrip: vi.fn(),
     },
 }))
 
-beforeEach(() => {
-    vi.resetAllMocks()
-})
-
 describe('/create-trip', () => {
-    it('should create a trip and open a stream to get the trip contents while also saving the final trip details', async () => {
+    it('should submit trip details to be generated and then create the trip and return its id', async () => {
+        const client = testClient(main)
         const inputs = {
             startDate: '2027-04-12',
             endDate: '2027-05-12',
             userId: 'userId',
             destinationName: 'Central Pennsylvania',
-            travelerCount: 2,
         }
-        const mockCreateTrip = vi
-            .spyOn(tripService, 'createTrip')
-            .mockResolvedValue()
-        const mockCreateTripDetails = vi.spyOn(tripService, 'createTripDetails')
-        const mockSaveTripDetailsFromStream = vi.spyOn(
-            tripService,
-            'saveTripDetailsFromStream',
-        )
+        const tripId = 'tripId'
+        const contentId = 'contentId'
 
-        const res = await main.request('/create-trip', {
-            method: 'POST',
-            body: JSON.stringify(inputs),
+        const submitTripDetails = vi
+            .mocked(tripService.submitTripDetails)
+            .mockResolvedValue(contentId)
+        const createTrip = vi
+            .mocked(tripService.createTrip)
+            .mockResolvedValue(tripId)
+
+        const response = await client.createTrip.$post({
+            json: inputs,
         })
 
-        expect(mockCreateTrip).toHaveBeenCalledWith({
-            userId: inputs.userId,
-            startDate: inputs.startDate,
-            endDate: inputs.endDate,
+        expect(submitTripDetails).toHaveBeenCalledOnce()
+        expect(submitTripDetails).toHaveBeenCalledWith(inputs)
+        expect(createTrip).toHaveBeenCalledOnce()
+        expect(createTrip).toHaveBeenCalledWith({
+            ...inputs,
+            contentId,
+            status: TripStatusEnum.Generating,
         })
-        expect(mockCreateTrip).toHaveBeenCalledOnce()
+        expect(await response.json()).toEqual({ tripId })
+    })
+})
 
-        expect(mockCreateTripDetails).toHaveBeenCalledWith({
-            userId: inputs.userId,
-            destinationName: inputs.destinationName,
-            travelerCount: inputs.travelerCount,
+describe('/getTrip', () => {
+    it('should get a trip based on the provided tripId', async () => {
+        const client = testClient(main)
+        const tripId = 'tripId'
+        const trip = {
+            tripId,
+            startDate: '2026-02-11',
+        } as Trip
+        const getTrip = vi.mocked(tripService.getTrip).mockResolvedValue(trip)
+
+        const response = await client.getTrip.$get({
+            query: {
+                tripId,
+            },
         })
-        expect(mockCreateTripDetails).toHaveBeenCalledOnce()
 
-        expect(mockSaveTripDetailsFromStream).toHaveBeenCalledWith(
-            typeof stream,
-        )
-        expect(mockSaveTripDetailsFromStream).toHaveBeenCalledOnce()
+        expect(getTrip).toHaveBeenCalledOnce()
+        expect(getTrip).toHaveBeenCalledWith(tripId)
+        expect(await response.json()).toEqual({ trip })
+    })
 
-        expect(res.status).toEqual(200)
-        expect(res.headers.get('content-type')).toEqual('stream')
+    it('should, for a trip whose content was still generating, self-heal by calling xAi to get its contents and save them to the trip before returning', async () => {
+        const client = testClient(main)
+        const tripId = 'tripId'
+        const contentId = 'contentId'
+        const trip = {
+            tripId,
+            startDate: '2026-02-11',
+            status: TripStatusEnum.Generating,
+            contentId,
+        } as Trip
+        const tripDetails = {
+            name: 'name',
+            description: 'description',
+        }
+        const updatedTrip = {
+            ...trip,
+            ...tripDetails,
+        } as Trip
+
+        const getTrip = vi.mocked(tripService.getTrip).mockResolvedValue(trip)
+        const getTripDetails = vi
+            .mocked(tripService.getTripDetails)
+            .mockResolvedValue(tripDetails)
+        const updateTrip = vi
+            .mocked(tripService.updateTrip)
+            .mockResolvedValue(updatedTrip)
+
+        const response = await client.getTrip.$get({
+            query: {
+                tripId,
+            },
+        })
+
+        expect(getTrip).toHaveBeenCalledOnce()
+        expect(getTrip).toHaveBeenCalledWith(tripId)
+        expect(getTripDetails).toHaveBeenCalledOnce()
+        expect(getTripDetails).toHaveBeenCalledWith(contentId)
+        expect(updateTrip).toHaveBeenCalledOnce()
+        expect(updateTrip).toHaveBeenCalledWith(updatedTrip)
+        expect(await response.json()).toEqual({ trip: updatedTrip })
+    })
+
+    it('should, for trips that are marked still in progress and have no content from xAi yet, return a status indicator so we know', async () => {
+        //
     })
 })

@@ -8,7 +8,10 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
     plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
     test: {
-        include: ['./app/server/routers/*.*.test.ts'],
-        exclude: [],
+        include: ['./app/**/*.test.ts'],
+        environment: 'node',
+        silent: 'passed-only',
+        mockReset: true,
+        watch: false,
     },
 })

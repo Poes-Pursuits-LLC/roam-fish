@@ -1,6 +1,17 @@
-import { PromptEnum, xAiClient } from '~/clients/xai.client'
 import { DynamoTrip } from './trip.dynamo'
 import type { Trip } from './trip.model'
+import { getTripDetails as getTripDetailsHelper } from './helpers/get-trip-details'
+import { postTripDetails } from './helpers/post-trip-details'
+
+const getTrip = async (tripId: string) => {
+    const { data: trip } = await DynamoTrip().get({ tripId }).go()
+    return trip
+}
+
+const getTripDetails = async (contentId: string) => {
+    const tripDetails = await getTripDetailsHelper(contentId)
+    return tripDetails
+}
 
 const getUserTrips = async (userId: string) => {
     const { data: trips } = await DynamoTrip().query.byUserId({ userId }).go()
@@ -8,34 +19,34 @@ const getUserTrips = async (userId: string) => {
 }
 
 const createTrip = async (
-    trip: Pick<Trip, 'startDate' | 'endDate' | 'userId'>,
+    trip: Pick<
+        Trip,
+        'startDate' | 'endDate' | 'userId' | 'contentId' | 'status'
+    >,
 ) => {
-    await DynamoTrip().put(trip).go()
+    const { data } = await DynamoTrip().put(trip).go()
+    return data.tripId
 }
 
-const createTripDetails = async (inputs: {
+const submitTripDetails = async (inputs: {
     destinationName: string
     startDate: string
     endDate: string
-    travelerCount: number
 }) => {
-    const tripDetails = await xAiClient.submitPrompt({
-        inputs,
-        prompt: PromptEnum.CreateTripDetails,
-    })
-    return tripDetails
+    const contentId = await postTripDetails(inputs)
+    return contentId
 }
 
-const saveTripDetails = async (trip: Trip) => {
-    await DynamoTrip().put(trip).go()
+const updateTrip = async (trip: Trip) => {
+    const { data: updatedTrip } = await DynamoTrip().patch(trip).set(trip).go()
+    return updatedTrip
 }
-
-const saveTripDetailsFromStream = () => {}
 
 export const tripService = {
+    getTrip,
+    getTripDetails,
     getUserTrips,
     createTrip,
-    createTripDetails,
-    saveTripDetails,
-    saveTripDetailsFromStream,
+    submitTripDetails,
+    updateTrip,
 }

@@ -13,7 +13,7 @@ export async function action({ request }: Route.ActionArgs) {
     const startDate = String(formData.get('startDate'))
 
     const client = hc<AppType>(process.env.SERVER_URL!)
-    await client.createTrip.$post({
+    const response = await client.createTrip.$post({
         json: {
             destinationName,
             startDate,
@@ -23,7 +23,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function PlanTripPage({ actionData }: Route.ComponentProps) {
-    const [isLoading] = useState(Boolean(!actionData))
+    const [isLoading, setIsLoading] = useState(false)
 
     return (
         <div className="min-h-screen bg-stone-100">
@@ -47,16 +47,15 @@ export default function PlanTripPage({ actionData }: Route.ComponentProps) {
                             Let&apos;s catch some fish!
                         </p>
                     </div>
+
                     {isLoading ? (
                         <TripLoader />
                     ) : (
-                        <>
-                            <div className="flex justify-center">
-                                <div className="w-full max-w-lg">
-                                    <TripForm />
-                                </div>
+                        <div className="flex justify-center">
+                            <div className="w-full max-w-lg">
+                                <TripForm />
                             </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>

@@ -3,6 +3,7 @@ import { Resource } from 'sst'
 import { getDynamoClient } from '~/clients/table.client'
 import { createFormattedDate } from '~/utils'
 import { nanoid } from 'nanoid'
+import { TripStatusEnum } from './trip.model'
 
 export const DynamoTrip = () => {
     const client = getDynamoClient()
@@ -54,6 +55,14 @@ export const DynamoTrip = () => {
                             quantity: { type: 'number' },
                         },
                     },
+                },
+                contentId: {
+                    type: 'string',
+                    required: true,
+                },
+                status: {
+                    type: [...Object.values(TripStatusEnum)] as const,
+                    required: true,
                 },
                 startDate: {
                     type: 'string',

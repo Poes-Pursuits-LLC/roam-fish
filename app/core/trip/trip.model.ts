@@ -7,6 +7,7 @@ export interface Trip {
     cities?: string[]
     packingListing?: PackingListItem[]
     status: TripStatusEnum
+    contentId: string
     startDate: string
     endDate: string
     createdAt: string
@@ -18,7 +19,7 @@ interface PackingListItem {
     quantity: number
 }
 
-enum TripStatusEnum {
+export enum TripStatusEnum {
     Generating = 'Generating',
     Planned = 'Planned',
     Completed = 'Completed',
