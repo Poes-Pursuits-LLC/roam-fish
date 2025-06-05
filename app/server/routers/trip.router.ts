@@ -1,11 +1,11 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
-import { handleAsync } from '~/utils'
-import { tripService } from '~/core/trip/trip.service'
+import { PromptEnum, xAiClient } from '~/clients/xai.client'
+import { streamSSE } from 'hono/streaming'
 
 const tripRouter = new Hono().post(
-    '/create-trip',
+    '/createTrip',
     zValidator(
         'json',
         z.object({
@@ -18,18 +18,22 @@ const tripRouter = new Hono().post(
     async (c) => {
         const inputs = c.req.valid('json')
 
-        const [trip, createTripError] = await handleAsync(
-            tripService.createTrip({
+        const tripContentStream = xAiClient.submitPrompt({
+            inputs: {
+                destinationName: inputs.destinationName,
                 startDate: inputs.startDate,
-                endDate: inputs.endDate,
-                ...(inputs.userId && { userId: inputs.userId }),
-            }),
-        )
-        if (createTripError) {
-            console.error(createTripError)
-        }
+            },
+            prompt: PromptEnum.CreateTripDetails,
+        })
+        console.info('here is our tripContentStream', tripContentStream)
 
-        // create trip details stream.
+        return streamSSE(c, async (sseStream) => {
+            for await (const chunk of tripContentStream) {
+                await sseStream.writeSSE({
+                    data: JSON.stringify(chunk),
+                })
+            }
+        })
     },
 )
 

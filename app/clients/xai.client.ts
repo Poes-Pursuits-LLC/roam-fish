@@ -17,7 +17,7 @@ const getXAiClient = () => {
     }
 }
 
-const submitPrompt = async <T>({
+const submitPrompt = <T>({
     inputs,
     prompt,
 }: {

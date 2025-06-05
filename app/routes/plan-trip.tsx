@@ -1,31 +1,29 @@
-import { useState } from 'react'
 import { ArrowLeft, Fish } from 'lucide-react'
 import TripForm from '~/ui/TripForm'
 import TripLoader from '~/ui/TripLoader'
 import { NavLink } from 'react-router'
 import type { Route } from './+types/plan-trip'
 import { hc } from 'hono/client'
-import { getAuth } from '@clerk/react-router/ssr.server'
+import type { AppType } from '~/server/main'
+import { useState } from 'react'
 
-export async function loader(args: Route.LoaderArgs) {
-    // auth check
-}
-
-export async function clientAction({ request }: Route.ClientActionArgs) {
+export async function action({ request }: Route.ActionArgs) {
     const formData = await request.formData()
-    const destinationName = formData.get('destinationName')
-    const startDate = formData.get('startDate')
-    const endDate = formData.get('endDate')
+    const destinationName = String(formData.get('destinationName'))
+    const startDate = String(formData.get('startDate'))
+
+    const client = hc<AppType>(process.env.SERVER_URL!)
+    await client.createTrip.$post({
+        json: {
+            destinationName,
+            startDate,
+            endDate: startDate,
+        },
+    })
 }
 
 export default function PlanTripPage({ actionData }: Route.ComponentProps) {
-    const [isLoading, setIsLoading] = useState(false)
-
-    const handleTripSubmit = async () => {
-        setIsLoading(true)
-        await new Promise((resolve) => setTimeout(resolve, 3000))
-        setIsLoading(false)
-    }
+    const [isLoading] = useState(Boolean(!actionData))
 
     return (
         <div className="min-h-screen bg-stone-100">
@@ -49,14 +47,13 @@ export default function PlanTripPage({ actionData }: Route.ComponentProps) {
                             Let&apos;s catch some fish!
                         </p>
                     </div>
-
                     {isLoading ? (
                         <TripLoader />
                     ) : (
                         <>
                             <div className="flex justify-center">
                                 <div className="w-full max-w-lg">
-                                    <TripForm onSubmit={handleTripSubmit} />
+                                    <TripForm />
                                 </div>
                             </div>
                         </>

@@ -1,34 +1,19 @@
 import { useState } from 'react'
 import { MapPin, Calendar, Fish, Clock } from 'lucide-react'
 import type { Destination } from '~/core/destination/destination.model'
+import { Form } from 'react-router'
 
-interface TripFormProps {
-    onSubmit: (data: any) => void
-}
-
-const TripForm = ({ onSubmit }: TripFormProps) => {
+const TripForm = () => {
     const [destination, setDestination] = useState<Destination['name']>('')
-    const [date, setDate] = useState('')
+    const [startDate, setStartDate] = useState('')
     const [fishType, setFishType] = useState('')
     const [duration, setDuration] = useState('')
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        // zodSafeParse against schema
-        // if not valid,
-        onSubmit({
-            destination,
-            date,
-            fishType,
-            duration,
-        })
-    }
 
     return (
         <div className="neo-card">
             <h2 className="neo-subheader mb-6 text-black">Trip Details</h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <Form action="/plan-trip" method="post" className="space-y-6">
                 <div>
                     <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
                         <MapPin className="w-5 h-5" />
@@ -36,6 +21,7 @@ const TripForm = ({ onSubmit }: TripFormProps) => {
                     </label>
                     <input
                         type="text"
+                        name="destinationName"
                         value={destination}
                         onChange={(e) => setDestination(e.target.value)}
                         className="neo-input w-full"
@@ -51,8 +37,9 @@ const TripForm = ({ onSubmit }: TripFormProps) => {
                     </label>
                     <input
                         type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
+                        name="startDate"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
                         className="neo-input w-full"
                         required
                     />
@@ -104,7 +91,7 @@ const TripForm = ({ onSubmit }: TripFormProps) => {
                 >
                     Generate Trip Plan
                 </button>
-            </form>
+            </Form>
         </div>
     )
 }
