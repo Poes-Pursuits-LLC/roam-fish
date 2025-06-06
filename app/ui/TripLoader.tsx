@@ -1,23 +1,30 @@
 import { useState, useEffect } from 'react'
 import { Fish } from 'lucide-react'
 import { Progress } from './Progress'
+import { useNavigate } from 'react-router'
 
-const TripLoader = () => {
+const TripLoader = ({ tripId }: { tripId: string }) => {
+    const navigate = useNavigate()
     const [progress, setProgress] = useState(0)
+    const DURATION = 20000
+    const INTERVAL = 50
+    const totalSteps = Math.ceil(DURATION / INTERVAL)
+    const incrementPerStep = 100 / totalSteps
 
     useEffect(() => {
         const timer = setInterval(() => {
             setProgress((oldProgress) => {
                 if (oldProgress >= 100) {
                     clearInterval(timer)
+                    navigate(`/trip/${tripId}`)
                     return 100
                 }
-                return oldProgress + 2
+                return Math.min(100, oldProgress + incrementPerStep)
             })
-        }, 60)
+        }, INTERVAL)
 
         return () => clearInterval(timer)
-    }, [])
+    }, [navigate])
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[400px] space-y-8">

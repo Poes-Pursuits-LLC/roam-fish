@@ -9,8 +9,8 @@ const destinationRouter = new Hono().get('/destinations', async (c) => {
     )
     if (getDestinationsError) {
         console.error(getDestinationsError)
+        throw new Error(getDestinationsError.message)
     }
-    console.info(`Retrieved ${destinations!.length} destinations`)
 
     return c.json({
         destinations: destinations!,

@@ -20,7 +20,7 @@ export const DynamoTrip = () => {
                 tripId: {
                     type: 'string',
                     required: true,
-                    default: () => nanoid(),
+                    default: () => nanoid().toLowerCase(),
                 },
                 name: {
                     type: 'string',

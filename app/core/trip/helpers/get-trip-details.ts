@@ -9,5 +9,9 @@ export const getTripDetails = async (contentId: string) => {
             Authorization: `Bearer ${Resource.XAiApiKey.value}`,
         },
     })
-    return response.choices[0].message.content
+
+    if (!response.choices?.[0]?.message?.content) {
+        return null
+    }
+    return JSON.parse(response.choices[0].message.content)
 }

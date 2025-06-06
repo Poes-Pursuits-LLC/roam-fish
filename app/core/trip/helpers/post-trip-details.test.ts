@@ -20,12 +20,12 @@ const inputs = {
     startDate: '2024-06-01',
     endDate: '2024-06-07',
 }
-const responseId = 'resp_123456789'
+const requestId = 'resp_123456789'
 
 it('should use the rest client to make a post request to the xAi completion endpoint with the included inputs and return the response id', async () => {
     const restClientPostSpy = vi
         .spyOn(restClient, 'post')
-        .mockResolvedValue({ response_id: responseId })
+        .mockResolvedValue({ request_id: requestId })
 
     const contentId = await postTripDetails(inputs)
 
@@ -41,7 +41,7 @@ it('should use the rest client to make a post request to the xAi completion endp
         }),
     )
     expect(restClientPostSpy).toHaveBeenCalledOnce()
-    expect(contentId).toBe(responseId)
+    expect(contentId).toBe(requestId)
 })
 
 it('should throw an error if the API call fails', async () => {

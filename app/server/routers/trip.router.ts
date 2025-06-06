@@ -35,12 +35,24 @@ const tripRouter = new Hono()
                 }
 
                 if (tripContent) {
-                    const [updatedTrip, updateTripError] = await handleAsync(
-                        tripService.updateTrip({ ...trip, ...tripContent }),
+                    const [_, updateTripError] = await handleAsync(
+                        tripService.updateTrip({
+                            ...trip,
+                            ...tripContent,
+                            status: TripStatusEnum.Planned,
+                        }),
                     )
                     if (updateTripError) {
                         console.error(updateTripError)
                         throw new Error(updateTripError.message)
+                    }
+
+                    const [updatedTrip, getTripError] = await handleAsync(
+                        tripService.getTrip(tripId),
+                    )
+                    if (getTripError) {
+                        console.error(getTripError)
+                        throw new Error(getTripError.message)
                     }
 
                     return c.json({
@@ -73,7 +85,7 @@ const tripRouter = new Hono()
             )
             if (submitTripDetailsError) {
                 console.error(submitTripDetailsError)
-                return c.json({ error: 'Failed to submit trip details' }, 500)
+                throw new Error(submitTripDetailsError.message)
             }
 
             const [tripId, createTripError] = await handleAsync(
@@ -85,7 +97,7 @@ const tripRouter = new Hono()
             )
             if (createTripError) {
                 console.error(createTripError)
-                return c.json({ error: 'Failed to create trip' }, 500)
+                throw new Error(createTripError.message)
             }
 
             return c.json({ tripId })

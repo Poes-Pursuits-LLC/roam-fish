@@ -5,7 +5,6 @@ import { NavLink } from 'react-router'
 import type { Route } from './+types/plan-trip'
 import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
-import { useState } from 'react'
 
 export async function action({ request }: Route.ActionArgs) {
     const formData = await request.formData()
@@ -13,18 +12,21 @@ export async function action({ request }: Route.ActionArgs) {
     const startDate = String(formData.get('startDate'))
 
     const client = hc<AppType>(process.env.SERVER_URL!)
-    const response = await client.createTrip.$post({
-        json: {
-            destinationName,
-            startDate,
-            endDate: startDate,
-        },
-    })
+    const tripId = await client.createTrip
+        .$post({
+            json: {
+                destinationName,
+                startDate,
+                endDate: startDate,
+            },
+        })
+        .then((res) => res.json())
+        .then((data) => data.tripId)
+    return { tripId }
 }
 
 export default function PlanTripPage({ actionData }: Route.ComponentProps) {
-    const [isLoading, setIsLoading] = useState(false)
-
+    const { tripId } = actionData || { tripId: null }
     return (
         <div className="min-h-screen bg-stone-100">
             <div className="px-6 py-8">
@@ -48,8 +50,8 @@ export default function PlanTripPage({ actionData }: Route.ComponentProps) {
                         </p>
                     </div>
 
-                    {isLoading ? (
-                        <TripLoader />
+                    {tripId ? (
+                        <TripLoader tripId={tripId} />
                     ) : (
                         <div className="flex justify-center">
                             <div className="w-full max-w-lg">

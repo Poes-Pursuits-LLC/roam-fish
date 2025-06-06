@@ -38,8 +38,14 @@ const submitTripDetails = async (inputs: {
 }
 
 const updateTrip = async (trip: Trip) => {
-    const { data: updatedTrip } = await DynamoTrip().patch(trip).set(trip).go()
-    return updatedTrip
+    await DynamoTrip()
+        .patch({ tripId: trip.tripId })
+        .set({
+            name: trip.name,
+            description: trip.description,
+            status: trip.status,
+        })
+        .go()
 }
 
 export const tripService = {
