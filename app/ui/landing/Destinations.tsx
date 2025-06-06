@@ -1,17 +1,19 @@
 import { MapPin, Fish } from 'lucide-react'
 import { useEffect, useState, useMemo, use } from 'react'
+import { useNavigate } from 'react-router'
 import type { Destination } from '~/core/destination/destination.model'
 import { debounce } from '~/utils'
 
 export const Destinations = (
     props: Readonly<{ promise: Promise<Destination[]> }>,
 ) => {
-    const destinations = use(props.promise)
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [displayDestinations, setDisplayDestinations] = useState<
         Destination[]
     >([])
 
+    const destinations = use(props.promise)
+    const navigate = useNavigate()
     const debouncedFilter = useMemo(
         () =>
             debounce((...args: unknown[]) => {
@@ -73,6 +75,7 @@ export const Destinations = (
                         .slice(0, 6)
                         .map((destination, index) => (
                             <div
+                                onClick={() => navigate('/plan-trip')}
                                 key={index}
                                 className="neo-card group cursor-pointer hover:translate-x-2 hover:translate-y-2 transition-transform bg-stone-50 flex flex-col"
                             >

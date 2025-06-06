@@ -21,7 +21,14 @@ const getUserTrips = async (userId: string) => {
 const createTrip = async (
     trip: Pick<
         Trip,
-        'startDate' | 'endDate' | 'userId' | 'contentId' | 'status'
+        | 'startDate'
+        | 'duration'
+        | 'userId'
+        | 'contentId'
+        | 'status'
+        | 'destinationName'
+        | 'headcount'
+        | 'packingList'
     >,
 ) => {
     const { data } = await DynamoTrip().put(trip).go()
@@ -31,19 +38,18 @@ const createTrip = async (
 const submitTripDetails = async (inputs: {
     destinationName: string
     startDate: string
-    endDate: string
+    duration: string
+    headcount: string
 }) => {
     const contentId = await postTripDetails(inputs)
     return contentId
 }
 
-const updateTrip = async (trip: Trip) => {
+const updateTrip = async (tripId: string, tripFields: Partial<Trip>) => {
     await DynamoTrip()
-        .patch({ tripId: trip.tripId })
+        .patch({ tripId })
         .set({
-            name: trip.name,
-            description: trip.description,
-            status: trip.status,
+            ...tripFields,
         })
         .go()
 }

@@ -93,15 +93,17 @@ describe('/getTrip', () => {
         const updatedTrip = {
             ...trip,
             ...tripDetails,
+            status: TripStatusEnum.Planned,
         } as Trip
 
-        const getTrip = vi.mocked(tripService.getTrip).mockResolvedValue(trip)
+        const getTrip = vi
+            .mocked(tripService.getTrip)
+            .mockResolvedValueOnce(trip)
+            .mockResolvedValueOnce(updatedTrip)
         const getTripDetails = vi
             .mocked(tripService.getTripDetails)
             .mockResolvedValue(tripDetails)
-        const updateTrip = vi
-            .mocked(tripService.updateTrip)
-            .mockResolvedValue(updatedTrip)
+        const updateTrip = vi.mocked(tripService.updateTrip)
 
         const response = await client.getTrip.$get({
             query: {
@@ -109,12 +111,15 @@ describe('/getTrip', () => {
             },
         })
 
-        expect(getTrip).toHaveBeenCalledOnce()
+        expect(getTrip).toHaveBeenCalledTimes(2)
         expect(getTrip).toHaveBeenCalledWith(tripId)
         expect(getTripDetails).toHaveBeenCalledOnce()
         expect(getTripDetails).toHaveBeenCalledWith(contentId)
         expect(updateTrip).toHaveBeenCalledOnce()
-        expect(updateTrip).toHaveBeenCalledWith(updatedTrip)
+        expect(updateTrip).toHaveBeenCalledWith(tripId, {
+            ...tripDetails,
+            status: TripStatusEnum.Planned,
+        })
         expect(await response.json()).toEqual({ trip: updatedTrip })
     })
 

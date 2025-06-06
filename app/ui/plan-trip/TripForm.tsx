@@ -1,13 +1,15 @@
 import { useState } from 'react'
-import { MapPin, Calendar, Fish, Clock } from 'lucide-react'
+import { MapPin, Calendar, Clock, Users } from 'lucide-react'
 import type { Destination } from '~/core/destination/destination.model'
 import { Form } from 'react-router'
+import { TripDurationEnum } from '~/core/trip/trip.model'
+import { SuspendedDestinationSelect } from './DestinationSelect'
 
-const TripForm = () => {
-    const [destination, setDestination] = useState<Destination['name']>('')
+const TripForm = ({ promise }: { promise: Promise<Destination[]> }) => {
+    const [destination, setDestination] = useState<Destination | null>(null)
     const [startDate, setStartDate] = useState('')
-    const [fishType, setFishType] = useState('')
     const [duration, setDuration] = useState('')
+    const [headcount, setHeadcount] = useState('')
 
     return (
         <div className="neo-card">
@@ -19,16 +21,13 @@ const TripForm = () => {
                         <MapPin className="w-5 h-5" />
                         Location
                     </label>
-                    <input
-                        type="text"
-                        name="destinationName"
-                        value={destination}
-                        onChange={(e) => setDestination(e.target.value)}
-                        className="neo-input w-full"
-                        placeholder="Lake Tahoe, Pacific Ocean..."
-                        required
-                    />
                 </div>
+                <SuspendedDestinationSelect
+                    destinationsPromise={promise}
+                    value={destination}
+                    onChange={setDestination}
+                    required
+                />
 
                 <div>
                     <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
@@ -45,26 +44,19 @@ const TripForm = () => {
                     />
                 </div>
 
-                <div>
-                    <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
-                        <Fish className="w-5 h-5" />
-                        Target Fish
-                    </label>
-                    <select
-                        value={fishType}
-                        onChange={(e) => setFishType(e.target.value)}
-                        className="neo-input w-full"
-                        required
-                    >
-                        <option value="">Select fish type</option>
-                        <option value="bass">Bass</option>
-                        <option value="trout">Trout</option>
-                        <option value="salmon">Salmon</option>
-                        <option value="catfish">Catfish</option>
-                        <option value="pike">Pike</option>
-                        <option value="any">Any Fish</option>
-                    </select>
-                </div>
+                <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
+                    <Users className="w-5 h-5" />
+                    Headcount
+                </label>
+                <input
+                    type="number"
+                    name="headcount"
+                    value={headcount}
+                    onChange={(e) => setHeadcount(e.target.value)}
+                    className="neo-input w-full"
+                    placeholder="Enter number of travelers"
+                    required
+                />
 
                 <div>
                     <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
@@ -77,11 +69,11 @@ const TripForm = () => {
                         className="neo-input w-full"
                         required
                     >
-                        <option value="">Select duration</option>
-                        <option value="half-day">Half Day (4 hours)</option>
-                        <option value="full-day">Full Day (8 hours)</option>
-                        <option value="weekend">Weekend</option>
-                        <option value="week">Week Long</option>
+                        {Object.values(TripDurationEnum).map((duration) => (
+                            <option key={duration} value={duration}>
+                                {duration}
+                            </option>
+                        ))}
                     </select>
                 </div>
 

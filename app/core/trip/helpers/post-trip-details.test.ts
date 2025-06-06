@@ -19,6 +19,8 @@ const inputs = {
     destinationName: 'Yellowstone',
     startDate: '2024-06-01',
     endDate: '2024-06-07',
+    headcount: '2',
+    duration: 'Weekend',
 }
 const requestId = 'resp_123456789'
 

@@ -3,7 +3,7 @@ import { Resource } from 'sst'
 import { getDynamoClient } from '~/clients/table.client'
 import { createFormattedDate } from '~/utils'
 import { nanoid } from 'nanoid'
-import { TripStatusEnum } from './trip.model'
+import { TripDurationEnum, TripStatusEnum } from './trip.model'
 
 export const DynamoTrip = () => {
     const client = getDynamoClient()
@@ -26,6 +26,10 @@ export const DynamoTrip = () => {
                     type: 'string',
                     required: false,
                 },
+                destinationName: {
+                    type: 'string',
+                    required: false,
+                },
                 description: {
                     type: 'string',
                     required: false,
@@ -45,12 +49,44 @@ export const DynamoTrip = () => {
                         type: 'string',
                     },
                 },
+                headcount: {
+                    type: 'string',
+                    required: true,
+                },
+                notes: {
+                    type: 'string',
+                    required: false,
+                },
+                flies: {
+                    type: 'list',
+                    required: false,
+                    items: {
+                        type: 'string',
+                    },
+                },
+                hatches: {
+                    type: 'list',
+                    required: false,
+                    items: {
+                        type: 'string',
+                    },
+                },
+                tacticsSummary: {
+                    type: 'string',
+                    required: false,
+                },
+                weather: {
+                    type: 'string',
+                    required: false,
+                },
                 packingList: {
                     type: 'list',
                     required: false,
                     items: {
                         type: 'map',
                         properties: {
+                            id: { type: 'string' },
+                            category: { type: 'string' },
                             name: { type: 'string' },
                             quantity: { type: 'number' },
                         },
@@ -68,8 +104,8 @@ export const DynamoTrip = () => {
                     type: 'string',
                     required: true,
                 },
-                endDate: {
-                    type: 'string',
+                duration: {
+                    type: [...Object.values(TripDurationEnum)] as const,
                     required: true,
                 },
                 createdAt: {

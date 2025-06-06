@@ -9,6 +9,7 @@ export default defineConfig({
     plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
     test: {
         include: ['./app/**/*.test.ts'],
+        exclude: ['**/*.integration.test.ts'],
         environment: 'node',
         silent: 'passed-only',
         mockReset: true,

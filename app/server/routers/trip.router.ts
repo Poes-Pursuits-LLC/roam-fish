@@ -3,7 +3,8 @@ import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { tripService } from '~/core/trip/trip.service'
 import { handleAsync } from '~/utils'
-import { TripStatusEnum } from '~/core/trip/trip.model'
+import { TripDurationEnum, TripStatusEnum } from '~/core/trip/trip.model'
+import { createDefaultPackingList } from '~/core/trip/helpers/create-default-packing-list'
 
 const tripRouter = new Hono()
     .get(
@@ -35,9 +36,8 @@ const tripRouter = new Hono()
                 }
 
                 if (tripContent) {
-                    const [_, updateTripError] = await handleAsync(
-                        tripService.updateTrip({
-                            ...trip,
+                    const [, updateTripError] = await handleAsync(
+                        tripService.updateTrip(trip!.tripId, {
                             ...tripContent,
                             status: TripStatusEnum.Planned,
                         }),
@@ -73,7 +73,8 @@ const tripRouter = new Hono()
             z.object({
                 destinationName: z.string(),
                 startDate: z.string(),
-                endDate: z.string(),
+                duration: z.nativeEnum(TripDurationEnum),
+                headcount: z.string(),
                 userId: z.string().optional(),
             }),
         ),
@@ -93,6 +94,8 @@ const tripRouter = new Hono()
                     ...inputs,
                     contentId: contentId!,
                     status: TripStatusEnum.Generating,
+                    duration: inputs.duration,
+                    packingList: createDefaultPackingList(inputs.headcount),
                 }),
             )
             if (createTripError) {

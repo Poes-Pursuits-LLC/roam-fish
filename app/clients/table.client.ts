@@ -2,9 +2,18 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 
 let client: DynamoDBClient | undefined
 
-export function getDynamoClient() {
+export const getDynamoClient = (endpoint?: string) => {
     if (!client) {
-        client = new DynamoDBClient()
+        client = new DynamoDBClient({
+            ...(endpoint && {
+                endpoint,
+                region: 'us-east-1',
+                credentials: {
+                    accessKeyId: 'local',
+                    secretAccessKey: 'local',
+                },
+            }),
+        })
     }
     return client
 }

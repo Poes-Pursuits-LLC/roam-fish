@@ -1,15 +1,27 @@
 import { ArrowLeft, Fish } from 'lucide-react'
-import TripForm from '~/ui/TripForm'
-import TripLoader from '~/ui/TripLoader'
+import TripForm from '~/ui/plan-trip/TripForm'
+import TripLoader from '~/ui/plan-trip/TripLoader'
 import { NavLink } from 'react-router'
 import type { Route } from './+types/plan-trip'
 import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
+import type { TripDurationEnum } from '~/core/trip/trip.model'
+
+export async function loader() {
+    const client = hc<AppType>(process.env.SERVER_URL!)
+    const getDestinationsPromise = client.destinations
+        .$get()
+        .then((res) => res.json())
+        .then((data) => data.destinations)
+    return { getDestinationsPromise }
+}
 
 export async function action({ request }: Route.ActionArgs) {
     const formData = await request.formData()
     const destinationName = String(formData.get('destinationName'))
     const startDate = String(formData.get('startDate'))
+    const headcount = String(formData.get('headcount'))
+    const duration = String(formData.get('duration')) as TripDurationEnum
 
     const client = hc<AppType>(process.env.SERVER_URL!)
     const tripId = await client.createTrip
@@ -17,16 +29,23 @@ export async function action({ request }: Route.ActionArgs) {
             json: {
                 destinationName,
                 startDate,
-                endDate: startDate,
+                headcount,
+                duration,
             },
         })
         .then((res) => res.json())
         .then((data) => data.tripId)
+
     return { tripId }
 }
 
-export default function PlanTripPage({ actionData }: Route.ComponentProps) {
+export default function PlanTripPage({
+    loaderData,
+    actionData,
+}: Route.ComponentProps) {
+    const { getDestinationsPromise } = loaderData
     const { tripId } = actionData || { tripId: null }
+
     return (
         <div className="min-h-screen bg-stone-100">
             <div className="px-6 py-8">
@@ -55,7 +74,7 @@ export default function PlanTripPage({ actionData }: Route.ComponentProps) {
                     ) : (
                         <div className="flex justify-center">
                             <div className="w-full max-w-lg">
-                                <TripForm />
+                                <TripForm promise={getDestinationsPromise} />
                             </div>
                         </div>
                     )}

@@ -25,7 +25,7 @@ it('should use the rest client to make a GET request to the xAi API to get gener
         choices: [
             {
                 message: {
-                    content: tripDetails,
+                    content: JSON.stringify(tripDetails),
                 },
             },
         ],
