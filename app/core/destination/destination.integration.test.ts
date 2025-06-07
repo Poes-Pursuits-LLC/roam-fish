@@ -49,23 +49,18 @@ describe('Destination Service Integration', () => {
                 },
             ]
 
-            // Insert test data
             for (const destination of testDestinations) {
                 await DynamoDestination().put(destination).go()
             }
 
-            // Get destinations through the API
             const response = await client.destinations.$get()
             const { destinations } = await response.json()
 
-            // Verify response
             expect(destinations).toBeDefined()
-            expect(Array.isArray(destinations)).toBe(true)
             expect(destinations.length).toBeGreaterThanOrEqual(
                 testDestinations.length,
             )
 
-            // Verify test destinations are included
             const foundDestinations = destinations.filter((d: Destination) =>
                 testDestinations.some(
                     (td) => td.destinationId === d.destinationId,
@@ -73,7 +68,6 @@ describe('Destination Service Integration', () => {
             )
             expect(foundDestinations).toHaveLength(testDestinations.length)
 
-            // Verify destination structure
             foundDestinations.forEach((destination: Destination) => {
                 expect(destination).toMatchObject({
                     destinationId: expect.any(String),

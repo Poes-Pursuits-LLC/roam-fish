@@ -4,7 +4,7 @@ import { destinationService } from '~/core/destination/destination.service'
 import { handleAsync } from '~/utils'
 
 const destinationRouter = new Hono().get('/destinations', async (c) => {
-    console.info('Retrieving destinations...')
+    console.info('Invoked server.getDestinations')
     const [destinations, getDestinationsError] = await handleAsync(
         destinationService.getDestinations(),
     )
@@ -15,7 +15,7 @@ const destinationRouter = new Hono().get('/destinations', async (c) => {
     }
 
     return c.json({
-        destinations: destinations!,
+        destinations: destinations ?? [],
     })
 })
 
