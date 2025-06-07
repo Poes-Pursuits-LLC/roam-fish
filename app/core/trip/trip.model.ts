@@ -2,7 +2,6 @@ export interface Trip {
     tripId: string
     name?: string
     destinationName: string
-    description?: string
     userId?: string
     airport?: string
     cities?: string[]

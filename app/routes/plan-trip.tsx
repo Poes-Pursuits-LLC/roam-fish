@@ -6,14 +6,19 @@ import type { Route } from './+types/plan-trip'
 import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
 import type { TripDurationEnum } from '~/core/trip/trip.model'
+import { getAuth } from '@clerk/react-router/ssr.server'
 
-export async function loader() {
+export async function loader(args: Route.LoaderArgs) {
+    const { userId } = await getAuth(args)
+
     const client = hc<AppType>(process.env.SERVER_URL!)
+
     const getDestinationsPromise = client.destinations
         .$get()
         .then((res) => res.json())
         .then((data) => data.destinations)
-    return { getDestinationsPromise }
+
+    return { userId, getDestinationsPromise }
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -22,6 +27,7 @@ export async function action({ request }: Route.ActionArgs) {
     const startDate = String(formData.get('startDate'))
     const headcount = String(formData.get('headcount'))
     const duration = String(formData.get('duration')) as TripDurationEnum
+    const userId = String(formData.get('userId'))
 
     const client = hc<AppType>(process.env.SERVER_URL!)
     const tripId = await client.createTrip
@@ -31,6 +37,7 @@ export async function action({ request }: Route.ActionArgs) {
                 startDate,
                 headcount,
                 duration,
+                ...(userId && { userId }),
             },
         })
         .then((res) => res.json())
@@ -43,7 +50,7 @@ export default function PlanTripPage({
     loaderData,
     actionData,
 }: Route.ComponentProps) {
-    const { getDestinationsPromise } = loaderData
+    const { getDestinationsPromise, userId } = loaderData
     const { tripId } = actionData || { tripId: null }
 
     return (
@@ -74,7 +81,10 @@ export default function PlanTripPage({
                     ) : (
                         <div className="flex justify-center">
                             <div className="w-full max-w-lg">
-                                <TripForm promise={getDestinationsPromise} />
+                                <TripForm
+                                    promise={getDestinationsPromise}
+                                    userId={userId}
+                                />
                             </div>
                         </div>
                     )}

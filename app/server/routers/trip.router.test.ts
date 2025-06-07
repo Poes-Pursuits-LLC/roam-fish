@@ -3,12 +3,12 @@ import { testClient } from 'hono/testing'
 import { tripService } from '~/core/trip/trip.service'
 import { tripRouter } from './trip.router'
 import { Hono } from 'hono'
-
-vi.mock('../main', () => ({
-    main: new Hono().route('/', tripRouter),
-}))
-import { main } from '../main'
-import { TripStatusEnum, type Trip } from '~/core/trip/trip.model'
+import {
+    TripDurationEnum,
+    TripStatusEnum,
+    type Trip,
+} from '~/core/trip/trip.model'
+import { createDefaultPackingList } from '~/core/trip/helpers/create-default-packing-list'
 
 vi.mock('~/core/trip/trip.service.ts', () => ({
     tripService: {
@@ -20,17 +20,37 @@ vi.mock('~/core/trip/trip.service.ts', () => ({
     },
 }))
 
+vi.mock('~/core/trip/helpers/create-default-packing-list', () => {
+    return {
+        createDefaultPackingList: vi.fn(),
+    }
+})
+
+vi.mock('../main', () => ({
+    main: new Hono().route('/', tripRouter),
+}))
+import { main } from '../main'
+
 describe('/create-trip', () => {
     it('should submit trip details to be generated and then create the trip and return its id', async () => {
         const client = testClient(main)
         const inputs = {
             startDate: '2027-04-12',
-            endDate: '2027-05-12',
             userId: 'userId',
+            headcount: '3',
             destinationName: 'Central Pennsylvania',
+            duration: TripDurationEnum.Week,
         }
         const tripId = 'tripId'
         const contentId = 'contentId'
+        const packingList = [
+            {
+                id: '1',
+                category: '1',
+                name: '1',
+                quantity: '1',
+            },
+        ]
 
         const submitTripDetails = vi
             .mocked(tripService.submitTripDetails)
@@ -38,6 +58,7 @@ describe('/create-trip', () => {
         const createTrip = vi
             .mocked(tripService.createTrip)
             .mockResolvedValue(tripId)
+        vi.mocked(createDefaultPackingList).mockReturnValue(packingList)
 
         const response = await client.createTrip.$post({
             json: inputs,
@@ -49,6 +70,50 @@ describe('/create-trip', () => {
         expect(createTrip).toHaveBeenCalledWith({
             ...inputs,
             contentId,
+            packingList,
+            status: TripStatusEnum.Generating,
+        })
+        expect(await response.json()).toEqual({ tripId })
+    })
+
+    it('should still create a trip for guests when no userId is provided', async () => {
+        const client = testClient(main)
+        const inputs = {
+            startDate: '2027-04-12',
+            headcount: '3',
+            destinationName: 'Central Pennsylvania',
+            duration: TripDurationEnum.Week,
+        }
+        const tripId = 'tripId'
+        const contentId = 'contentId'
+        const packingList = [
+            {
+                id: '1',
+                category: '1',
+                name: '1',
+                quantity: '1',
+            },
+        ]
+
+        const submitTripDetails = vi
+            .mocked(tripService.submitTripDetails)
+            .mockResolvedValue(contentId)
+        const createTrip = vi
+            .mocked(tripService.createTrip)
+            .mockResolvedValue(tripId)
+        vi.mocked(createDefaultPackingList).mockReturnValue(packingList)
+
+        const response = await client.createTrip.$post({
+            json: inputs,
+        })
+
+        expect(submitTripDetails).toHaveBeenCalledOnce()
+        expect(submitTripDetails).toHaveBeenCalledWith(inputs)
+        expect(createTrip).toHaveBeenCalledOnce()
+        expect(createTrip).toHaveBeenCalledWith({
+            ...inputs,
+            contentId,
+            packingList,
             status: TripStatusEnum.Generating,
         })
         expect(await response.json()).toEqual({ tripId })
@@ -76,7 +141,7 @@ describe('/getTrip', () => {
         expect(await response.json()).toEqual({ trip })
     })
 
-    it('should, for a trip whose content was still generating, self-heal by calling xAi to get its contents and save them to the trip before returning', async () => {
+    it('should, for a trip whose content was still generating, self-heal by calling xAi to get its contents and save them to the trip before returning it', async () => {
         const client = testClient(main)
         const tripId = 'tripId'
         const contentId = 'contentId'
@@ -121,9 +186,5 @@ describe('/getTrip', () => {
             status: TripStatusEnum.Planned,
         })
         expect(await response.json()).toEqual({ trip: updatedTrip })
-    })
-
-    it('should, for trips that are marked still in progress and have no content from xAi yet, return a status indicator so we know', async () => {
-        //
     })
 })

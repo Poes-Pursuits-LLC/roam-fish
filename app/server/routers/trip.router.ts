@@ -34,6 +34,10 @@ const tripRouter = new Hono()
                     console.error(getTripContentError)
                     throw new Error(getTripContentError.message)
                 }
+                console.info(
+                    'tripContent',
+                    JSON.stringify(tripContent, null, 2),
+                )
 
                 if (tripContent) {
                     const [, updateTripError] = await handleAsync(
@@ -80,6 +84,7 @@ const tripRouter = new Hono()
         ),
         async (c) => {
             const inputs = c.req.valid('json')
+            console.info('Invoked server.createTrip with inputs:', inputs)
 
             const [contentId, submitTripDetailsError] = await handleAsync(
                 tripService.submitTripDetails(inputs),
@@ -94,7 +99,6 @@ const tripRouter = new Hono()
                     ...inputs,
                     contentId: contentId!,
                     status: TripStatusEnum.Generating,
-                    duration: inputs.duration,
                     packingList: createDefaultPackingList(inputs.headcount),
                 }),
             )

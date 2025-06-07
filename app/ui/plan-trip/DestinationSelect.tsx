@@ -16,6 +16,7 @@ export function DestinationSelect({
 }: DestinationSelectProps) {
     return (
         <Select
+            name="destinationName"
             options={destinations}
             getId={(destination) => destination.destinationId}
             getLabel={(destination) => destination.name}

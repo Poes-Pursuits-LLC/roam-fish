@@ -30,10 +30,6 @@ export const DynamoTrip = () => {
                     type: 'string',
                     required: false,
                 },
-                description: {
-                    type: 'string',
-                    required: false,
-                },
                 userId: {
                     type: 'string',
                     required: false,
@@ -88,7 +84,7 @@ export const DynamoTrip = () => {
                             id: { type: 'string' },
                             category: { type: 'string' },
                             name: { type: 'string' },
-                            quantity: { type: 'number' },
+                            quantity: { type: 'string' },
                         },
                     },
                 },

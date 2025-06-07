@@ -5,7 +5,6 @@ import { zodResponseFormat } from 'openai/helpers/zod'
 
 const ZResponseFormat = z.object({
     name: z.string(),
-    description: z.string(),
     cities: z.array(z.string()),
     airport: z.string(),
     weather: z.string(),
@@ -57,7 +56,6 @@ const systemPrompt = `you are an expert trip planner and fly fishing expert who 
 
     Please provide a detailed plan for the trip, including ALL of the following:
     - a trip name.
-    - A basic trip description that respects the user inputs.
     - Up to three cities or towns that I should book accommodations in that would be a good base of operations for fishing. Just specify the city or town name, nor the state or country as the user already knows that by this point.
     - a recommended airport that I should fly in to to get to the area.
     - A list of up to 5 flies to try that are appropriate for trout in the area, typical weather conditions, and time of year. 

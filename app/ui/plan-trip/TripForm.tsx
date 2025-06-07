@@ -5,7 +5,13 @@ import { Form } from 'react-router'
 import { TripDurationEnum } from '~/core/trip/trip.model'
 import { SuspendedDestinationSelect } from './DestinationSelect'
 
-const TripForm = ({ promise }: { promise: Promise<Destination[]> }) => {
+const TripForm = ({
+    promise,
+    userId,
+}: {
+    promise: Promise<Destination[]>
+    userId: string | null
+}) => {
     const [destination, setDestination] = useState<Destination | null>(null)
     const [startDate, setStartDate] = useState('')
     const [duration, setDuration] = useState('')
@@ -14,12 +20,12 @@ const TripForm = ({ promise }: { promise: Promise<Destination[]> }) => {
     return (
         <div className="neo-card">
             <h2 className="neo-subheader mb-6 text-black">Trip Details</h2>
-
             <Form action="/plan-trip" method="post" className="space-y-6">
+                <input type="hidden" name="userId" value={userId ?? ''} />
                 <div>
                     <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
                         <MapPin className="w-5 h-5" />
-                        Location
+                        Destination
                     </label>
                 </div>
                 <SuspendedDestinationSelect
@@ -28,7 +34,6 @@ const TripForm = ({ promise }: { promise: Promise<Destination[]> }) => {
                     onChange={setDestination}
                     required
                 />
-
                 <div>
                     <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
                         <Calendar className="w-5 h-5" />
@@ -65,6 +70,7 @@ const TripForm = ({ promise }: { promise: Promise<Destination[]> }) => {
                     </label>
                     <select
                         value={duration}
+                        name="duration"
                         onChange={(e) => setDuration(e.target.value)}
                         className="neo-input w-full"
                         required

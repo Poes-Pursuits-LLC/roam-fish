@@ -8,24 +8,28 @@ import { Notes } from '~/ui/trip/Notes'
 import { PackingList } from '~/ui/trip/PackingList'
 import { Tactics } from '~/ui/trip/Tactics'
 import { TravelDetails } from '~/ui/trip/TravelDetails'
+import { Checklist } from '~/ui/trip/Checklist'
+import { getAuth } from '@clerk/react-router/ssr.server'
 
-export async function loader({ params }: Route.LoaderArgs) {
-    const { tripId } = params
+export async function loader(args: Route.LoaderArgs) {
+    const { userId } = await getAuth(args)
+    const { tripId } = args.params
+
     const client = hc<AppType>(process.env.SERVER_URL!)
     const trip = await client.getTrip
         .$get({ query: { tripId } })
         .then((res) => res.json())
         .then((data) => data.trip)
-    return { trip }
+
+    return { trip, userId }
 }
 
 export default function TripPage({ loaderData }: Route.ComponentProps) {
-    const { trip } = loaderData
-    console.info('trip in client', JSON.stringify(trip, null, 2))
+    const { trip, userId } = loaderData
 
     return (
         <div className="min-h-screen bg-stone-100">
-            <Navbar />
+            <Navbar userId={userId} />
             <div className="px-6 py-8">
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-8">
@@ -43,16 +47,19 @@ export default function TripPage({ loaderData }: Route.ComponentProps) {
                         airport={trip.airport}
                         cities={trip.cities}
                     />
-                    <PackingList list={trip.packingList} />
+                    <div className="grid lg:grid-cols-3 gap-8 mb-8">
+                        <Budget />
+                        <PackingList list={trip.packingList} />
+                        <Checklist />
+                    </div>
                     <Tactics
                         tacticsSummary={trip.tacticsSummary}
                         weather={trip.weather}
                         flies={trip.flies}
                         hatches={trip.hatches}
                     />
-                    <Budget />
+                    <Notes />
                 </div>
-                <Notes />
             </div>
         </div>
     )

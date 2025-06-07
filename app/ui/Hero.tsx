@@ -3,20 +3,13 @@ import { scrollToElement } from '~/utils'
 
 const Hero = () => {
     return (
-        <section className="relative px-6 py-20 bg-gradient-to-br from-stone-200 to-stone-300 border-b-4 border-black">
-            <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
-                style={{
-                    backgroundImage: `url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80')`,
-                }}
-            />
+        <section className="relative px-6 py-20 bg-gradient-to-br from-stone-200/90 to-stone-300/90 border-b-4 border-black overflow-hidden">
             <div className="relative max-w-4xl mx-auto text-center">
                 <h1 className="neo-header mb-6 text-slate-800">
-                    Plan Your Perfect Fishing Adventure
+                    The simplest fishing planner on the internet
                 </h1>
                 <p className="text-xl md:text-2xl font-bold mb-8 text-slate-700 max-w-2xl mx-auto">
-                    From bass to trout, lakes to oceans - we help you catch the
-                    fish of your dreams
+                    Plan your next fishing trip in seconds
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <NavLink

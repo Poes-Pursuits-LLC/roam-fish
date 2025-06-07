@@ -1,4 +1,4 @@
-import Hero from '~/ui/landing/Hero'
+import Hero from '~/ui/Hero'
 import Features from '~/ui/landing/Features'
 import { Destinations, DestinationsFallback } from '~/ui/landing/Destinations'
 import { FAQ } from '~/ui/landing/FAQ'
@@ -8,6 +8,7 @@ import type { Route } from './+types/landing'
 import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
 import { Suspense } from 'react'
+import { getAuth } from '@clerk/react-router/ssr.server'
 
 export function meta() {
     return [
@@ -19,20 +20,24 @@ export function meta() {
     ]
 }
 
-export async function loader() {
+export async function loader(args: Route.LoaderArgs) {
+    const { userId } = await getAuth(args)
+
     const client = hc<AppType>(process.env.SERVER_URL!)
     const getDestinationsPromise = client.destinations
         .$get()
         .then((res) => res.json())
         .then((data) => data.destinations)
-    return { getDestinationsPromise }
+
+    return { getDestinationsPromise, userId }
 }
 
 export default function LandingPage({ loaderData }: Route.ComponentProps) {
-    const { getDestinationsPromise } = loaderData
+    const { getDestinationsPromise, userId } = loaderData
+
     return (
         <div className="min-h-screen bg-white">
-            <Navbar />
+            <Navbar userId={userId} />
             <Hero />
             <Features />
             <Suspense fallback={<DestinationsFallback />}>

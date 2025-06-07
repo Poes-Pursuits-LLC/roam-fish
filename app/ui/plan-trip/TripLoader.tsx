@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router'
 const TripLoader = ({ tripId }: { tripId: string }) => {
     const navigate = useNavigate()
     const [progress, setProgress] = useState(0)
-    const DURATION = 20000
+    const DURATION = 15000
     const INTERVAL = 50
     const totalSteps = Math.ceil(DURATION / INTERVAL)
     const incrementPerStep = 100 / totalSteps
@@ -31,7 +31,7 @@ const TripLoader = ({ tripId }: { tripId: string }) => {
                 <h2 className="neo-subheader text-center text-slate-800">
                     Planning Your Trip...
                 </h2>
-
+                Please do not refresh your browser.
                 <div className="space-y-2">
                     <Progress
                         value={progress}
@@ -41,7 +41,6 @@ const TripLoader = ({ tripId }: { tripId: string }) => {
                         {Math.round(progress)}%
                     </p>
                 </div>
-
                 <div className="text-center space-y-1">
                     <p className="text-sm font-semibold text-slate-600">
                         {progress < 30 && 'Analyzing fishing conditions...'}

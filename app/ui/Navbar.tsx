@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router'
 
-const Navbar = () => {
+const Navbar = ({ userId }: { userId: string | null }) => {
     return (
         <nav className="bg-stone-50 border-b-4 border-black px-6 py-4">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -20,12 +20,21 @@ const Navbar = () => {
                     >
                         Plan Trip
                     </NavLink>
-                    <NavLink
-                        to="/login"
-                        className="neo-button bg-emerald-700 text-white border-black"
-                    >
-                        Login
-                    </NavLink>
+                    {userId ? (
+                        <NavLink
+                            to="/dashboard"
+                            className="neo-button bg-emerald-700 text-white border-black"
+                        >
+                            Dashboard
+                        </NavLink>
+                    ) : (
+                        <NavLink
+                            to="/login"
+                            className="neo-button bg-emerald-700 text-white border-black"
+                        >
+                            Login
+                        </NavLink>
+                    )}
                 </div>
             </div>
         </nav>
