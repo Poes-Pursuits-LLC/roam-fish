@@ -14,6 +14,7 @@ vi.mock('~/core/trip/trip.service.ts', () => ({
     tripService: {
         getTrip: vi.fn(),
         createTrip: vi.fn(),
+        getUserTrips: vi.fn(),
         submitTripDetails: vi.fn(),
         getTripDetails: vi.fn(),
         updateTrip: vi.fn(),
@@ -118,6 +119,28 @@ describe('/create-trip', () => {
         })
         expect(await response.json()).toEqual({ tripId })
     })
+
+    it('should throw an http exception and return a 500 status code if an error occurs', async () => {
+        const client = testClient(main)
+        const inputs = {
+            startDate: '2027-04-12',
+            headcount: '3',
+            destinationName: 'Central Pennsylvania',
+            duration: TripDurationEnum.Week,
+        }
+
+        const submitTripDetails = vi
+            .mocked(tripService.submitTripDetails)
+            .mockRejectedValue(new Error('Error'))
+
+        const response = await client.createTrip.$post({
+            json: inputs,
+        })
+
+        expect(submitTripDetails).toHaveBeenCalledOnce()
+        expect(submitTripDetails).toHaveBeenCalledWith(inputs)
+        expect(response.status).toBe(500)
+    })
 })
 
 describe('/getTrip', () => {
@@ -186,5 +209,62 @@ describe('/getTrip', () => {
             status: TripStatusEnum.Planned,
         })
         expect(await response.json()).toEqual({ trip: updatedTrip })
+    })
+
+    it('should throw an http exception and return a 500 status code if an error occurs', async () => {
+        const client = testClient(main)
+        const tripId = 'tripId'
+        const getTrip = vi
+            .mocked(tripService.getTrip)
+            .mockRejectedValue(new Error('Error'))
+
+        const response = await client.getTrip.$get({
+            query: {
+                tripId,
+            },
+        })
+
+        expect(getTrip).toHaveBeenCalledOnce()
+        expect(getTrip).toHaveBeenCalledWith(tripId)
+        expect(response.status).toBe(500)
+    })
+})
+
+describe('/getUserTrips', () => {
+    it('should get a list of trips for a user', async () => {
+        const client = testClient(main)
+        const userId = 'userId'
+        const trips = [{ tripId: 'tripId' }] as Trip[]
+        const getUserTrips = vi
+            .mocked(tripService.getUserTrips)
+            .mockResolvedValue(trips)
+
+        const response = await client.getUserTrips.$get({
+            query: {
+                userId,
+            },
+        })
+
+        expect(getUserTrips).toHaveBeenCalledOnce()
+        expect(getUserTrips).toHaveBeenCalledWith(userId)
+        expect(await response.json()).toEqual({ trips })
+    })
+
+    it('should throw an http exception and return a 500 status code if an error occurs', async () => {
+        const client = testClient(main)
+        const userId = 'userId'
+        const getUserTrips = vi
+            .mocked(tripService.getUserTrips)
+            .mockRejectedValue(new Error('Error'))
+
+        const response = await client.getUserTrips.$get({
+            query: {
+                userId,
+            },
+        })
+
+        expect(getUserTrips).toHaveBeenCalledOnce()
+        expect(getUserTrips).toHaveBeenCalledWith(userId)
+        expect(response.status).toBe(500)
     })
 })

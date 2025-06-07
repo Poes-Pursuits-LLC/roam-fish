@@ -6,4 +6,5 @@ export default [
     route('/plan-trip', 'routes/plan-trip.tsx'),
     route('/trip/:tripId', 'routes/trip.tsx'),
     route('/dashboard', 'routes/dashboard.tsx'),
+    route('/trips', 'routes/trips.tsx'),
 ] satisfies RouteConfig

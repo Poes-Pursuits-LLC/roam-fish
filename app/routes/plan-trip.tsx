@@ -12,7 +12,6 @@ export async function loader(args: Route.LoaderArgs) {
     const { userId } = await getAuth(args)
 
     const client = hc<AppType>(process.env.SERVER_URL!)
-
     const getDestinationsPromise = client.destinations
         .$get()
         .then((res) => res.json())

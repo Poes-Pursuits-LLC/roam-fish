@@ -28,7 +28,7 @@ export const DynamoTrip = () => {
                 },
                 destinationName: {
                     type: 'string',
-                    required: false,
+                    required: true,
                 },
                 userId: {
                     type: 'string',
@@ -77,14 +77,14 @@ export const DynamoTrip = () => {
                 },
                 packingList: {
                     type: 'list',
-                    required: false,
+                    required: true,
                     items: {
                         type: 'map',
                         properties: {
-                            id: { type: 'string' },
-                            category: { type: 'string' },
-                            name: { type: 'string' },
-                            quantity: { type: 'string' },
+                            id: { type: 'string', required: true },
+                            category: { type: 'string', required: true },
+                            name: { type: 'string', required: true },
+                            quantity: { type: 'string', required: true },
                         },
                     },
                 },

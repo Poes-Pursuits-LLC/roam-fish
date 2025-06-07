@@ -10,6 +10,7 @@ import { Tactics } from '~/ui/trip/Tactics'
 import { TravelDetails } from '~/ui/trip/TravelDetails'
 import { Checklist } from '~/ui/trip/Checklist'
 import { getAuth } from '@clerk/react-router/ssr.server'
+import { SignUpCTA } from '~/ui/trip/SignUpCTA'
 
 export async function loader(args: Route.LoaderArgs) {
     const { userId } = await getAuth(args)
@@ -36,29 +37,38 @@ export default function TripPage({ loaderData }: Route.ComponentProps) {
                         <h1 className="neo-header text-slate-800">
                             {trip.name}
                         </h1>
+                        {!userId && (
+                            <SignUpCTA
+                                title="Want to save this trip?"
+                                description="Sign up for free to access our trip management tools and save many more trips!"
+                                className="mt-4 bg-white rounded-lg shadow-sm border border-stone-200"
+                            />
+                        )}
                     </div>
-                    <InfoCards
-                        destinationName={trip.destinationName}
-                        date={trip.startDate}
-                        duration={trip.duration}
-                        participants={trip.headcount}
-                    />
-                    <TravelDetails
-                        airport={trip.airport}
-                        cities={trip.cities}
-                    />
-                    <div className="grid lg:grid-cols-3 gap-8 mb-8">
-                        <Budget />
-                        <PackingList list={trip.packingList} />
-                        <Checklist />
+                    <div className="relative">
+                        <InfoCards
+                            destinationName={trip.destinationName}
+                            date={trip.startDate}
+                            duration={trip.duration}
+                            participants={trip.headcount}
+                        />
+                        <TravelDetails
+                            airport={trip.airport}
+                            cities={trip.cities}
+                        />
+                        <div className="grid lg:grid-cols-3 gap-8 mb-8">
+                            <Budget />
+                            <PackingList list={trip.packingList} />
+                            <Checklist />
+                        </div>
+                        <Tactics
+                            tacticsSummary={trip.tacticsSummary}
+                            weather={trip.weather}
+                            flies={trip.flies}
+                            hatches={trip.hatches}
+                        />
+                        <Notes />
                     </div>
-                    <Tactics
-                        tacticsSummary={trip.tacticsSummary}
-                        weather={trip.weather}
-                        flies={trip.flies}
-                        hatches={trip.hatches}
-                    />
-                    <Notes />
                 </div>
             </div>
         </div>

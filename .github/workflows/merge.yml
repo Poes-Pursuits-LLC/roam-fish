@@ -1,11 +1,11 @@
-# name: Deploy to Production
+# name: Merge Develop to Main
 
 # on:
 #   schedule:
 #     - cron: "0 0 * * *"
 
 # jobs:
-#   deploy:
+#   merge-to-main:
 #     runs-on: ubuntu-latest
 #     steps:
 #       - name: Checkout develop branch
@@ -36,15 +36,3 @@
 #           git checkout main
 #           git merge --no-ff origin/develop -m "Automated merge of develop into main [skip ci]"
 #           git push origin main
-
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v4
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: ${{ secrets.AWS_REGION }}
-
-#       - name: Deploy
-#         run: |
-#           # Replace with your actual deploy command
-#           npm run deploy

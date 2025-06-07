@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { HTTPException } from 'hono/http-exception'
 import { destinationService } from '~/core/destination/destination.service'
 import { handleAsync } from '~/utils'
 
@@ -8,8 +9,9 @@ const destinationRouter = new Hono().get('/destinations', async (c) => {
         destinationService.getDestinations(),
     )
     if (getDestinationsError) {
-        console.error(getDestinationsError)
-        throw new Error(getDestinationsError.message)
+        throw new HTTPException(500, {
+            message: getDestinationsError.message,
+        })
     }
 
     return c.json({

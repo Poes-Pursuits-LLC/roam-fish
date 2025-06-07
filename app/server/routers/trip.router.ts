@@ -5,6 +5,7 @@ import { tripService } from '~/core/trip/trip.service'
 import { handleAsync } from '~/utils'
 import { TripDurationEnum, TripStatusEnum } from '~/core/trip/trip.model'
 import { createDefaultPackingList } from '~/core/trip/helpers/create-default-packing-list'
+import { HTTPException } from 'hono/http-exception'
 
 const tripRouter = new Hono()
     .get(
@@ -22,8 +23,7 @@ const tripRouter = new Hono()
                 tripService.getTrip(tripId),
             )
             if (getTripError) {
-                console.error(getTripError)
-                throw new Error(getTripError.message)
+                throw new HTTPException(500, { message: getTripError.message })
             }
 
             if (trip!.status === TripStatusEnum.Generating) {
@@ -31,13 +31,10 @@ const tripRouter = new Hono()
                     tripService.getTripDetails(trip!.contentId),
                 )
                 if (getTripContentError) {
-                    console.error(getTripContentError)
-                    throw new Error(getTripContentError.message)
+                    throw new HTTPException(500, {
+                        message: getTripContentError.message,
+                    })
                 }
-                console.info(
-                    'tripContent',
-                    JSON.stringify(tripContent, null, 2),
-                )
 
                 if (tripContent) {
                     const [, updateTripError] = await handleAsync(
@@ -47,16 +44,18 @@ const tripRouter = new Hono()
                         }),
                     )
                     if (updateTripError) {
-                        console.error(updateTripError)
-                        throw new Error(updateTripError.message)
+                        throw new HTTPException(500, {
+                            message: updateTripError.message,
+                        })
                     }
 
                     const [updatedTrip, getTripError] = await handleAsync(
                         tripService.getTrip(tripId),
                     )
                     if (getTripError) {
-                        console.error(getTripError)
-                        throw new Error(getTripError.message)
+                        throw new HTTPException(500, {
+                            message: getTripError.message,
+                        })
                     }
 
                     return c.json({
@@ -68,6 +67,25 @@ const tripRouter = new Hono()
             return c.json({
                 trip,
             })
+        },
+    )
+    .get(
+        '/getUserTrips',
+        zValidator('query', z.object({ userId: z.string() })),
+        async (c) => {
+            const { userId } = c.req.valid('query')
+            console.info('Invoked server.getUserTrips with userId:', userId)
+
+            const [trips, getTripsError] = await handleAsync(
+                tripService.getUserTrips(userId),
+            )
+            if (getTripsError) {
+                throw new HTTPException(500, {
+                    message: getTripsError.message,
+                })
+            }
+
+            return c.json({ trips: trips ?? [] })
         },
     )
     .post(
@@ -90,8 +108,9 @@ const tripRouter = new Hono()
                 tripService.submitTripDetails(inputs),
             )
             if (submitTripDetailsError) {
-                console.error(submitTripDetailsError)
-                throw new Error(submitTripDetailsError.message)
+                throw new HTTPException(500, {
+                    message: submitTripDetailsError.message,
+                })
             }
 
             const [tripId, createTripError] = await handleAsync(
@@ -103,8 +122,9 @@ const tripRouter = new Hono()
                 }),
             )
             if (createTripError) {
-                console.error(createTripError)
-                throw new Error(createTripError.message)
+                throw new HTTPException(500, {
+                    message: createTripError.message,
+                })
             }
 
             return c.json({ tripId })

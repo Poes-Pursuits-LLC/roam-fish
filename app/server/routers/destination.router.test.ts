@@ -33,4 +33,16 @@ describe('/getDestinations', () => {
             destinations,
         })
     })
+
+    it('should throw an http exception and return a 500 status code if an error occurs', async () => {
+        const client = testClient(main)
+        const getDestinations = vi
+            .mocked(destinationService.getDestinations)
+            .mockRejectedValue(new Error('Error'))
+
+        const response = await client.destinations.$get()
+
+        expect(getDestinations).toHaveBeenCalledOnce()
+        expect(response.status).toBe(500)
+    })
 })
