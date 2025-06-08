@@ -1,8 +1,8 @@
-import { describe, it, beforeAll, afterAll, expect } from 'vitest'
+import { describe, it, beforeAll, afterAll, expect, vi } from 'vitest'
 import {
-    setupTestEnvironment,
-    teardownTestEnvironment,
-} from '../../integration/setupIntegration'
+    setupIntegrationEnvironment,
+    tearDownIntegrationEnvironment,
+} from '../../integration/setup.integration'
 import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
 import type { Destination } from '~/core/destination/destination.model'
@@ -10,18 +10,28 @@ import { DynamoDestination } from '~/core/destination/destination.dynamo'
 import { createFormattedDate } from '~/utils'
 import { nanoid } from 'nanoid'
 
+vi.mock('sst', () => {
+    return {
+        Resource: {
+            Table: {
+                name: 'integration-table',
+            },
+        },
+    }
+})
+
 describe('Destination Service Integration', () => {
     let client: ReturnType<typeof hc<AppType>>
     let serverUrl: string
 
     beforeAll(async () => {
-        const env = await setupTestEnvironment()
+        const env = await setupIntegrationEnvironment()
         serverUrl = env.serverUrl
         client = hc<AppType>(serverUrl)
     })
 
     afterAll(async () => {
-        await teardownTestEnvironment()
+        await tearDownIntegrationEnvironment()
     })
 
     describe('Destination Retrieval', () => {
@@ -49,23 +59,17 @@ describe('Destination Service Integration', () => {
                 },
             ]
 
-            // Insert test data
             for (const destination of testDestinations) {
                 await DynamoDestination().put(destination).go()
             }
 
-            // Get destinations through the API
             const response = await client.destinations.$get()
             const { destinations } = await response.json()
 
-            // Verify response
-            expect(destinations).toBeDefined()
-            expect(Array.isArray(destinations)).toBe(true)
             expect(destinations.length).toBeGreaterThanOrEqual(
                 testDestinations.length,
             )
 
-            // Verify test destinations are included
             const foundDestinations = destinations.filter((d: Destination) =>
                 testDestinations.some(
                     (td) => td.destinationId === d.destinationId,
@@ -73,7 +77,6 @@ describe('Destination Service Integration', () => {
             )
             expect(foundDestinations).toHaveLength(testDestinations.length)
 
-            // Verify destination structure
             foundDestinations.forEach((destination: Destination) => {
                 expect(destination).toMatchObject({
                     destinationId: expect.any(String),

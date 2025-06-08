@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
     "local": "sst dev",
     "dev": "react-router dev",
+    "build": "react-router build",
     "unit-tests": "vitest",
     "integration-tests": "vitest --config ./app/integration/vitest.integration.config.ts",
     "quality-check": "npx eslint . && react-router typegen && tsc --no-emit",
@@ -25,7 +25,6 @@
     "clsx": "^2.1.1",
     "electrodb": "^3.4.1",
     "hono": "^4.7.11",
-    "inngest": "^3.38.0",
     "isbot": "^5.1.27",
     "lucide-react": "^0.511.0",
     "nanoid": "^5.1.5",
