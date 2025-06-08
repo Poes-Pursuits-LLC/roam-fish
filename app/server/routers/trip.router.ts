@@ -85,7 +85,6 @@ const tripRouter = new Hono()
                     message: getTripsError.message,
                 })
             }
-
             return c.json({ trips: trips ?? [] })
         },
     )

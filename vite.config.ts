@@ -11,7 +11,6 @@ export default defineConfig({
         include: ['./app/**/*.test.ts'],
         exclude: ['**/*.integration.test.ts'],
         environment: 'jsdom',
-        setupFiles: ['./app/test/setup.ts'],
         silent: 'passed-only',
         mockReset: true,
         watch: false,

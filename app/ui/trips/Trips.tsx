@@ -1,5 +1,4 @@
 import { Fish } from 'lucide-react'
-import { useNavigate } from 'react-router'
 import { useState } from 'react'
 import { TripCard } from './TripCard'
 import type { Trip } from '~/core/trip/trip.model'
@@ -7,7 +6,6 @@ import { use } from 'react'
 
 export const Trips = ({ promise }: { promise: Promise<Trip[]> }) => {
     const trips = use(promise)
-    const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming')
 
     const upcomingTrips = trips.filter(
@@ -28,12 +26,6 @@ export const Trips = ({ promise }: { promise: Promise<Trip[]> }) => {
                     <p className="text-slate-500 mb-6">
                         Ready to plan your next fishing adventure?
                     </p>
-                    <button
-                        onClick={() => navigate('/plan-trip')}
-                        className="neo-button-primary"
-                    >
-                        Plan Your First Trip
-                    </button>
                 </div>
             )
         }
@@ -53,21 +45,19 @@ export const Trips = ({ promise }: { promise: Promise<Trip[]> }) => {
             <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
                 <button
                     onClick={() => setActiveTab('upcoming')}
-                    className={`px-4 py-2 font-bold border-2 border-black whitespace-nowrap transition-colors ${
-                        activeTab === 'upcoming'
-                            ? 'bg-amber-400 text-black'
-                            : 'bg-white text-slate-800 hover:bg-stone-50'
-                    }`}
+                    className={`px-4 py-2 font-bold border-2 border-black whitespace-nowrap transition-colors ${activeTab === 'upcoming'
+                        ? 'bg-amber-400 text-black'
+                        : 'bg-white text-slate-800 hover:bg-stone-50'
+                        }`}
                 >
                     Upcoming
                 </button>
                 <button
                     onClick={() => setActiveTab('past')}
-                    className={`px-4 py-2 font-bold border-2 border-black whitespace-nowrap transition-colors ${
-                        activeTab === 'past'
-                            ? 'bg-emerald-400 text-black'
-                            : 'bg-white text-slate-800 hover:bg-stone-50'
-                    }`}
+                    className={`px-4 py-2 font-bold border-2 border-black whitespace-nowrap transition-colors ${activeTab === 'past'
+                        ? 'bg-emerald-400 text-black'
+                        : 'bg-white text-slate-800 hover:bg-stone-50'
+                        }`}
                 >
                     Past Trips
                 </button>

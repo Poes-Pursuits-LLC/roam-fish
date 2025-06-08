@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "local": "sst dev",
+    "local": "sst dev --stage nickpapadakis",
     "dev": "react-router dev",
     "build": "react-router build",
     "unit-tests": "vitest",

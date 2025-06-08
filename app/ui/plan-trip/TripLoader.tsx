@@ -11,19 +11,30 @@ const TripLoader = ({ tripId }: { tripId: string }) => {
     const incrementPerStep = 100 / totalSteps
 
     useEffect(() => {
+        console.log('TripLoader mounted, starting progress')
         const timer = setInterval(() => {
             setProgress((oldProgress) => {
-                if (oldProgress >= 100) {
+                const newProgress = Math.min(100, oldProgress + incrementPerStep)
+                console.log('Progress updated:', newProgress)
+                
+                if (newProgress >= 100) {
+                    console.log('Progress reached 100%, navigating to:', `/trip/${tripId}`)
                     clearInterval(timer)
-                    navigate(`/trip/${tripId}`)
+                    // Use setTimeout to ensure state updates are processed
+                    setTimeout(() => {
+                        navigate(`/trip/${tripId}`)
+                    }, 0)
                     return 100
                 }
-                return Math.min(100, oldProgress + incrementPerStep)
+                return newProgress
             })
         }, INTERVAL)
 
-        return () => clearInterval(timer)
-    }, [navigate])
+        return () => {
+            console.log('TripLoader unmounting, clearing interval')
+            clearInterval(timer)
+        }
+    }, [navigate, tripId]) // Added tripId to dependencies
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[400px] space-y-8">

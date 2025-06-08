@@ -6,8 +6,10 @@ import {
     BookOpen,
     Settings,
 } from 'lucide-react'
-import { SignOutButton } from '@clerk/react-router'
-import { NavLink } from 'react-router'
+import { NavLink, redirect } from 'react-router'
+import { getAuth } from '@clerk/react-router/ssr.server'
+import type { Route } from './+types/dashboard'
+import Navbar from '~/ui/Navbar'
 
 const stats = [
     {
@@ -57,9 +59,21 @@ const recentTrips = [
     },
 ]
 
-export default function DashboardPage() {
+export async function loader(args: Route.LoaderArgs) {
+    const { userId } = await getAuth(args)
+    if (!userId) {
+        return redirect('/login')
+    }
+
+    return { userId }
+}
+
+export default function DashboardPage({ loaderData }: Route.ComponentProps) {
+    const { userId } = loaderData
+
     return (
         <div className="min-h-screen bg-stone-50">
+            <Navbar userId={userId} />
             <div className="px-6 py-12">
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-12">
@@ -145,9 +159,9 @@ export default function DashboardPage() {
                             </div>
 
                             <div className="space-y-4">
-                                <NavLink to="/plan-trip" className="">
-                                    <button className="neo-button w-full bg-amber-400 text-black border-black">
-                                        Plan New Trip
+                                <NavLink to="/trips">
+                                    <button className="neo-button w-full bg-amber-400 text-black border-black mb-4">
+                                        My Trips
                                     </button>
                                 </NavLink>
                                 <button className="neo-button w-full bg-stone-800 text-white border-black">
@@ -162,11 +176,6 @@ export default function DashboardPage() {
                                 <button className="neo-button w-full bg-orange-400 text-black border-black">
                                     Fishing Tips
                                 </button>
-                                <SignOutButton>
-                                    <button className="neo-button w-full bg-red-500 text-white border-black">
-                                        Sign Out
-                                    </button>
-                                </SignOutButton>
                             </div>
                         </div>
                     </div>

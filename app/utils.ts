@@ -45,5 +45,7 @@ export const createFormattedDate = () => {
 }
 
 export const getTTL = (hours: number) => {
-    return Math.floor(Date.now() / 1000) + hours * 60 * 60
+    const now = new Date()
+    const futureDate = new Date(now.getTime() + hours * 60 * 60 * 1000)
+    return Math.floor(futureDate.getTime() / 1000)
 }

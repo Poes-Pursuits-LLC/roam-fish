@@ -35,10 +35,10 @@ export default function TripsRoute({ loaderData }: Route.ComponentProps) {
                     <div className="flex items-center justify-between mb-12">
                         <div>
                             <h1 className="neo-header text-slate-800 mb-4">
-                                Your Fishing Trips
+                                Your Trips
                             </h1>
                             <p className="text-xl font-semibold text-slate-700">
-                                Track your adventures and plan new ones
+                                Track your fishing adventures and plan new ones!
                             </p>
                         </div>
                     </div>

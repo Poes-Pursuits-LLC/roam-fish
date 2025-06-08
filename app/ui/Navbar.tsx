@@ -1,3 +1,4 @@
+import { UserButton } from '@clerk/react-router'
 import { NavLink } from 'react-router'
 
 const Navbar = ({ userId }: { userId: string | null }) => {
@@ -21,12 +22,33 @@ const Navbar = ({ userId }: { userId: string | null }) => {
                         Plan Trip
                     </NavLink>
                     {userId ? (
-                        <NavLink
-                            to="/dashboard"
-                            className="neo-button bg-emerald-700 text-white border-black"
-                        >
-                            Dashboard
-                        </NavLink>
+                        <div className="flex items-center space-x-4">
+                            <NavLink
+                                to="/dashboard"
+                                className="neo-button bg-emerald-700 text-white border-black"
+                            >
+                                Dashboard
+                            </NavLink>
+                            <UserButton
+                                fallback={
+                                    <div className="w-10 h-10 rounded-full bg-stone-200 animate-pulse border-2 border-black" />
+                                }
+                                userProfileProps={{
+                                    appearance: {
+                                        elements: {
+                                            profileSection__emailAddresses: {
+                                                display: 'none',
+                                            },
+                                            profileSection__danger: {
+                                                display: 'none',
+                                            },
+                                            profileSection__connectedAccounts: {
+                                                display: 'none',
+                                            },
+                                        },
+                                    },
+                                }} />
+                        </div>
                     ) : (
                         <NavLink
                             to="/login"
