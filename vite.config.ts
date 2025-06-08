@@ -10,7 +10,8 @@ export default defineConfig({
     test: {
         include: ['./app/**/*.test.ts'],
         exclude: ['**/*.integration.test.ts'],
-        environment: 'node',
+        environment: 'jsdom',
+        setupFiles: ['./app/test/setup.ts'],
         silent: 'passed-only',
         mockReset: true,
         watch: false,

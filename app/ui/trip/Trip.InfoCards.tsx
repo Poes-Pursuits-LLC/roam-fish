@@ -9,7 +9,7 @@ export const InfoCards = ({
     destinationName: string
     date: string
     duration: string
-    participants: number
+    participants: string
 }) => {
     return (
         <div className="grid md:grid-cols-4 gap-6 mb-8">

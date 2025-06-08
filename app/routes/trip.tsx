@@ -53,19 +53,19 @@ export default function TripPage({ loaderData }: Route.ComponentProps) {
                             participants={trip.headcount}
                         />
                         <TravelDetails
-                            airport={trip.airport}
-                            cities={trip.cities}
+                            airport={trip.airport!}
+                            cities={trip.cities!}
                         />
                         <div className="grid lg:grid-cols-3 gap-8 mb-8">
                             <Budget />
-                            <PackingList list={trip.packingList} />
+                            <PackingList list={trip.packingList!} />
                             <Checklist />
                         </div>
                         <Tactics
-                            tacticsSummary={trip.tacticsSummary}
-                            weather={trip.weather}
-                            flies={trip.flies}
-                            hatches={trip.hatches}
+                            tacticsSummary={trip.tacticsSummary!}
+                            weather={trip.weather!}
+                            flies={trip.flies!}
+                            hatches={trip.hatches!}
                         />
                         <Notes />
                     </div>

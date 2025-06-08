@@ -18,6 +18,7 @@ const tripRouter = new Hono()
         ),
         async (c) => {
             const { tripId } = c.req.valid('query')
+            console.info('Invoked server.getTrip with tripId:', tripId)
 
             const [trip, getTripError] = await handleAsync(
                 tripService.getTrip(tripId),
@@ -59,13 +60,13 @@ const tripRouter = new Hono()
                     }
 
                     return c.json({
-                        trip: updatedTrip,
+                        trip: updatedTrip!,
                     })
                 }
             }
 
             return c.json({
-                trip,
+                trip: trip!,
             })
         },
     )
