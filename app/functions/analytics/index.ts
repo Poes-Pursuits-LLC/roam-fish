@@ -1,5 +1,5 @@
 import { main } from './main'
 
-export const handler = async (event: any) => {
+export const handler = async (event: unknown) => {
     await main(event)
 }
