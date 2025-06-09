@@ -114,6 +114,11 @@ export const DynamoTrip = () => {
                     required: true,
                     default: () => createFormattedDate(),
                 },
+                type: {
+                    type: 'string',
+                    required: true,
+                    default: () => 'trip',
+                },
             },
             indexes: {
                 primary: {

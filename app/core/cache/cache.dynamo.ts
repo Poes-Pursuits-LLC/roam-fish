@@ -5,6 +5,7 @@ import { getDynamoClient } from '~/clients/table.client'
 export const DynamoCache = () => {
     const client = getDynamoClient()
     const table = Resource.Table.name
+
     return new Entity(
         {
             model: {

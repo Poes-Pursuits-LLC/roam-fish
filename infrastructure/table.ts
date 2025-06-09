@@ -9,5 +9,6 @@ export const table = new sst.aws.Dynamo('Table', {
     globalIndexes: {
         'gsi1pk-gsi1sk-index': { hashKey: 'gsi1pk', rangeKey: 'gsi1sk' },
     },
+    stream: 'new-and-old-images',
     ttl: 'expireAt',
 })

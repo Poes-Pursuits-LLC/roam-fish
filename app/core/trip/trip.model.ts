@@ -15,6 +15,7 @@ export interface Trip {
     status: TripStatusEnum
     contentId: string
     startDate: string
+    type: string
     duration: TripDurationEnum
     createdAt: string
     updatedAt: string

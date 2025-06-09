@@ -8,6 +8,7 @@
     "build": "react-router build",
     "unit-tests": "vitest",
     "integration-tests": "vitest --config ./app/integration/vitest.integration.config.ts",
+    "e2e-tests": "npx sst shell magnitude",
     "quality-check": "npx eslint . && react-router typegen && tsc --noEmit",
     "deploy-dev": "npx sst deploy --stage develop",
     "deploy-prod": "npx sst deploy --stage production"
@@ -29,6 +30,7 @@
     "hono": "^4.7.11",
     "isbot": "^5.1.27",
     "lucide-react": "^0.511.0",
+    "magnitude-test": "^0.1.4",
     "nanoid": "^5.1.5",
     "nock": "^14.0.5",
     "openai": "^5.1.0",
