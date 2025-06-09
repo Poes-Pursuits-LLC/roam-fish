@@ -1,36 +1,24 @@
-import { MapPin, Calendar, Fish } from 'lucide-react'
-
-const Features = () => {
-    const features = [
-        {
-            icon: MapPin,
-            title: 'Find Perfect Spots',
-            description:
-                'Discover the best fishing locations based on your preferences and skill level',
-        },
-        {
-            icon: Calendar,
-            title: 'Plan Your Schedule',
-            description:
-                'Optimize timing for weather, tides, and fish activity patterns',
-        },
-        {
-            icon: Fish,
-            title: 'Track Your Catches',
-            description:
-                'Log your successful trips and build your fishing knowledge base',
-        },
-    ]
-
+const Features = ({
+    config,
+}: {
+    config: {
+        header: string
+        features: {
+            icon: React.ElementType
+            title: string
+            description: string
+        }[]
+    }
+}) => {
     return (
         <section className="px-6 py-20 bg-stone-100">
             <div className="max-w-6xl mx-auto">
                 <h2 className="neo-subheader text-center mb-16 text-slate-800">
-                    Everything You Need To Fish Better
+                    {config.header}
                 </h2>
 
                 <div className="grid md:grid-cols-3 gap-8">
-                    {features.map((feature, index) => (
+                    {config.features.map((feature, index) => (
                         <div
                             key={index}
                             className="neo-card text-center bg-amber-50"

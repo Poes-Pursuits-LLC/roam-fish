@@ -13,7 +13,8 @@ import { getAuth } from '@clerk/react-router/ssr.server'
 import { SignUpCTA } from '~/ui/trip/SignUpCTA'
 
 export async function loader(args: Route.LoaderArgs) {
-    const { userId } = await getAuth(args)
+    const { userId, has } = await getAuth(args)
+    const isSubscriber = has({ plan: 'roam_premium' })
     const { tripId } = args.params
 
     const client = hc<AppType>(process.env.SERVER_URL!)
@@ -22,15 +23,15 @@ export async function loader(args: Route.LoaderArgs) {
         .then((res) => res.json())
         .then((data) => data.trip)
 
-    return { trip, userId }
+    return { trip, userId, isSubscriber }
 }
 
 export default function TripPage({ loaderData }: Route.ComponentProps) {
-    const { trip, userId } = loaderData
+    const { trip, userId, isSubscriber } = loaderData
 
     return (
         <div className="min-h-screen bg-stone-100">
-            <Navbar userId={userId} />
+            <Navbar userId={userId} isSubscriber={isSubscriber} />
             <div className="px-6 py-8">
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-8">

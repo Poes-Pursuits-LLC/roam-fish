@@ -9,7 +9,8 @@ import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
 
 export const loader = async (args: Route.LoaderArgs) => {
-    const { userId } = await getAuth(args)
+    const { userId, has } = await getAuth(args)
+    const isSubscriber = has({ plan: 'roam_premium' })
     if (!userId) {
         return redirect('/login')
     }
@@ -20,15 +21,15 @@ export const loader = async (args: Route.LoaderArgs) => {
         .then((res) => res.json())
         .then((data) => data.trips)
 
-    return { getTripsPromise, userId }
+    return { getTripsPromise, userId, isSubscriber }
 }
 
 export default function TripsRoute({ loaderData }: Route.ComponentProps) {
-    const { getTripsPromise, userId } = loaderData
+    const { getTripsPromise, userId, isSubscriber } = loaderData
 
     return (
         <div className="min-h-screen bg-stone-100">
-            <Navbar userId={userId} />
+            <Navbar userId={userId} isSubscriber={isSubscriber} />
 
             <div className="px-6 py-12">
                 <div className="max-w-6xl mx-auto">

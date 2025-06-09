@@ -60,20 +60,21 @@ const recentTrips = [
 ]
 
 export async function loader(args: Route.LoaderArgs) {
-    const { userId } = await getAuth(args)
+    const { userId, has } = await getAuth(args)
     if (!userId) {
         return redirect('/login')
     }
+    const isSubscriber = has({ plan: 'roam_premium' })
 
-    return { userId }
+    return { userId, isSubscriber }
 }
 
 export default function DashboardPage({ loaderData }: Route.ComponentProps) {
-    const { userId } = loaderData
+    const { userId, isSubscriber } = loaderData
 
     return (
         <div className="min-h-screen bg-stone-50">
-            <Navbar userId={userId} />
+            <Navbar userId={userId} isSubscriber={isSubscriber} />
             <div className="px-6 py-12">
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-12">
@@ -85,7 +86,6 @@ export default function DashboardPage({ loaderData }: Route.ComponentProps) {
                         </p>
                     </div>
 
-                    {/* Stats Grid */}
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                         {stats.map((stat, index) => (
                             <div
@@ -107,7 +107,6 @@ export default function DashboardPage({ loaderData }: Route.ComponentProps) {
                     </div>
 
                     <div className="grid lg:grid-cols-2 gap-8">
-                        {/* Recent Trips */}
                         <div className="neo-card bg-stone-100">
                             <div className="flex items-center space-x-3 mb-6">
                                 <BookOpen className="w-8 h-8 text-emerald-700" />
@@ -149,7 +148,6 @@ export default function DashboardPage({ loaderData }: Route.ComponentProps) {
                             </NavLink>
                         </div>
 
-                        {/* Quick Actions */}
                         <div className="neo-card bg-emerald-100">
                             <div className="flex items-center space-x-3 mb-6">
                                 <Settings className="w-8 h-8 text-emerald-700" />
@@ -158,25 +156,26 @@ export default function DashboardPage({ loaderData }: Route.ComponentProps) {
                                 </h2>
                             </div>
 
-                            <div className="space-y-4">
-                                <NavLink to="/trips">
-                                    <button className="neo-button w-full bg-amber-400 text-black border-black mb-4">
-                                        My Trips
-                                    </button>
-                                </NavLink>
-                                <button className="neo-button w-full bg-stone-800 text-white border-black">
-                                    Log a Catch
+                            <NavLink to="/trips">
+                                <button className="neo-button w-full bg-amber-400 text-black border-black my-4">
+                                    My Trips
                                 </button>
-                                <button className="neo-button w-full bg-emerald-600 text-white border-black">
+                            </NavLink>
+                            <NavLink to="/">
+                                <button className="neo-button w-full bg-emerald-600 text-white border-black my-4">
                                     Browse Destinations
                                 </button>
-                                <button className="neo-button w-full bg-amber-100 text-black border-black">
-                                    Weather Forecast
-                                </button>
-                                <button className="neo-button w-full bg-orange-400 text-black border-black">
+                            </NavLink>
+                            <NavLink to="/">
+                                <button className="neo-button w-full bg-orange-400 text-black border-black my-4">
                                     Fishing Tips
                                 </button>
-                            </div>
+                            </NavLink>
+                            <NavLink to="/billing">
+                                <button className="neo-button w-full bg-stone-800 text-white border-black my-4">
+                                    Billing
+                                </button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>
