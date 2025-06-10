@@ -8,9 +8,11 @@ import { SuspendedDestinationSelect } from './DestinationSelect'
 const TripForm = ({
     promise,
     userId,
+    reachedFreeTripLimit,
 }: {
     promise: Promise<Destination[]>
     userId: string | null
+    reachedFreeTripLimit: boolean
 }) => {
     const [destination, setDestination] = useState<Destination | null>(null)
     const [startDate, setStartDate] = useState('')
@@ -83,9 +85,16 @@ const TripForm = ({
                     </select>
                 </div>
 
+                {reachedFreeTripLimit && (
+                    <div className="text-red-400">
+                        You have reached your free trip limit. Subscribe to get
+                        access to unlimited trips!
+                    </div>
+                )}
                 <button
                     type="submit"
                     className="neo-button w-full text-black bg-amber-400 text-xl py-4"
+                    disabled={reachedFreeTripLimit}
                 >
                     Generate Trip Plan
                 </button>

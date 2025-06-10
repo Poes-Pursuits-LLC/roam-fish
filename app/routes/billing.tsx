@@ -1,9 +1,8 @@
-import { Shield, Clock, Zap } from 'lucide-react'
 import Navbar from '~/ui/Navbar'
 import { getAuth } from '@clerk/react-router/ssr.server'
 import { PricingTable } from '@clerk/react-router'
 import { FAQ } from '~/ui/FAQ'
-import Features from '~/ui/Features'
+import { BillingFeatureSet } from '~/ui/billing/BillingFeatureSet'
 
 type LoaderData = {
     userId: string | null
@@ -40,31 +39,7 @@ export default function PricingRoute({
             </div>
 
             <div className="border-b-4 border-black bg-white">
-                <Features
-                    config={{
-                        header: 'Cancel Anytime',
-                        features: [
-                            {
-                                icon: Shield,
-                                title: 'Cancel Anytime',
-                                description:
-                                    'No long-term commitments. Cancel your subscription whenever you want.',
-                            },
-                            {
-                                icon: Clock,
-                                title: '14-Day Free Trial',
-                                description:
-                                    'Try all premium features risk-free. No credit card required.',
-                            },
-                            {
-                                icon: Zap,
-                                title: 'Instant Access',
-                                description:
-                                    'Get immediate access to all features when you upgrade.',
-                            },
-                        ],
-                    }}
-                />
+                <BillingFeatureSet />
             </div>
 
             <div className="max-w-6xl mx-auto px-6 py-16">

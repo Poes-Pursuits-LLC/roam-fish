@@ -7,9 +7,19 @@ import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
 import type { TripDurationEnum } from '~/core/trip/trip.model'
 import { getAuth } from '@clerk/react-router/ssr.server'
+import { createClerkClient } from '@clerk/backend'
 
 export async function loader(args: Route.LoaderArgs) {
     const { userId } = await getAuth(args)
+    let freeTripCount: number | undefined
+    if (userId) {
+        const clerkClient = createClerkClient({
+            secretKey: process.env.CLERK_SECRET_KEY,
+        })
+        const user = await clerkClient.users.getUser(userId)
+        freeTripCount = (user.privateMetadata as { freeTripCount: number })
+            ?.freeTripCount
+    }
 
     const client = hc<AppType>(process.env.SERVER_URL!)
     const getDestinationsPromise = client.destinations
@@ -17,7 +27,7 @@ export async function loader(args: Route.LoaderArgs) {
         .then((res) => res.json())
         .then((data) => data.destinations)
 
-    return { userId, getDestinationsPromise }
+    return { userId, getDestinationsPromise, freeTripCount }
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -42,6 +52,20 @@ export async function action({ request }: Route.ActionArgs) {
         .then((res) => res.json())
         .then((data) => data.tripId)
 
+    if (userId) {
+        const clerkClient = createClerkClient({
+            secretKey: process.env.CLERK_SECRET_KEY,
+        })
+        const user = await clerkClient.users.getUser(userId)
+        const freeTripCount =
+            (user.privateMetadata as { freeTripCount: number })
+                ?.freeTripCount ?? 0
+
+        await clerkClient.users.updateUserMetadata(userId, {
+            privateMetadata: { freeTripCount: freeTripCount + 1 },
+        })
+    }
+
     return { tripId }
 }
 
@@ -49,8 +73,9 @@ export default function PlanTripPage({
     loaderData,
     actionData,
 }: Route.ComponentProps) {
-    const { getDestinationsPromise, userId } = loaderData
+    const { getDestinationsPromise, userId, freeTripCount } = loaderData
     const { tripId } = actionData || { tripId: null }
+    const reachedFreeTripLimit = Boolean(freeTripCount && freeTripCount >= 3)
 
     return (
         <div className="min-h-screen bg-stone-100">
@@ -83,6 +108,7 @@ export default function PlanTripPage({
                                 <TripForm
                                     promise={getDestinationsPromise}
                                     userId={userId}
+                                    reachedFreeTripLimit={reachedFreeTripLimit}
                                 />
                             </div>
                         </div>

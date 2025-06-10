@@ -1,4 +1,4 @@
-const Features = ({
+export const FeatureSet = ({
     config,
 }: {
     config: {
@@ -37,5 +37,3 @@ const Features = ({
         </section>
     )
 }
-
-export default Features
