@@ -26,9 +26,9 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: '20'
-                  cache: 'npm'
 
             - name: Install dependencies
+              if: steps.npm-cache.outputs.cache-hit != 'true'
               run: npm ci
 
             - name: Run quality check
@@ -46,7 +46,6 @@ jobs:
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws-region: ${{ secrets.AWS_REGION }}
-                  # role-to-assume: ${{ secrets.DEV_AWS_ROLE_TO_ASSUME }}
 
             - name: Deploy
               run: |

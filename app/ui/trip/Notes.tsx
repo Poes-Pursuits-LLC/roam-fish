@@ -6,7 +6,7 @@ export const Notes = () => {
             </div>
 
             <p className="text-slate-800 font-semibold leading-relaxed bg-white p-4 border-2 border-black">
-                Notes
+                Hello World
             </p>
         </div>
     )

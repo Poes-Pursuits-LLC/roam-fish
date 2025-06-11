@@ -1,3 +1,3 @@
 export const main = async (event: unknown) => {
-    console.info(event)
+    console.info('here is our stream processor in action', event)
 }

@@ -31,6 +31,7 @@ vi.mock('../main', () => ({
     main: new Hono().route('/', tripRouter),
 }))
 import { main } from '../main'
+import { createFormattedDate } from '~/utils'
 
 describe('/create-trip', () => {
     it('should submit trip details to be generated and then create the trip and return its id', async () => {
@@ -250,7 +251,7 @@ describe('/getUserTrips', () => {
         expect(await response.json()).toEqual({ trips })
     })
 
-    it('should throw an http exception and return a 500 status code if an error occurs', async () => {
+    it('should throw an HTTP exception and return a 500 status code if an error occurs', async () => {
         const client = testClient(main)
         const userId = 'userId'
         const getUserTrips = vi
@@ -265,6 +266,58 @@ describe('/getUserTrips', () => {
 
         expect(getUserTrips).toHaveBeenCalledOnce()
         expect(getUserTrips).toHaveBeenCalledWith(userId)
+        expect(response.status).toBe(500)
+    })
+})
+
+describe('/updateTrip', () => {
+    it('should update a trip with provided fields', async () => {
+        const client = testClient(main)
+        const tripId = 'tripId'
+        const updateTrip = vi.mocked(tripService.updateTrip)
+
+        const updateFields = {
+            status: TripStatusEnum.Planned,
+        }
+
+        const response = await client.updateTrip.$post({
+            json: {
+                tripId,
+                updateFields,
+            },
+        })
+        console.info(response)
+
+        expect(updateTrip).toHaveBeenCalledOnce()
+        expect(updateTrip).toHaveBeenCalledWith(tripId, {
+            ...updateFields,
+            updatedAt: createFormattedDate(),
+        })
+        expect(await response.json()).toEqual({ tripId })
+    })
+
+    it('should throw an HTTP exception and return a 500 status code if an error occurs', async () => {
+        const client = testClient(main)
+        const tripId = 'tripId'
+        const updateTrip = vi
+            .mocked(tripService.updateTrip)
+            .mockRejectedValue(new Error('Error'))
+        const updateFields = {
+            status: TripStatusEnum.Planned,
+        }
+
+        const response = await client.updateTrip.$post({
+            json: {
+                tripId,
+                updateFields,
+            },
+        })
+
+        expect(updateTrip).toHaveBeenCalledOnce()
+        expect(updateTrip).toHaveBeenCalledWith(tripId, {
+            ...updateFields,
+            updatedAt: createFormattedDate(),
+        })
         expect(response.status).toBe(500)
     })
 })

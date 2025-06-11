@@ -2,10 +2,23 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { tripService } from '~/core/trip/trip.service'
-import { handleAsync } from '~/utils'
-import { TripDurationEnum, TripStatusEnum } from '~/core/trip/trip.model'
+import { createFormattedDate, handleAsync } from '~/utils'
+import {
+    TripDurationEnum,
+    TripStatusEnum,
+    TripSchema,
+} from '~/core/trip/trip.model'
 import { createDefaultPackingList } from '~/core/trip/helpers/create-default-packing-list'
 import { HTTPException } from 'hono/http-exception'
+
+const updatableTripFields = TripSchema.pick({
+    name: true,
+    notes: true,
+    status: true,
+    packingList: true,
+    startDate: true,
+    updatedAt: true,
+}).partial()
 
 const tripRouter = new Hono()
     .get(
@@ -124,6 +137,38 @@ const tripRouter = new Hono()
             if (createTripError) {
                 throw new HTTPException(500, {
                     message: createTripError.message,
+                })
+            }
+
+            return c.json({ tripId })
+        },
+    )
+    .post(
+        '/updateTrip',
+        zValidator(
+            'json',
+            z.object({
+                tripId: z.string(),
+                updateFields: updatableTripFields,
+            }),
+        ),
+        async (c) => {
+            const { tripId, updateFields } = c.req.valid('json')
+            console.info(
+                `Invoked server.updateTrip with tripId: ${tripId} and updates:`,
+                updateFields,
+            )
+
+            const [, updateTripError] = await handleAsync(
+                tripService.updateTrip(tripId, {
+                    ...updateFields,
+                    updatedAt: createFormattedDate(),
+                }),
+            )
+            if (updateTripError) {
+                console.error('WHAT IS OUR ERROR', updateTripError)
+                throw new HTTPException(500, {
+                    message: updateTripError.message,
                 })
             }
 
