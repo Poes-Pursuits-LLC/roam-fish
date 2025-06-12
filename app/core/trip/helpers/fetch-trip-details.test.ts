@@ -1,5 +1,5 @@
 import { expect, it, vi } from 'vitest'
-import { getTripDetails } from './get-trip-details'
+import { fetchTripDetails } from './fetch-trip-details'
 import { restClient } from '~/clients/rest.client'
 
 vi.mock('~/clients/rest.client', () => ({
@@ -31,7 +31,7 @@ it('should use the rest client to make a GET request to the xAi API to get gener
         ],
     })
 
-    const result = await getTripDetails(contentId)
+    const result = await fetchTripDetails(contentId)
 
     expect(get).toHaveBeenCalledOnce()
     expect(get).toHaveBeenCalledWith(
@@ -48,5 +48,5 @@ it('should throw an error if the API call fails', async () => {
         new Error('Internal Server Error'),
     )
 
-    await expect(getTripDetails(contentId)).rejects.toThrow()
+    await expect(fetchTripDetails(contentId)).rejects.toThrow()
 })

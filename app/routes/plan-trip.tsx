@@ -1,72 +1,17 @@
-import { ArrowLeft, Fish } from 'lucide-react'
 import TripForm from '~/ui/plan-trip/TripForm'
 import TripLoader from '~/ui/plan-trip/TripLoader'
-import { NavLink } from 'react-router'
 import type { Route } from './+types/plan-trip'
-import { hc } from 'hono/client'
-import type { AppType } from '~/server/main'
-import type { TripDurationEnum } from '~/core/trip/trip.model'
-import { getAuth } from '@clerk/react-router/ssr.server'
-import { createClerkClient } from '@clerk/backend'
+import { planTripLoader } from '~/loaders/plan-trip.loader'
+import { PlanTripHeader } from '~/ui/plan-trip/PlanTripHeader'
+import { planTripAction } from '~/actions/plan-trip.action'
+import { BackButton } from '~/ui/BackButton'
 
 export async function loader(args: Route.LoaderArgs) {
-    const { userId } = await getAuth(args)
-    let freeTripCount: number | undefined
-    if (userId) {
-        const clerkClient = createClerkClient({
-            secretKey: process.env.CLERK_SECRET_KEY,
-        })
-        const user = await clerkClient.users.getUser(userId)
-        freeTripCount = (user.privateMetadata as { freeTripCount: number })
-            ?.freeTripCount
-    }
-
-    const client = hc<AppType>(process.env.SERVER_URL!)
-    const getDestinationsPromise = client.destinations
-        .$get()
-        .then((res) => res.json())
-        .then((data) => data.destinations)
-
-    return { userId, getDestinationsPromise, freeTripCount }
+    return await planTripLoader(args)
 }
 
-export async function action({ request }: Route.ActionArgs) {
-    const formData = await request.formData()
-    const destinationName = String(formData.get('destinationName'))
-    const startDate = String(formData.get('startDate'))
-    const headcount = String(formData.get('headcount'))
-    const duration = String(formData.get('duration')) as TripDurationEnum
-    const userId = String(formData.get('userId'))
-
-    const client = hc<AppType>(process.env.SERVER_URL!)
-    const tripId = await client.createTrip
-        .$post({
-            json: {
-                destinationName,
-                startDate,
-                headcount,
-                duration,
-                ...(userId && { userId }),
-            },
-        })
-        .then((res) => res.json())
-        .then((data) => data.tripId)
-
-    if (userId) {
-        const clerkClient = createClerkClient({
-            secretKey: process.env.CLERK_SECRET_KEY,
-        })
-        const user = await clerkClient.users.getUser(userId)
-        const freeTripCount =
-            (user.privateMetadata as { freeTripCount: number })
-                ?.freeTripCount ?? 0
-
-        await clerkClient.users.updateUserMetadata(userId, {
-            privateMetadata: { freeTripCount: freeTripCount + 1 },
-        })
-    }
-
-    return { tripId }
+export async function action(args: Route.ActionArgs) {
+    return await planTripAction(args)
 }
 
 export default function PlanTripPage({
@@ -81,25 +26,8 @@ export default function PlanTripPage({
         <div className="min-h-screen bg-stone-100">
             <div className="px-6 py-8">
                 <div className="max-w-4xl mx-auto">
-                    <NavLink to="/">
-                        <button className="neo-button mb-8 flex items-center gap-2 bg-slate-700 text-slate-100 border-black">
-                            <ArrowLeft className="w-5 h-5" />
-                            Back Home
-                        </button>
-                    </NavLink>
-
-                    <div className="text-center mb-12">
-                        <div className="flex justify-center mb-4">
-                            <Fish className="h-6 w-6" />
-                        </div>
-                        <h1 className="neo-header text-slate-800 mb-4">
-                            Plan Your Trip
-                        </h1>
-                        <p className="text-2xl font-bold text-slate-700">
-                            Let&apos;s catch some fish!
-                        </p>
-                    </div>
-
+                    <BackButton />
+                    <PlanTripHeader />
                     {tripId ? (
                         <TripLoader tripId={tripId} />
                     ) : (

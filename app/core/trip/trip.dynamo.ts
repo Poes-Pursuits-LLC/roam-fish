@@ -13,7 +13,7 @@ export const DynamoTrip = () => {
         {
             model: {
                 entity: 'trip',
-                version: '1',
+                version: '2',
                 service: 'trip',
             },
             attributes: {
@@ -67,7 +67,7 @@ export const DynamoTrip = () => {
                         type: 'string',
                     },
                 },
-                tacticsSummary: {
+                fishingSummary: {
                     type: 'string',
                     required: false,
                 },
@@ -85,6 +85,30 @@ export const DynamoTrip = () => {
                             category: { type: 'string', required: true },
                             name: { type: 'string', required: true },
                             quantity: { type: 'string', required: true },
+                        },
+                    },
+                },
+                budgetList: {
+                    type: 'list',
+                    required: true,
+                    items: {
+                        type: 'map',
+                        properties: {
+                            id: { type: 'string', required: true },
+                            name: { type: 'string', required: true },
+                            price: { type: 'string', required: true },
+                        },
+                    },
+                },
+                checkList: {
+                    type: 'list',
+                    required: true,
+                    items: {
+                        type: 'map',
+                        properties: {
+                            id: { type: 'string', required: true },
+                            name: { type: 'string', required: true },
+                            completed: { type: 'boolean', required: true },
                         },
                     },
                 },

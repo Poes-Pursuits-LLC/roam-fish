@@ -5,25 +5,27 @@ import { useNavigate } from 'react-router'
 const TripLoader = ({ tripId }: { tripId: string }) => {
     const navigate = useNavigate()
     const [progress, setProgress] = useState(0)
+    const [shouldNavigate, setShouldNavigate] = useState(false)
     const DURATION = 15000
     const INTERVAL = 50
     const totalSteps = Math.ceil(DURATION / INTERVAL)
     const incrementPerStep = 100 / totalSteps
 
     useEffect(() => {
-        console.log('TripLoader mounted, starting progress')
         const timer = setInterval(() => {
             setProgress((oldProgress) => {
-                const newProgress = Math.min(100, oldProgress + incrementPerStep)
+                const newProgress = Math.min(
+                    100,
+                    oldProgress + incrementPerStep,
+                )
                 console.log('Progress updated:', newProgress)
-                
+
                 if (newProgress >= 100) {
-                    console.log('Progress reached 100%, navigating to:', `/trip/${tripId}`)
+                    console.log(
+                        'Progress reached 100%, setting shouldNavigate to true',
+                    )
                     clearInterval(timer)
-                    // Use setTimeout to ensure state updates are processed
-                    setTimeout(() => {
-                        navigate(`/trip/${tripId}`)
-                    }, 0)
+                    setShouldNavigate(true)
                     return 100
                 }
                 return newProgress
@@ -34,7 +36,14 @@ const TripLoader = ({ tripId }: { tripId: string }) => {
             console.log('TripLoader unmounting, clearing interval')
             clearInterval(timer)
         }
-    }, [navigate, tripId]) // Added tripId to dependencies
+    }, [])
+
+    useEffect(() => {
+        if (shouldNavigate) {
+            console.log('Navigating to:', `/trip/${tripId}`)
+            navigate(`/trip/${tripId}`, { replace: true })
+        }
+    }, [shouldNavigate, navigate, tripId])
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[400px] space-y-8">

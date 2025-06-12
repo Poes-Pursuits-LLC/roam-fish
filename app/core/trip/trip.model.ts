@@ -2,23 +2,25 @@ import z from 'zod'
 
 export interface Trip {
     tripId: string
-    name?: string
     destinationName: string
-    userId?: string
-    airport?: string
-    cities?: string[]
     headcount: string
-    notes?: string
-    flies?: string[]
-    hatches?: string[]
-    weather?: string
-    fishingSummary?: string
     packingList: PackingListItem[]
+    budgetList: BudgetItem[]
+    checkList: ChecklistItem[]
     status: TripStatusEnum
     contentId: string
     startDate: string
     type: string
     duration: TripDurationEnum
+    name?: string
+    userId?: string
+    airport?: string
+    cities?: string[]
+    notes?: string
+    flies?: string[]
+    hatches?: string[]
+    weather?: string
+    fishingSummary?: string
     createdAt: string
     updatedAt: string
 }
@@ -30,6 +32,18 @@ interface PackingListItem {
     quantity: string
 }
 
+export interface BudgetItem {
+    id: string
+    name: string
+    price: string
+}
+
+export interface ChecklistItem {
+    id: string
+    name: string
+    completed: boolean
+}
+
 export enum TripStatusEnum {
     Generating = 'Generating',
     Planned = 'Planned',
@@ -37,8 +51,6 @@ export enum TripStatusEnum {
 }
 
 export enum TripDurationEnum {
-    HalfDay = 'Half Day (4 hours)',
-    FullDay = 'Full Day (8 hours)',
     Weekend = 'Weekend',
     Week = 'Week Long',
     TwoWeeks = 'Two weeks',
@@ -49,6 +61,18 @@ export const PackingListItemSchema = z.object({
     category: z.string(),
     name: z.string(),
     quantity: z.string(),
+})
+
+export const BudgetItemSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    price: z.string(),
+})
+
+export const ChecklistItemSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    completed: z.boolean(),
 })
 
 export const TripSchema = z.object({
@@ -65,6 +89,8 @@ export const TripSchema = z.object({
     weather: z.string().optional(),
     fishingSummary: z.string().optional(),
     packingList: z.array(PackingListItemSchema),
+    budgetList: z.array(BudgetItemSchema),
+    checkList: z.array(ChecklistItemSchema),
     status: z.nativeEnum(TripStatusEnum),
     contentId: z.string(),
     startDate: z.string(),

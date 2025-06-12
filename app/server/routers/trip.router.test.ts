@@ -9,6 +9,8 @@ import {
     type Trip,
 } from '~/core/trip/trip.model'
 import { createDefaultPackingList } from '~/core/trip/helpers/create-default-packing-list'
+import { createDefaultBudgetList } from '~/core/trip/helpers/create-default-budget'
+import { createDefaultCheckList } from '~/core/trip/helpers/create-defaultcheckList'
 
 vi.mock('~/core/trip/trip.service.ts', () => ({
     tripService: {
@@ -24,6 +26,16 @@ vi.mock('~/core/trip/trip.service.ts', () => ({
 vi.mock('~/core/trip/helpers/create-default-packing-list', () => {
     return {
         createDefaultPackingList: vi.fn(),
+    }
+})
+vi.mock('~/core/trip/helpers/create-default-budget', () => {
+    return {
+        createDefaultBudgetList: vi.fn(),
+    }
+})
+vi.mock('~/core/trip/helpers/create-defaultcheckList', () => {
+    return {
+        createDefaultCheckList: vi.fn(),
     }
 })
 
@@ -53,6 +65,14 @@ describe('/create-trip', () => {
                 quantity: '1',
             },
         ]
+        const budgetList = [
+            {
+                id: '1',
+                name: '1',
+                price: '1',
+            },
+        ]
+        const checkList = ['Buy plane tickets', 'Buy car rental']
 
         const submitTripDetails = vi
             .mocked(tripService.submitTripDetails)
@@ -61,6 +81,8 @@ describe('/create-trip', () => {
             .mocked(tripService.createTrip)
             .mockResolvedValue(tripId)
         vi.mocked(createDefaultPackingList).mockReturnValue(packingList)
+        vi.mocked(createDefaultBudgetList).mockReturnValue(budgetList)
+        vi.mocked(createDefaultCheckList).mockReturnValue(checkList)
 
         const response = await client.createTrip.$post({
             json: inputs,
@@ -73,6 +95,8 @@ describe('/create-trip', () => {
             ...inputs,
             contentId,
             packingList,
+            budgetList,
+            checkList,
             status: TripStatusEnum.Generating,
         })
         expect(await response.json()).toEqual({ tripId })

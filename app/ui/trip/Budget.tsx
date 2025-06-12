@@ -1,72 +1,118 @@
-import { DollarSign } from 'lucide-react'
+import { DollarSign, Plus, Trash2 } from 'lucide-react'
+import { useState } from 'react'
+import type { BudgetItem } from '~/core/trip/trip.model'
 
-export const Budget = () => {
+export const Budget = ({ budgetList }: { budgetList: BudgetItem[] }) => {
+    const [localBudgetList, setLocalBudgetList] =
+        useState<BudgetItem[]>(budgetList)
+    const total = localBudgetList.reduce(
+        (acc, item) => acc + Number(item.price),
+        0,
+    )
+
+    const handleItemChange = (
+        id: string,
+        field: keyof BudgetItem,
+        value: string,
+    ) => {
+        setLocalBudgetList((prev) =>
+            prev.map((item) =>
+                item.id === id
+                    ? {
+                          ...item,
+                          [field]:
+                              field === 'price'
+                                  ? value.replace(/[^0-9.]/g, '')
+                                  : value,
+                      }
+                    : item,
+            ),
+        )
+    }
+
+    const handleAddItem = () => {
+        const newItem: BudgetItem = {
+            id: crypto.randomUUID(),
+            name: '',
+            price: '0',
+        }
+        setLocalBudgetList((prev) => [...prev, newItem])
+    }
+
+    const handleRemoveItem = (id: string) => {
+        setLocalBudgetList((prev) => prev.filter((item) => item.id !== id))
+    }
+
     return (
         <div className="neo-card bg-stone-50">
             <div className="flex items-center gap-3 mb-6">
                 <DollarSign className="w-6 h-6 text-emerald-700" />
                 <h2 className="neo-subheader text-slate-800">Budget</h2>
                 <div className="ml-auto bg-emerald-400 text-black px-3 py-1 font-bold border-2 border-black">
-                    Total: ${budget.total}
+                    Total: ${total}
                 </div>
             </div>
 
-            {budget.items.map((item) => (
+            {localBudgetList.map((item) => (
                 <div
                     key={item.id}
-                    className="flex items-center justify-between p-3 mb-3 bg-white border-2 border-black"
+                    className="flex items-center justify-between p-3 mb-3 bg-white border-2 border-black hover:bg-stone-100 transition-colors"
                 >
-                    <div>
-                        <div className="font-bold text-slate-800">
-                            {item.category}
-                        </div>
-                        <div className="text-slate-600 text-sm">
-                            {item.description}
-                        </div>
+                    <div className="flex-1 mr-4">
+                        <input
+                            type="text"
+                            name={`budget-${item.id}-name`}
+                            value={item.name}
+                            onChange={(e) =>
+                                handleItemChange(
+                                    item.id,
+                                    'name',
+                                    e.target.value,
+                                )
+                            }
+                            placeholder="Item name"
+                            className="w-full font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer"
+                        />
+                        <input
+                            type="text"
+                            name={`budget-${item.id}-price`}
+                            value={item.price}
+                            onChange={(e) =>
+                                handleItemChange(
+                                    item.id,
+                                    'price',
+                                    e.target.value,
+                                )
+                            }
+                            placeholder="0.00"
+                            className="w-full text-slate-600 text-sm bg-transparent focus:outline-none cursor-pointer"
+                        />
                     </div>
-                    <div className="flex items-center gap-3">
-                        <span className="font-bold text-lg text-slate-800">
-                            ${item.amount}
-                        </span>
-                    </div>
+                    <button
+                        type="button"
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-full"
+                    >
+                        <Trash2 className="w-5 h-5" />
+                    </button>
                 </div>
             ))}
+
+            <button
+                type="button"
+                onClick={handleAddItem}
+                className="w-full p-3 mt-2 flex items-center justify-center gap-2 bg-emerald-100 text-emerald-700 font-bold border-2 border-black hover:bg-emerald-200"
+            >
+                <Plus className="w-5 h-5" />
+                Add Budget Item
+            </button>
+
+            {/* Hidden input to capture the entire budget list as JSON */}
+            <input
+                type="hidden"
+                name="budgetList"
+                value={JSON.stringify(localBudgetList)}
+            />
         </div>
     )
-}
-
-const budget = {
-    total: 1200,
-    items: [
-        {
-            id: 1,
-            category: 'Accommodation',
-            amount: 400,
-            description: 'Cabin rental',
-        },
-        {
-            id: 2,
-            category: 'Food',
-            amount: 300,
-            description: 'Groceries & meals',
-        },
-        {
-            id: 3,
-            category: 'Transportation',
-            amount: 200,
-            description: 'Gas & vehicle',
-        },
-        {
-            id: 4,
-            category: 'Permits',
-            amount: 150,
-            description: 'Fishing licenses',
-        },
-        {
-            id: 5,
-            category: 'Gear',
-            amount: 150,
-            description: 'New flies & tackle',
-        },
-    ],
 }

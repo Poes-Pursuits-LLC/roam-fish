@@ -10,12 +10,16 @@ import {
 } from '~/core/trip/trip.model'
 import { createDefaultPackingList } from '~/core/trip/helpers/create-default-packing-list'
 import { HTTPException } from 'hono/http-exception'
+import { createDefaultBudgetList } from '~/core/trip/helpers/create-default-budget'
+import { createDefaultCheckList } from '~/core/trip/helpers/create-defaultcheckList'
 
 const updatableTripFields = TripSchema.pick({
     name: true,
     notes: true,
     status: true,
     packingList: true,
+    budgetList: true,
+    checkList: true,
     startDate: true,
     updatedAt: true,
 }).partial()
@@ -132,6 +136,11 @@ const tripRouter = new Hono()
                     contentId: contentId!,
                     status: TripStatusEnum.Generating,
                     packingList: createDefaultPackingList(inputs.headcount),
+                    budgetList: createDefaultBudgetList(
+                        inputs.headcount,
+                        inputs.duration,
+                    ),
+                    checkList: createDefaultCheckList(),
                 }),
             )
             if (createTripError) {

@@ -1,6 +1,6 @@
 import { DynamoTrip } from './trip.dynamo'
 import type { Trip } from './trip.model'
-import { getTripDetails as getTripDetailsHelper } from './helpers/get-trip-details'
+import { fetchTripDetails } from './helpers/fetch-trip-details'
 import { postTripDetails } from './helpers/post-trip-details'
 
 const getTrip = async (tripId: string) => {
@@ -9,7 +9,7 @@ const getTrip = async (tripId: string) => {
 }
 
 const getTripDetails = async (contentId: string) => {
-    const tripDetails = await getTripDetailsHelper(contentId)
+    const tripDetails = await fetchTripDetails(contentId)
     return tripDetails
 }
 
@@ -29,6 +29,8 @@ const createTrip = async (
         | 'destinationName'
         | 'headcount'
         | 'packingList'
+        | 'budgetList'
+        | 'checkList'
     >,
 ) => {
     const { data } = await DynamoTrip().put(trip).go()

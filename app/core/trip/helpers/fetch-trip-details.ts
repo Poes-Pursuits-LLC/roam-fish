@@ -2,7 +2,7 @@ import { Resource } from 'sst'
 import { restClient } from '~/clients/rest.client'
 import type { ChatCompletion } from 'openai/resources/chat'
 
-export const getTripDetails = async (contentId: string) => {
+export const fetchTripDetails = async (contentId: string) => {
     const response = await restClient.get<ChatCompletion>({
         url: `${Resource.XAiUrl.value}/chat/deferred-completion/${contentId}`,
         headers: {

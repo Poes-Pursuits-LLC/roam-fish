@@ -1,12 +1,12 @@
 import { Cloud, Fish, Target } from 'lucide-react'
 
 export const Tactics = ({
-    tacticsSummary,
+    fishingSummary,
     weather,
     flies,
     hatches,
 }: {
-    tacticsSummary: string
+    fishingSummary: string
     weather: string
     flies: string[]
     hatches: string[]
@@ -71,10 +71,10 @@ export const Tactics = ({
 
                 <div className="bg-white p-4 border-2 border-black">
                     <h3 className="font-bold text-lg text-slate-800 uppercase tracking-wide mb-4">
-                        Fishing Summary
+                        Summary
                     </h3>
                     <p className="text-slate-800 font-semibold leading-relaxed">
-                        {tacticsSummary}
+                        {fishingSummary}
                     </p>
                 </div>
             </div>

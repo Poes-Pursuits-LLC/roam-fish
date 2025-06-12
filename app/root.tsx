@@ -55,12 +55,13 @@ export default function App({ loaderData }: Route.ComponentProps) {
         <ClerkProvider
             loaderData={loaderData}
             appearance={{
-                baseTheme: neobrutalism, elements: {
+                baseTheme: neobrutalism,
+                elements: {
                     avatarBox: {
                         width: '2.5rem',
                         height: '2.5rem',
                     },
-                }
+                },
             }}
         >
             <Outlet />

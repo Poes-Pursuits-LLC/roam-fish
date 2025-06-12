@@ -1,6 +1,6 @@
 import { it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { landingLoader } from './landing.loader'
-import type { Route } from './+types/landing'
+import type { Route } from '../routes/+types/landing'
 import { hc } from 'hono/client'
 import { getAuth } from '@clerk/react-router/ssr.server'
 

@@ -7,19 +7,23 @@ import { PackingList } from '~/ui/trip/PackingList'
 import { Tactics } from '~/ui/trip/Tactics'
 import { TravelDetails } from '~/ui/trip/TravelDetails'
 import { Checklist } from '~/ui/trip/Checklist'
-import { tripLoader } from './trip.loader'
+import { tripLoader } from '~/loaders/trip.loader'
 import { Form } from 'react-router'
-import { tripAction } from './trip.action'
+import { tripAction } from '~/actions/trip.action'
 import { TripHeader } from '~/ui/trip/TripHeader'
 
 export async function loader(args: Route.LoaderArgs) {
-    const { trip, userId, isSubscriber } = await tripLoader(args)
-    return { trip, userId, isSubscriber }
+    return await tripLoader(args)
 }
 
 export async function action(args: Route.ActionArgs) {
     await tripAction(args)
 }
+
+// TODO: enforce limits on length of notes, packing list, checklist, budget list
+// TODO: clean up styling a bit more.
+// TODO: make fishing summary behind paywall.
+// TODO: new licensing and local regulations section, behind paywall as well.
 
 export default function TripPage({ loaderData }: Route.ComponentProps) {
     const { trip, userId, isSubscriber } = loaderData
@@ -48,17 +52,17 @@ export default function TripPage({ loaderData }: Route.ComponentProps) {
                                 cities={trip.cities!}
                             />
                             <div className="grid lg:grid-cols-3 gap-8 mb-8">
-                                <Budget />
+                                <Budget budgetList={trip.budgetList} />
                                 <PackingList list={trip!.packingList} />
-                                <Checklist />
+                                <Checklist checkList={trip.checkList} />
                             </div>
                             <Tactics
-                                tacticsSummary={trip.tacticsSummary!}
+                                fishingSummary={trip.fishingSummary!}
                                 weather={trip.weather!}
                                 flies={trip.flies!}
                                 hatches={trip.hatches!}
                             />
-                            <Notes />
+                            <Notes notes={trip.notes ?? ''} />
                         </div>
                     </div>
                 </Form>

@@ -10,7 +10,7 @@ const ZResponseFormat = z.object({
     weather: z.string(),
     flies: z.array(z.string()),
     hatches: z.array(z.string()),
-    tacticsSummary: z.string(),
+    fishingSummary: z.string(),
 })
 
 export const postTripDetails = async (inputs: {

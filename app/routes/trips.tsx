@@ -1,25 +1,13 @@
-import { redirect } from 'react-router'
 import { Suspense } from 'react'
 import Navbar from '~/ui/Navbar'
 import { Trips } from '~/ui/trips/Trips'
 import { TripsSkeleton } from '~/ui/trips/TripsSkeleton'
-import { getAuth } from '@clerk/react-router/ssr.server'
 import type { Route } from './+types/trips'
-import { hc } from 'hono/client'
-import type { AppType } from '~/server/main'
+import { tripsLoader } from '~/loaders/trips.loader'
 
 export const loader = async (args: Route.LoaderArgs) => {
-    const { userId, has } = await getAuth(args)
-    const isSubscriber = has({ plan: 'roam_premium' })
-    if (!userId) {
-        return redirect('/login')
-    }
-
-    const client = hc<AppType>(process.env.SERVER_URL!)
-    const getTripsPromise = client.getUserTrips
-        .$get({ query: { userId } })
-        .then((res) => res.json())
-        .then((data) => data.trips)
+    const response = await tripsLoader(args)
+    const { getTripsPromise, userId, isSubscriber } = response
 
     return { getTripsPromise, userId, isSubscriber }
 }

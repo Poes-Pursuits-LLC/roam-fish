@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { MapPin, Calendar, Clock, Users } from 'lucide-react'
 import type { Destination } from '~/core/destination/destination.model'
-import { Form } from 'react-router'
+import { Form, NavLink } from 'react-router'
 import { TripDurationEnum } from '~/core/trip/trip.model'
 import { SuspendedDestinationSelect } from './DestinationSelect'
 
@@ -85,19 +85,27 @@ const TripForm = ({
                     </select>
                 </div>
 
-                {reachedFreeTripLimit && (
-                    <div className="text-red-400">
-                        You have reached your free trip limit. Subscribe to get
-                        access to unlimited trips!
+                {reachedFreeTripLimit ? (
+                    <div className="flex flex-col gap-4">
+                        <div className="text-red-400 text-lg">
+                            You have reached your free trip limit. Subscribe to
+                            get access to more!
+                        </div>
+                        <NavLink to="/billing">
+                            <button className="neo-button w-full text-black bg-red-400 text-xl py-4">
+                                Subscribe
+                            </button>
+                        </NavLink>
                     </div>
+                ) : (
+                    <button
+                        type="submit"
+                        className="neo-button w-full text-black bg-amber-400 text-xl py-4"
+                        disabled={reachedFreeTripLimit}
+                    >
+                        Generate Trip Plan
+                    </button>
                 )}
-                <button
-                    type="submit"
-                    className="neo-button w-full text-black bg-amber-400 text-xl py-4"
-                    disabled={reachedFreeTripLimit}
-                >
-                    Generate Trip Plan
-                </button>
             </Form>
         </div>
     )

@@ -4,7 +4,7 @@ import { Footer } from '~/ui/landing/Footer'
 import Navbar from '~/ui/Navbar'
 import type { Route } from './+types/landing'
 import { Suspense } from 'react'
-import { landingLoader } from './landing.loader'
+import { landingLoader } from '../loaders/landing.loader'
 import { LandingFAQ } from '~/ui/landing/LandingFAQ'
 import { LandingFeatureSet } from '~/ui/landing/LandingFeatureSet'
 
@@ -19,10 +19,7 @@ export function meta() {
 }
 
 export async function loader(args: Route.LoaderArgs) {
-    const { getDestinationsPromise, userId, isSubscriber } =
-        await landingLoader(args)
-
-    return { getDestinationsPromise, userId, isSubscriber }
+    return await landingLoader(args)
 }
 
 export default function LandingPage({ loaderData }: Route.ComponentProps) {
