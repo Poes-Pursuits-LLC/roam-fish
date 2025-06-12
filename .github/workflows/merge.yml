@@ -1,7 +1,5 @@
 name: Merge Develop to Main
 
-# ayeeee
-
 on:
     schedule:
         - cron: '0 0 * * *'
@@ -32,7 +30,6 @@ jobs:
             - name: Run unit tests
               run: npm run unit-tests
 
-              # yahweh beseeches thee
             - name: Merge develop -> main
               uses: devmasx/merge-branch@master
               with:
@@ -40,3 +37,11 @@ jobs:
                   from_branch: develop
                   target_branch: main
                   github_token: ${{ secrets.GITHUB_TOKEN }}
+                  message: 'Automated merge from develop to main'
+
+            - name: Trigger production deployment
+              uses: peter-evans/repository-dispatch@v2
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  event-type: merge_to_main
+                  client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

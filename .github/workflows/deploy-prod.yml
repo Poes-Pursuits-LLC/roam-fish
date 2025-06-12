@@ -1,8 +1,8 @@
 name: Deploy to Production
 
 on:
-    push:
-        branches: [main]
+    repository_dispatch:
+        types: [merge_to_main]
 
 jobs:
     deploy-prod:
