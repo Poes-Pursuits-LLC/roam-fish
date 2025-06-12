@@ -25,14 +25,10 @@ jobs:
             - name: Run unit tests
               run: npm run unit-tests
 
-            - name: Merge develop into main
-              if: success()
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  git config --global user.name "github-actions[bot]"
-                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                  git fetch origin main
-                  git checkout main
-                  git merge --no-ff --allow-unrelated-histories origin/develop -m "Automated merge of develop into main"
-                  git push origin main
+            - name: Merge develop -> main
+              uses: devmasx/merge-branch@master
+              with:
+                  type: now
+                  from_branch: develop
+                  target_branch: main
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
