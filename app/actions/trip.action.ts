@@ -1,5 +1,5 @@
 import { hc } from 'hono/client'
-import type { Route } from '~/routes/+types/trip'
+import type { Route } from '../routes/+types/trip'
 import type { AppType } from '~/server/main'
 
 // TODO: update test given new fields.

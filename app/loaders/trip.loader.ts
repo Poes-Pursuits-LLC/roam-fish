@@ -1,5 +1,5 @@
 import { getAuth } from '@clerk/react-router/ssr.server'
-import type { Route } from './+types/trip'
+import type { Route } from '../routes/+types/trip'
 import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
 

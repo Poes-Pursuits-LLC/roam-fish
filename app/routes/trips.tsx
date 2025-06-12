@@ -7,8 +7,10 @@ import { tripsLoader } from '~/loaders/trips.loader'
 
 export const loader = async (args: Route.LoaderArgs) => {
     const response = await tripsLoader(args)
+    if (response instanceof Response) {
+        return response
+    }
     const { getTripsPromise, userId, isSubscriber } = response
-
     return { getTripsPromise, userId, isSubscriber }
 }
 

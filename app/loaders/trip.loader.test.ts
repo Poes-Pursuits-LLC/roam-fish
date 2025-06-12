@@ -1,6 +1,6 @@
 import { it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { tripLoader } from './trip.loader'
-import type { Route } from './+types/trip'
+import type { Route } from '../routes/+types/trip'
 import { hc } from 'hono/client'
 import { getAuth } from '@clerk/react-router/ssr.server'
 

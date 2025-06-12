@@ -72,7 +72,10 @@ describe('/create-trip', () => {
                 price: '1',
             },
         ]
-        const checkList = ['Buy plane tickets', 'Buy car rental']
+        const checkList = [
+            { id: '1', name: 'Buy plane tickets', completed: false },
+            { id: '2', name: 'Buy car rental', completed: false },
+        ]
 
         const submitTripDetails = vi
             .mocked(tripService.submitTripDetails)
