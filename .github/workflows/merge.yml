@@ -32,6 +32,7 @@ jobs:
             - name: Run unit tests
               run: npm run unit-tests
 
+              # yahweh beseeches thee
             - name: Merge develop -> main
               uses: devmasx/merge-branch@master
               with:
