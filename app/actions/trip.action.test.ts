@@ -35,7 +35,7 @@ it('should call the updateTrip endpoint with the trip updateFields from the subm
         params: { tripId },
     } as Route.ActionArgs
 
-    // TODO: change to see how cicd works.
+    // TODO: change to see how cicd works. ok?
     const mockUpdateTripPost = vi.fn().mockResolvedValue({ ok: true })
     mockedHc.mockReturnValue({
         updateTrip: {
