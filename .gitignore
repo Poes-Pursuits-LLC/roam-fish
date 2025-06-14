@@ -9,3 +9,5 @@
 .sst
 
 docker
+
+seed.ts

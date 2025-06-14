@@ -3,6 +3,7 @@ import { dashboardLoader } from './dashboard.loader'
 import type { Route } from '../routes/+types/dashboard'
 import { getAuth } from '@clerk/react-router/ssr.server'
 import { redirect } from 'react-router'
+import { createClerkClient } from '@clerk/backend'
 
 vi.mock('@clerk/react-router/ssr.server', () => ({
     getAuth: vi.fn(),
@@ -13,6 +14,11 @@ vi.mock('react-router', () => ({
     redirect: vi.fn(),
 }))
 const mockedRedirect = vi.mocked(redirect)
+
+vi.mock('@clerk/backend', () => ({
+    createClerkClient: vi.fn(),
+}))
+const mockedCreateClerkClient = vi.mocked(createClerkClient)
 
 const loaderArgs = {} as Route.LoaderArgs
 
@@ -32,8 +38,16 @@ it('should redirect to /login if user is not authenticated', async () => {
     expect(result).toBe(redirectMarker)
 })
 
-it('should return userId and isSubscriber for an authenticated premium user', async () => {
+it('should return userId, isSubscriber, and freeTripCount for an authenticated premium user', async () => {
     const has = vi.fn().mockReturnValue(true)
+    const mockClerkClient = {
+        users: {
+            getUser: vi.fn().mockResolvedValue({
+                privateMetadata: { freeTripCount: 3 }
+            })
+        }
+    }
+    mockedCreateClerkClient.mockReturnValue(mockClerkClient as any)
     mockedGetAuth.mockResolvedValue({
         userId: 'user-123',
         has,
@@ -44,11 +58,27 @@ it('should return userId and isSubscriber for an authenticated premium user', as
 
     expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
     expect(has).toHaveBeenCalledWith({ plan: 'roam_premium' })
-    expect(result).toEqual({ userId: 'user-123', isSubscriber: true })
+    expect(mockedCreateClerkClient).toHaveBeenCalledWith({
+        secretKey: process.env.CLERK_SECRET_KEY,
+    })
+    expect(mockClerkClient.users.getUser).toHaveBeenCalledWith('user-123')
+    expect(result).toEqual({
+        userId: 'user-123',
+        isSubscriber: true,
+        freeTripCount: 3
+    })
 })
 
-it('should return userId and isSubscriber as false for an authenticated non-premium user', async () => {
+it('should return userId, isSubscriber as false, and freeTripCount for an authenticated non-premium user', async () => {
     const has = vi.fn().mockReturnValue(false)
+    const mockClerkClient = {
+        users: {
+            getUser: vi.fn().mockResolvedValue({
+                privateMetadata: { freeTripCount: 1 }
+            })
+        }
+    }
+    mockedCreateClerkClient.mockReturnValue(mockClerkClient as any)
     mockedGetAuth.mockResolvedValue({
         userId: 'user-456',
         has,
@@ -59,5 +89,38 @@ it('should return userId and isSubscriber as false for an authenticated non-prem
 
     expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
     expect(has).toHaveBeenCalledWith({ plan: 'roam_premium' })
-    expect(result).toEqual({ userId: 'user-456', isSubscriber: false })
+    expect(mockedCreateClerkClient).toHaveBeenCalledWith({
+        secretKey: process.env.CLERK_SECRET_KEY,
+    })
+    expect(mockClerkClient.users.getUser).toHaveBeenCalledWith('user-456')
+    expect(result).toEqual({
+        userId: 'user-456',
+        isSubscriber: false,
+        freeTripCount: 1
+    })
+})
+
+it('should handle missing freeTripCount in privateMetadata', async () => {
+    const has = vi.fn().mockReturnValue(false)
+    const mockClerkClient = {
+        users: {
+            getUser: vi.fn().mockResolvedValue({
+                privateMetadata: {}
+            })
+        }
+    }
+    mockedCreateClerkClient.mockReturnValue(mockClerkClient as any)
+    mockedGetAuth.mockResolvedValue({
+        userId: 'user-789',
+        has,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any)
+
+    const result = await dashboardLoader(loaderArgs)
+
+    expect(result).toEqual({
+        userId: 'user-789',
+        isSubscriber: false,
+        freeTripCount: 0
+    })
 })

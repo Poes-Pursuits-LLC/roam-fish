@@ -10,14 +10,16 @@ export async function loader(args: Route.LoaderArgs) {
 }
 
 export default function DashboardPage({ loaderData }: Route.ComponentProps) {
-    const { userId, isSubscriber } = loaderData
+    const { userId, isSubscriber, freeTripCount } = loaderData
 
     return (
         <div className="min-h-screen bg-stone-50">
             <Navbar userId={userId} isSubscriber={isSubscriber} />
             <div className="px-6 py-12">
                 <div className="max-w-7xl mx-auto">
-                    <UserStatsCards notYet={[]} />
+                    <UserStatsCards config={{
+                        freeTripCount
+                    }} />
                     <div className="grid lg:grid-cols-2 gap-8">
                         <RecentTrips />
                         <QuickActions />

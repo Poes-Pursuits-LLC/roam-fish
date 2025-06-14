@@ -1,5 +1,24 @@
 @import 'tailwindcss';
 
+/* Add your font faces */
+@font-face {
+    font-family: 'YOUR_FONT_NAME';
+    src: url('/fonts/your-font.woff2') format('woff2'),
+        url('/fonts/your-font.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YOUR_FONT_NAME';
+    src: url('/fonts/your-font-bold.woff2') format('woff2'),
+        url('/fonts/your-font-bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -78,86 +97,105 @@
 body {
     background-color: hsl(var(--background) / 1);
     color: hsl(var(--foreground) / 1);
+    font-family: 'YOUR_FONT_NAME', system-ui, -apple-system, sans-serif;
 }
 
 @layer utilities {
     .border-border {
         border-color: hsl(var(--border) / 1);
     }
+
     .bg-background {
         background-color: hsl(var(--background) / 1);
     }
+
     .text-foreground {
         color: hsl(var(--foreground) / 1);
     }
+
     .bg-card {
         background-color: hsl(var(--card) / 1);
     }
+
     .text-card-foreground {
         color: hsl(var(--card-foreground) / 1);
     }
+
     .bg-popover {
         background-color: hsl(var(--popover) / 1);
     }
+
     .text-popover-foreground {
         color: hsl(var(--popover-foreground) / 1);
     }
+
     .bg-primary {
         background-color: hsl(var(--primary) / 1);
     }
+
     .text-primary-foreground {
         color: hsl(var(--primary-foreground) / 1);
     }
+
     .bg-secondary {
         background-color: hsl(var(--secondary) / 1);
     }
+
     .text-secondary-foreground {
         color: hsl(var(--secondary-foreground) / 1);
     }
+
     .bg-muted {
         background-color: hsl(var(--muted) / 1);
     }
+
     .text-muted-foreground {
         color: hsl(var(--muted-foreground) / 1);
     }
+
     .bg-accent {
         background-color: hsl(var(--accent) / 1);
     }
+
     .text-accent-foreground {
         color: hsl(var(--accent-foreground) / 1);
     }
+
     .bg-destructive {
         background-color: hsl(var(--destructive) / 1);
     }
+
     .text-destructive-foreground {
         color: hsl(var(--destructive-foreground) / 1);
     }
+
     .border-input {
         border-color: hsl(var(--input) / 1);
     }
+
     .ring-ring {
         --tw-ring-color: hsl(var(--ring) / 1);
     }
 }
 
 .neo-button {
-    @apply cursor-pointer rounded-lg border-4 border-black px-6 py-3 font-bold uppercase tracking-wide transform transition-transform hover:translate-x-1 hover:translate-y-1 active:translate-x-0 active:translate-y-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+    @apply cursor-pointer rounded-lg border-2 border-black px-4 py-2 font-bold uppercase tracking-wide bg-[#1F513F] text-white transition-all duration-150 ease-in-out shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-0 active:translate-y-0 active:shadow-none;
 }
 
-.neo-button-for-login {
-    @apply cursor-pointer bg-amber-400 text-black text-lg border-4 border-black px-6 py-3 font-bold uppercase tracking-wide transform transition-transform hover:translate-x-1 hover:translate-y-1 active:translate-x-0 active:translate-y-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+.neo-button-secondary {
+    @apply cursor-pointer rounded-lg border-2 border-black px-4 py-2 font-bold uppercase tracking-wide bg-[#79594F] text-white transition-all duration-150 ease-in-out shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-0 active:translate-y-0 active:shadow-none;
 }
 
 .neo-card {
-    @apply bg-stone-50 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6;
+    @apply bg-[#F4F2ED] border-2 border-[#5a3b1b] shadow-[8px_8px_0px_0px_#000000] p-6;
 }
 
 .neo-input {
-    @apply border-4 border-black px-4 py-3 text-lg font-semibold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow bg-stone-50;
+    @apply border-2 border-[#5a3b1b] px-4 py-2 text-lg font-semibold focus:outline-none focus:shadow-[4px_4px_0px_0px_#000000] transition-shadow;
 }
 
 .neo-header {
-    @apply text-4xl md:text-6xl font-black uppercase tracking-tight;
+    @apply text-4xl md:text-5xl font-black uppercase tracking-tight;
 }
 
 .neo-subheader {

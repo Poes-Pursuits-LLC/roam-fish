@@ -51,7 +51,7 @@ export const Destinations = (
     }, [searchTerm, debouncedFilter])
 
     return (
-        <section id="destinations" className="px-6 py-20 bg-emerald-50">
+        <section id="destinations" className="px-6 py-20">
             <div className="max-w-7xl mx-auto">
                 <h2 className="neo-subheader text-center mb-16 text-slate-800">
                     Popular Fishing Destinations

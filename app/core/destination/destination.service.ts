@@ -24,6 +24,7 @@ const getDestinations = async () => {
     return destinations
 }
 
+
 export const destinationService = {
     getDestinations,
 }

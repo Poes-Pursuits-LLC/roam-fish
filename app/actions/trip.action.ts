@@ -2,8 +2,6 @@ import { hc } from 'hono/client'
 import type { Route } from '../routes/+types/trip'
 import type { AppType } from '~/server/main'
 
-// TODO: update test given new fields.
-
 export const tripAction = async (args: Route.ActionArgs) => {
     const { tripId } = args.params
     const formData = await args.request.formData()
