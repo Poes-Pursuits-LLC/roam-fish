@@ -17,13 +17,13 @@ export const TripHeader = ({
             <div className="flex justify-between gap-2">
                 <input
                     name="tripName"
-                    disabled={!canEditTrip}
                     className="neo-header cursor-pointer truncate text-slate-700 bg-stone-100 focus:outline-none hover:bg-stone-200 transition-colors"
                     value={localTripName}
                     onChange={(e) => setLocalTripName(e.target.value)}
                 />
                 <button
                     type="submit"
+                    disabled={!canEditTrip}
                     className="neo-button bg-slate-700 text-white rounded-lg px-4 py-2 text-sm"
                 >
                     Save Changes

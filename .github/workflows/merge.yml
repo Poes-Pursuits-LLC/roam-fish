@@ -18,6 +18,17 @@ jobs:
               with:
                   ref: develop
 
+            - name: Cache npm dependencies
+              uses: actions/cache@v3
+              id: npm-cache
+              with:
+                  path: |
+                      ~/.npm
+                      node_modules
+                  key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-npm-
+
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
@@ -25,6 +36,7 @@ jobs:
                   cache: 'npm'
 
             - name: Install dependencies
+              if: steps.npm-cache.outputs.cache-hit != 'true'
               run: npm ci
 
             - name: Run unit tests

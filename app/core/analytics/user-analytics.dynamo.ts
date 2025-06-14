@@ -1,15 +1,16 @@
 import { Entity } from 'electrodb'
 import { Resource } from 'sst'
 import { getDynamoClient } from '~/clients/table.client'
+import { createFormattedDate } from '~/utils'
 
-export const DynamoDestinationAnalytics = () => {
+export const DynamoUserAnalytics = () => {
     const client = getDynamoClient()
     const table = Resource.Table.name
 
     return new Entity(
         {
             model: {
-                entity: 'destinationAnalytics',
+                entity: 'userAnalytics',
                 version: '1',
                 service: 'analytics',
             },
@@ -18,36 +19,49 @@ export const DynamoDestinationAnalytics = () => {
                     type: 'string',
                     required: true,
                 },
-                destinationName: {
+                totalDaysFishing: {
+                    type: 'number',
+                    required: true,
+                    default: 0,
+                },
+                uniqueDestinations: {
+                    type: 'list',
+                    required: true,
+                    items: {
+                        type: 'string',
+                    },
+                    default: () => [],
+                },
+                totalTripCost: {
+                    type: 'number',
+                    required: true,
+                    default: 0,
+                },
+                tripCount: {
+                    type: 'number',
+                    required: true,
+                    default: 0,
+                },
+                type: {
                     type: 'string',
                     required: true,
+                    default: () => 'userAnalytics',
                 },
-                totalCost: {
-                    type: 'number',
-                    required: true,
-                },
-                visitCount: {
-                    type: 'number',
-                    required: true,
-                },
-                averageCost: {
-                    type: 'number',
-                    required: true,
-                },
-                lastVisited: {
+                createdAt: {
                     type: 'string',
                     required: true,
+                    default: () => createFormattedDate(),
+                },
+                updatedAt: {
+                    type: 'string',
+                    required: true,
+                    default: () => createFormattedDate(),
                 },
             },
             indexes: {
                 primary: {
-                    pk: { field: 'pk', composite: ['userId', 'destinationName'] },
+                    pk: { field: 'pk', composite: ['userId'] },
                     sk: { field: 'sk', composite: [] },
-                },
-                byUser: {
-                    index: 'gsi1pk-gsi1sk-index',
-                    pk: { field: 'gsi1pk', composite: ['userId'] },
-                    sk: { field: 'gsi1sk', composite: ['destinationName'] },
                 },
             },
         },
@@ -56,4 +70,4 @@ export const DynamoDestinationAnalytics = () => {
             table,
         },
     )
-} 
+}

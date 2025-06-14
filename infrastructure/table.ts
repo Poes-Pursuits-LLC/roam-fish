@@ -13,7 +13,6 @@ export const table = new sst.aws.Dynamo('Table', {
     ttl: 'expireAt',
 })
 
-
-export const outputs = {
-    tableName: table.name,
-}
+// export const outputs = {
+//     tableName: table.name,
+// }

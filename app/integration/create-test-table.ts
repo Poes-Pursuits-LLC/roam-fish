@@ -43,6 +43,10 @@ export const createTestTable = async () => {
                     },
                 },
             ],
+            StreamSpecification: {
+                StreamEnabled: true,
+                StreamViewType: 'NEW_AND_OLD_IMAGES',
+            },
             ProvisionedThroughput: {
                 ReadCapacityUnits: 5,
                 WriteCapacityUnits: 5,

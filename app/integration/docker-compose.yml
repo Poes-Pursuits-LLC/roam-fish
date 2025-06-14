@@ -1,7 +1,7 @@
 services:
     dynamodb-local:
         image: amazon/dynamodb-local:latest
-        command: '-jar DynamoDBLocal.jar -sharedDb'
+        command: '-jar DynamoDBLocal.jar -sharedDb -Djava.library.path=/DynamoDBLocal_lib -Dstreams.enabled=true'
         ports:
             - 8000:8000
         volumes:

@@ -29,6 +29,7 @@ jobs:
                   cache: 'npm'
 
             - name: Install dependencies
+              if: steps.npm-cache.outputs.cache-hit != 'true'
               run: npm ci
 
             - name: Configure AWS credentials
