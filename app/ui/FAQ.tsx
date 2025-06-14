@@ -11,7 +11,7 @@ export const FAQ = ({
     const [openIndex, setOpenIndex] = useState<number | null>(null)
 
     return (
-        <section className="px-6 py-20 bg-teal-50">
+        <section className="px-6 py-20 bg-stone-100">
             <div className="max-w-4xl mx-auto">
                 <h2 className="neo-subheader text-center mb-12 text-slate-800">
                     Frequently Asked Questions

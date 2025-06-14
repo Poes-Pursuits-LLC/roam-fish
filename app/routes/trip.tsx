@@ -21,7 +21,6 @@ export async function action(args: Route.ActionArgs) {
 }
 
 // TODO: enforce limits on length of notes, packing list, checklist, budget list
-// TODO: clean up styling a bit more.
 // TODO: make fishing summary behind paywall.
 // TODO: new licensing and local regulations section, behind paywall as well.
 

@@ -1,16 +1,13 @@
 import { Calendar, Fish, MapPin, TrendingUp } from 'lucide-react'
 
 export const UserStatsCards = ({
-    notYet,
+    config,
 }: {
-    notYet: {
-        value: string
-        title: string
-        subtitle: string
-        icon: string
-    }[]
+    config: {
+        freeTripCount: number
+    }
 }) => {
-    console.info(notYet)
+    const stats = getStats(config)
 
     return (
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -32,29 +29,33 @@ export const UserStatsCards = ({
     )
 }
 
-const stats = [
-    {
-        icon: Fish,
-        title: 'Total Catches',
-        value: '47',
-        subtitle: 'This season',
-    },
-    {
-        icon: MapPin,
-        title: 'Locations Visited',
-        value: '12',
-        subtitle: 'Different spots',
-    },
-    {
-        icon: Calendar,
-        title: 'Days Fishing',
-        value: '28',
-        subtitle: 'This year',
-    },
-    {
-        icon: TrendingUp,
-        title: 'Success Rate',
-        value: '73%',
-        subtitle: 'Improving!',
-    },
-]
+const getStats = (config: { freeTripCount: number }) => {
+    return (
+        [
+            {
+                icon: Fish,
+                title: 'Free trips',
+                value: `${3 - config.freeTripCount} of 3`,
+                subtitle: 'remaining',
+            },
+            {
+                icon: MapPin,
+                title: 'Locations Visited',
+                value: '12',
+                subtitle: 'Different spots',
+            },
+            {
+                icon: Calendar,
+                title: 'Days Fishing',
+                value: '28',
+                subtitle: 'This year',
+            },
+            {
+                icon: TrendingUp,
+                title: 'Success Rate',
+                value: '73%',
+                subtitle: 'Improving!',
+            },
+        ]
+    )
+}

@@ -19,11 +19,18 @@ afterEach(() => {
     process.env = originalEnv
 })
 
-it('should call the updateTrip endpoint with the trip updateFields from the submitted form', async () => {
+it('should call the updateTrip endpoint with all form fields when all are provided', async () => {
     const tripId = 'test-trip-id'
     const tripName = 'My Awesome Trip'
+    const budgetList = [{ item: 'Hotel', amount: 100 }]
+    const checkList = [{ item: 'Passport', done: false }]
+    const notes = 'Important trip notes'
+
     const formData = new FormData()
     formData.append('tripName', tripName)
+    formData.append('budgetList', JSON.stringify(budgetList))
+    formData.append('checkList', JSON.stringify(checkList))
+    formData.append('notes', notes)
 
     const request = new Request(`http://localhost/trip/${tripId}`, {
         method: 'POST',
@@ -35,13 +42,11 @@ it('should call the updateTrip endpoint with the trip updateFields from the subm
         params: { tripId },
     } as Route.ActionArgs
 
-    // TODO: change to see how cicd works. ok?
     const mockUpdateTripPost = vi.fn().mockResolvedValue({ ok: true })
     mockedHc.mockReturnValue({
         updateTrip: {
             $post: mockUpdateTripPost,
         },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
 
     await tripAction(actionArgs)
@@ -52,6 +57,49 @@ it('should call the updateTrip endpoint with the trip updateFields from the subm
             tripId,
             updateFields: {
                 name: tripName,
+                budgetList,
+                checkList,
+                notes,
+            },
+        },
+    })
+})
+
+it('should call the updateTrip endpoint with only provided fields', async () => {
+    const tripId = 'test-trip-id'
+    const checkList = [{ item: 'Passport', done: false }]
+    const notes = 'Important trip notes'
+
+    const formData = new FormData()
+    formData.append('checkList', JSON.stringify(checkList))
+    formData.append('notes', notes)
+
+    const request = new Request(`http://localhost/trip/${tripId}`, {
+        method: 'POST',
+        body: formData,
+    })
+
+    const actionArgs = {
+        request,
+        params: { tripId },
+    } as Route.ActionArgs
+
+    const mockUpdateTripPost = vi.fn().mockResolvedValue({ ok: true })
+    mockedHc.mockReturnValue({
+        updateTrip: {
+            $post: mockUpdateTripPost,
+        },
+    } as any)
+
+    await tripAction(actionArgs)
+
+    expect(mockedHc).toHaveBeenCalledWith(serverUrl)
+    expect(mockUpdateTripPost).toHaveBeenCalledWith({
+        json: {
+            tripId,
+            updateFields: {
+                checkList,
+                notes,
             },
         },
     })

@@ -24,7 +24,7 @@ const Navbar = ({
                     <div className="flex items-center space-x-4">
                         <NavLink
                             to="/plan-trip"
-                            className="neo-button bg-amber-400"
+                            className="neo-button-secondary"
                         >
                             Plan Trip
                         </NavLink>
@@ -32,7 +32,7 @@ const Navbar = ({
                             <div className="flex items-center space-x-4">
                                 <NavLink
                                     to="/dashboard"
-                                    className="neo-button bg-emerald-700 text-white border-black"
+                                    className="neo-button"
                                 >
                                     Dashboard
                                 </NavLink>
@@ -44,16 +44,16 @@ const Navbar = ({
                                         appearance: {
                                             elements: {
                                                 profileSection__emailAddresses:
-                                                    {
-                                                        display: 'none',
-                                                    },
+                                                {
+                                                    display: 'none',
+                                                },
                                                 profileSection__danger: {
                                                     display: 'none',
                                                 },
                                                 profileSection__connectedAccounts:
-                                                    {
-                                                        display: 'none',
-                                                    },
+                                                {
+                                                    display: 'none',
+                                                },
                                             },
                                         },
                                     }}
