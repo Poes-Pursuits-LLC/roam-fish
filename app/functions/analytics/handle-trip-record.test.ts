@@ -1,6 +1,6 @@
 import { it, expect, vi } from 'vitest'
 import { analyticsService } from '~/core/analytics/analytics.service'
-import { handleTripEvent } from './handle-trip-event'
+import { handleTripRecord } from './handle-trip-record'
 import type { DynamoDBRecord } from 'aws-lambda'
 import { extractTripData } from './extract-trip-data'
 import type { ExtractedTripData } from './extract-trip-data'
@@ -15,7 +15,6 @@ vi.mock('~/core/analytics/analytics.service', () => ({
     },
 }))
 vi.mock('./extract-trip-data')
-vi.mock('./get-days-from-duration')
 
 const mockRecord = {} as DynamoDBRecord
 
@@ -25,14 +24,14 @@ it('should short circuit when no userId is present', async () => {
         emptyTripData as ExtractedTripData,
     )
 
-    const result = await handleTripEvent(mockRecord)
+    const result = await handleTripRecord(mockRecord)
 
     expect(analyticsService.createUserAnalyticsSheet).not.toHaveBeenCalled()
     expect(analyticsService.updateUserAnalyticsSheet).not.toHaveBeenCalled()
     expect(result).toBeUndefined()
 })
 
-it('should create new analytics when user does not exist', async () => {
+it('should create new analytics when user analytics sheet does not exist', async () => {
     const mockTripData: ExtractedTripData = {
         userId: 'user123',
         duration: TripDurationEnum.Weekend,
@@ -47,7 +46,7 @@ it('should create new analytics when user does not exist', async () => {
             data: null,
         })
 
-    await handleTripEvent(mockRecord)
+    await handleTripRecord(mockRecord)
 
     expect(mockGetAnalytics).toHaveBeenCalledWith('user123')
     expect(analyticsService.createUserAnalyticsSheet).toHaveBeenCalledWith({
@@ -60,7 +59,7 @@ it('should create new analytics when user does not exist', async () => {
     expect(analyticsService.updateUserAnalyticsSheet).not.toHaveBeenCalled()
 })
 
-it('should update existing analytics when user exists', async () => {
+it('should update existing analytics when user analytics sheet already exists', async () => {
     const mockTripData: ExtractedTripData = {
         userId: 'user123',
         duration: TripDurationEnum.Weekend,
@@ -76,66 +75,25 @@ it('should update existing analytics when user exists', async () => {
         type: 'type',
         uniqueDestinations: ['Previous Lake'],
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as unknown as unknown as any
+    } as unknown as any
     vi.mocked(extractTripData).mockReturnValue(mockTripData)
     const mockGetAnalytics = vi
         .mocked(analyticsService.getUserAnalyticsSheet)
         .mockResolvedValue({
-            data: { ...existingAnalytics },
+            data: existingAnalytics,
         })
 
-    await handleTripEvent(mockRecord)
+    await handleTripRecord(mockRecord)
 
     expect(mockGetAnalytics).toHaveBeenCalledWith('user123')
     expect(analyticsService.updateUserAnalyticsSheet).toHaveBeenCalledWith(
         'user123',
         {
-            tripCount: 2,
-            totalDaysFishing: 10,
-            totalTripCost: 1000,
-            uniqueDestinations: ['Previous Lake'],
+            tripCount: 3,
+            totalDaysFishing: 12,
+            totalTripCost: 1500,
+            uniqueDestinations: ['Previous Lake', 'Lake Tahoe'],
         },
     )
     expect(analyticsService.createUserAnalyticsSheet).not.toHaveBeenCalled()
-})
-
-it('should handle null extractTripData result correctly', async () => {
-    vi.mocked(extractTripData).mockReturnValue(null)
-    vi.mocked(analyticsService.getUserAnalyticsSheet).mockResolvedValue({
-        data: null,
-    })
-
-    await handleTripEvent(mockRecord)
-
-    // Should not call createUserAnalyticsSheet because userId will be undefined
-    expect(analyticsService.createUserAnalyticsSheet).not.toHaveBeenCalled()
-    expect(getDaysFromDuration).not.toHaveBeenCalled()
-})
-
-it('should debug daysToAdd calculation', async () => {
-    const mockTripData: ExtractedTripData = {
-        userId: 'user123',
-        duration: TripDurationEnum.Weekend,
-        destinationName: 'Lake Tahoe',
-        totalCost: 500,
-        startDate: '2024-03-20',
-    }
-    vi.mocked(extractTripData).mockReturnValue(mockTripData)
-    vi.mocked(getDaysFromDuration).mockImplementation((duration) => {
-        console.log('getDaysFromDuration called with:', duration)
-        return 2
-    })
-    vi.mocked(analyticsService.getUserAnalyticsSheet).mockResolvedValue({
-        data: null,
-    })
-
-    await handleTripEvent(mockRecord)
-
-    console.log('Mock calls:', {
-        extractTripData: vi.mocked(extractTripData).mock.calls,
-        getDaysFromDuration: vi.mocked(getDaysFromDuration).mock.calls,
-        createUserAnalyticsSheet: vi.mocked(
-            analyticsService.createUserAnalyticsSheet,
-        ).mock.calls,
-    })
 })

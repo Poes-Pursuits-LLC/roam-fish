@@ -1,9 +1,15 @@
 services:
     dynamodb-local:
         image: amazon/dynamodb-local:latest
-        command: '-jar DynamoDBLocal.jar -sharedDb -Djava.library.path=/DynamoDBLocal_lib -Dstreams.enabled=true'
+        command: '-jar DynamoDBLocal.jar -sharedDb -dbPath ./data'
         ports:
             - 8000:8000
         volumes:
             - './docker/dynamodb:/home/dynamodblocal/data'
         working_dir: /home/dynamodblocal
+        healthcheck:
+            test: ["CMD-SHELL", "ps aux | grep DynamoDBLocal.jar | grep -v grep || exit 1"]
+            interval: 1s
+            timeout: 3s
+            retries: 30
+            start_period: 5s

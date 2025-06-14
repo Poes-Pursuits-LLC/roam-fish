@@ -3,7 +3,7 @@ import { getDaysFromDuration } from './get-days-from-duration'
 import { extractTripData } from './extract-trip-data'
 import { analyticsService } from '~/core/analytics/analytics.service'
 
-export const handleTripEvent = async (record: DynamoDBRecord) => {
+export const handleTripRecord = async (record: DynamoDBRecord) => {
     const tripData = extractTripData(record)
     if (!tripData?.userId) {
         return
@@ -17,10 +17,10 @@ export const handleTripEvent = async (record: DynamoDBRecord) => {
 
     if (existingUserAnalytics) {
         await analyticsService.updateUserAnalyticsSheet(userId, {
-            tripCount: existingUserAnalytics.tripCount,
-            totalDaysFishing: existingUserAnalytics.totalDaysFishing,
-            totalTripCost: existingUserAnalytics.totalTripCost,
-            uniqueDestinations: existingUserAnalytics.uniqueDestinations,
+            tripCount: existingUserAnalytics.tripCount + 1,
+            totalDaysFishing: existingUserAnalytics.totalDaysFishing + daysToAdd,
+            totalTripCost: existingUserAnalytics.totalTripCost + totalCost,
+            uniqueDestinations: Array.from(new Set([...existingUserAnalytics.uniqueDestinations, destinationName])),
         })
     } else {
         await analyticsService.createUserAnalyticsSheet({

@@ -14,7 +14,10 @@
     "deploy-prod": "npx sst deploy --stage production"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.828.0",
     "@aws-sdk/client-dynamodb-streams": "^3.828.0",
+    "@aws-sdk/lib-dynamodb": "^3.828.0",
+    "@aws-sdk/util-dynamodb": "^3.828.0",
     "@clerk/backend": "^2.0.0",
     "@clerk/react-router": "^1.4.8",
     "@clerk/themes": "^2.2.48",

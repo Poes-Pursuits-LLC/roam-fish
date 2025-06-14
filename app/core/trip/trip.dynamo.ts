@@ -7,7 +7,8 @@ import { TripDurationEnum, TripStatusEnum } from './trip.model'
 
 export const DynamoTrip = () => {
     const client = getDynamoClient()
-    const table = Resource.Table.name
+    console.info(process.env.TABLE_NAME)
+    const table = process.env.TABLE_NAME ?? Resource.Table.name
 
     return new Entity(
         {

@@ -6,9 +6,8 @@ import {
 import { getDynamoClient } from '~/clients/table.client'
 
 export const createTestTable = async () => {
-    console.info('Creating test integration table...')
     const client = getDynamoClient()
-    const tableName = 'integration-table'
+    const tableName = process.env.TABLE_NAME!
 
     const { TableNames } = await client!.send(new ListTablesCommand({}))
     if (TableNames?.includes(tableName)) {
@@ -43,10 +42,6 @@ export const createTestTable = async () => {
                     },
                 },
             ],
-            StreamSpecification: {
-                StreamEnabled: true,
-                StreamViewType: 'NEW_AND_OLD_IMAGES',
-            },
             ProvisionedThroughput: {
                 ReadCapacityUnits: 5,
                 WriteCapacityUnits: 5,
