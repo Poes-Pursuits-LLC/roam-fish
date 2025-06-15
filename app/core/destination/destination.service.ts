@@ -1,7 +1,8 @@
-import { getTTL } from '~/utils'
+import { createFormattedDate, getTTL, handleAsync } from '~/utils'
 import { DynamoCache } from '../cache/cache.dynamo'
 import { DynamoDestination } from './destination.dynamo'
 import type { Destination } from './destination.model'
+import { nanoid } from 'nanoid'
 
 const getDestinations = async () => {
     const { data } = await DynamoCache().get({ cacheKey: 'destinations' }).go()
@@ -24,7 +25,28 @@ const getDestinations = async () => {
     return destinations
 }
 
+const createDestinations = async (
+    destinations: Pick<
+        Destination,
+        'name' | 'province' | 'country' | 'type' | 'imageUrl'
+    >[],
+) => {
+    const [createDestinations, createDestinationsError] = await handleAsync(
+        DynamoDestination()
+            .put({
+                ...destinations.map((destination) => ({
+                    ...destination,
+                    destinationId: nanoid(),
+                    createdAt: createFormattedDate(),
+                    updatedAt: createFormattedDate(),
+                })),
+            })
+            .go(),
+    )
+    return [createDestinations, createDestinationsError]
+}
 
 export const destinationService = {
     getDestinations,
+    createDestinations,
 }

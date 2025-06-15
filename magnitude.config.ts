@@ -13,7 +13,7 @@ export default {
         options: {
             baseUrl: Resource.XAiUrl.value,
             apiKey: Resource.XAiApiKey.value,
-            model: 'grok-3-mini',
+            model: 'grok-3',
         },
     },
 } satisfies MagnitudeConfig

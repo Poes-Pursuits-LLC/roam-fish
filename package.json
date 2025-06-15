@@ -6,8 +6,9 @@
     "local": "sst dev --stage nickpapadakis",
     "dev": "react-router dev",
     "build": "react-router build",
-    "unit-tests": "vitest",
-    "integration-tests": "vitest --config ./app/integration/vitest.integration.config.ts",
+    "unit-tests": "vitest --project unit-tests",
+    "ui-tests": "vitest --project ui-tests",
+    "integration-tests": "vitest --project integration-tests",
     "e2e-tests": "npx sst shell magnitude",
     "quality-check": "npx eslint . && react-router typegen && tsc --noEmit",
     "deploy-dev": "npx sst deploy --stage develop",
@@ -47,7 +48,7 @@
     "sst": "3.17.0",
     "tailwind-merge": "^3.3.0",
     "tsx": "^4.19.4",
-    "vitest": "^3.1.4",
+    "vitest": "^3.2.2",
     "zod": "^3.25.51"
   },
   "devDependencies": {

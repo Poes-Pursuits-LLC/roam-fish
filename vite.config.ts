@@ -8,11 +8,42 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
     plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
     test: {
-        include: ['./app/**/*.test.ts'],
-        exclude: ['**/*.integration.test.ts'],
-        environment: 'node',
-        silent: 'passed-only',
-        mockReset: true,
-        watch: false,
+        projects: [
+            {
+                extends: true,
+                test: {
+                    name: 'unit-tests',
+                    include: ['./app/**/*.test.ts'],
+                    environment: 'node',
+                    mockReset: true,
+                },
+            },
+            {
+                plugins: [tailwindcss(), tsconfigPaths()],
+                test: {
+                    name: 'ui-tests',
+                    include: ['./app/**/*.ui.test.ts'],
+                    environment: 'jsdom',
+                    mockReset: true,
+                },
+            },
+            {
+                extends: true,
+                test: {
+                    name: 'integration-tests',
+                    include: ['**/*.integration.test.ts'],
+                    globalSetup: './app/integration/setup-integration.ts',
+                    environment: 'node',
+                    testTimeout: 20000,
+                    hookTimeout: 20000,
+                    globals: true,
+                    server: {
+                        deps: {
+                            inline: ['uuid'],
+                        },
+                    },
+                },
+            },
+        ],
     },
 })

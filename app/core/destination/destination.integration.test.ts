@@ -1,21 +1,7 @@
-import { it, expect, beforeAll, afterAll } from 'vitest'
-import { hc } from 'hono/client'
-import type { AppType } from '~/server/main'
+import { it, expect } from 'vitest'
 import type { Destination } from '~/core/destination/destination.model'
-import { DynamoDestination } from '~/core/destination/destination.dynamo'
 import { createFormattedDate } from '~/utils'
 import { nanoid } from 'nanoid'
-import { setupServer, teardownServer } from '~/integration/setup-server'
-
-const client = hc<AppType>(process.env.SERVER_URL!)
-
-beforeAll(async () => {
-    await setupServer()
-})
-
-afterAll(async () => {
-    await teardownServer()
-})
 
 it('should retrieve all destinations from DynamoDB', async () => {
     const testDestinations: Destination[] = [
@@ -41,9 +27,17 @@ it('should retrieve all destinations from DynamoDB', async () => {
         },
     ]
 
-    await DynamoDestination().put(testDestinations).go()
+    await fetch(
+        `http://localhost:${process.env.SERVER_PORT}/createDestinations`,
+        {
+            method: 'POST',
+            body: JSON.stringify(testDestinations),
+        },
+    )
 
-    const response = await client.destinations.$get()
+    const response = await fetch(
+        `http://localhost:${process.env.SERVER_PORT}/destinations`,
+    )
     const { destinations } = await response.json()
     const foundDestinations = destinations.filter((d: Destination) =>
         testDestinations.some((td) => td.destinationId === d.destinationId),

@@ -4,7 +4,8 @@ import { getDynamoClient } from '~/clients/table.client'
 
 export const DynamoDestination = () => {
     const client = getDynamoClient()
-    const table = process.env.TABLE_NAME ?? Resource.Table.name
+    const table = process.env.TABLE_NAME || Resource.Table.name
+    console.info('Destination entity using table name:', table)
 
     return new Entity(
         {
