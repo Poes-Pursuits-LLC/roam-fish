@@ -9,6 +9,7 @@ const destinationRouter = new Hono().get('/destinations', async (c) => {
         destinationService.getDestinations(),
     )
     if (getDestinationsError) {
+        console.info(getDestinationsError)
         throw new HTTPException(500, {
             message: getDestinationsError.message,
         })

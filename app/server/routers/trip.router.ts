@@ -125,6 +125,7 @@ const tripRouter = new Hono()
                 tripService.submitTripDetails(inputs),
             )
             if (submitTripDetailsError) {
+                console.error('hey whats up', submitTripDetailsError)
                 throw new HTTPException(500, {
                     message: submitTripDetailsError.message,
                 })
@@ -175,7 +176,6 @@ const tripRouter = new Hono()
                 }),
             )
             if (updateTripError) {
-                console.error('WHAT IS OUR ERROR', updateTripError)
                 throw new HTTPException(500, {
                     message: updateTripError.message,
                 })
