@@ -1,11 +1,23 @@
-import { it, expect, vi } from 'vitest'
+import { it, expect, beforeAll, afterAll } from 'vitest'
 import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
 import { TripDurationEnum, TripStatusEnum } from './trip.model'
+import { setupServer, teardownServer } from '~/integration/setup-server'
 
-vi.mock('~/core/trip/trip.service')
+let client: ReturnType<typeof hc<AppType>>
 
-const client = hc<AppType>(process.env.SERVER_URL!)
+beforeAll(async () => {
+    await setupServer({
+        tripService: {
+            submitTripDetails: async () => 'mock-content-id',
+        },
+    })
+    client = hc<AppType>(process.env.SERVER_URL!)
+})
+
+afterAll(async () => {
+    await teardownServer()
+})
 
 it('should be able to create and retrieve a trip', async () => {
     const createTripArgs = {
@@ -17,15 +29,17 @@ it('should be able to create and retrieve a trip', async () => {
         headcount: '2',
     }
 
-    const returnedTripId = await client.createTrip.$post({
-        json: createTripArgs
-    }).then((response) => response.json())
+    const returnedTripId = await client.createTrip
+        .$post({
+            json: createTripArgs,
+        })
+        .then((response) => response.json())
         .then((data) => data.tripId)
 
     const fetchedTrip = await client.getTrip.$get({
         query: {
-            tripId: returnedTripId!
-        }
+            tripId: returnedTripId!,
+        },
     })
 
     expect(returnedTripId).toBeDefined()
@@ -39,6 +53,6 @@ it('should be able to create and retrieve a trip', async () => {
         headcount: '2',
         packingList: expect.any([]),
         budgetList: expect.any([]),
-        checkList: expect.any([])
+        checkList: expect.any([]),
     })
 })

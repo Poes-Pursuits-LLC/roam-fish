@@ -36,12 +36,13 @@ afterEach(() => {
     process.env = originalEnv
 })
 
-it('should return destinations, userId, and freeTripCount for an authenticated user', async () => {
+it('should return destinations, userId, freeTripCount, and isSubscriber=false for a non-subscriber', async () => {
     const userId = 'user-123'
     const freeTripCount = 5
+    const hasMock = vi.fn().mockReturnValue(false)
     mockedGetAuth.mockResolvedValue({
         userId,
-        has: vi.fn(),
+        has: hasMock,
     } as unknown as Awaited<ReturnType<typeof getAuth>>)
 
     const getUserMock = vi.fn().mockResolvedValue({
@@ -63,10 +64,12 @@ it('should return destinations, userId, and freeTripCount for an authenticated u
         getDestinationsPromise,
         userId: resultUserId,
         freeTripCount: resultFreeTripCount,
+        isSubscriber,
     } = await planTripLoader(loaderArgs)
     const resultDestinations = await getDestinationsPromise
 
     expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
+    expect(hasMock).toHaveBeenCalledWith({ plan: 'roam_premium' })
     expect(mockedCreateClerkClient).toHaveBeenCalledWith({
         secretKey: clerkSecretKey,
     })
@@ -74,13 +77,61 @@ it('should return destinations, userId, and freeTripCount for an authenticated u
     expect(mockedHc).toHaveBeenCalledWith(serverUrl)
     expect(resultUserId).toBe(userId)
     expect(resultFreeTripCount).toBe(freeTripCount)
+    expect(isSubscriber).toBe(false)
     expect(resultDestinations).toEqual(destinations)
 })
 
-it('should return destinations, null userId, and undefined freeTripCount for an unauthenticated user', async () => {
+it('should return destinations, userId, freeTripCount, and isSubscriber=true for a subscriber', async () => {
+    const userId = 'user-123'
+    const freeTripCount = 5
+    const hasMock = vi.fn().mockReturnValue(true)
+    mockedGetAuth.mockResolvedValue({
+        userId,
+        has: hasMock,
+    } as unknown as Awaited<ReturnType<typeof getAuth>>)
+
+    const getUserMock = vi.fn().mockResolvedValue({
+        privateMetadata: { freeTripCount },
+    })
+    mockedCreateClerkClient.mockReturnValue({
+        users: { getUser: getUserMock },
+    } as unknown as ReturnType<typeof createClerkClient>)
+
+    mockedHc.mockReturnValue({
+        destinations: {
+            $get: vi.fn().mockResolvedValue({
+                json: vi.fn().mockResolvedValue({ destinations }),
+            }),
+        },
+    } as unknown as ReturnType<typeof hc>)
+
+    const {
+        getDestinationsPromise,
+        userId: resultUserId,
+        freeTripCount: resultFreeTripCount,
+        isSubscriber,
+    } = await planTripLoader(loaderArgs)
+
+    const resultDestinations = await getDestinationsPromise
+
+    expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
+    expect(hasMock).toHaveBeenCalledWith({ plan: 'roam_premium' })
+    expect(mockedCreateClerkClient).toHaveBeenCalledWith({
+        secretKey: clerkSecretKey,
+    })
+    expect(getUserMock).toHaveBeenCalledWith(userId)
+    expect(mockedHc).toHaveBeenCalledWith(serverUrl)
+    expect(resultUserId).toBe(userId)
+    expect(resultFreeTripCount).toBe(freeTripCount)
+    expect(isSubscriber).toBe(true)
+    expect(resultDestinations).toEqual(destinations)
+})
+
+it('should return destinations, null userId, undefined freeTripCount, and isSubscriber=false for an unauthenticated user', async () => {
+    const hasMock = vi.fn().mockReturnValue(false)
     mockedGetAuth.mockResolvedValue({
         userId: null,
-        has: vi.fn(),
+        has: hasMock,
     } as unknown as Awaited<ReturnType<typeof getAuth>>)
     mockedHc.mockReturnValue({
         destinations: {
@@ -94,22 +145,26 @@ it('should return destinations, null userId, and undefined freeTripCount for an 
         getDestinationsPromise,
         userId: resultUserId,
         freeTripCount: resultFreeTripCount,
+        isSubscriber,
     } = await planTripLoader(loaderArgs)
     const resultDestinations = await getDestinationsPromise
 
     expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
+    expect(hasMock).toHaveBeenCalledWith({ plan: 'roam_premium' })
     expect(mockedCreateClerkClient).not.toHaveBeenCalled()
     expect(mockedHc).toHaveBeenCalledWith(serverUrl)
     expect(resultUserId).toBeNull()
     expect(resultFreeTripCount).toBeUndefined()
+    expect(isSubscriber).toBe(false)
     expect(resultDestinations).toEqual(destinations)
 })
 
 it('should return undefined freeTripCount if user has no freeTripCount in privateMetadata', async () => {
     const userId = 'user-123'
+    const hasMock = vi.fn().mockReturnValue(false)
     mockedGetAuth.mockResolvedValue({
         userId,
-        has: vi.fn(),
+        has: hasMock,
     } as unknown as Awaited<ReturnType<typeof getAuth>>)
 
     const getUserMock = vi.fn().mockResolvedValue({
@@ -131,10 +186,12 @@ it('should return undefined freeTripCount if user has no freeTripCount in privat
         getDestinationsPromise,
         userId: resultUserId,
         freeTripCount: resultFreeTripCount,
+        isSubscriber,
     } = await planTripLoader(loaderArgs)
     const resultDestinations = await getDestinationsPromise
 
     expect(resultUserId).toBe(userId)
     expect(resultFreeTripCount).toBeUndefined()
+    expect(isSubscriber).toBe(false)
     expect(resultDestinations).toEqual(destinations)
 })

@@ -18,9 +18,12 @@ export default function PlanTripPage({
     loaderData,
     actionData,
 }: Route.ComponentProps) {
-    const { getDestinationsPromise, userId, freeTripCount } = loaderData
+    const { getDestinationsPromise, userId, freeTripCount, isSubscriber } =
+        loaderData
     const { tripId } = actionData || { tripId: null }
-    const reachedFreeTripLimit = Boolean(freeTripCount && freeTripCount >= 3)
+    const noMoreTrips = Boolean(
+        freeTripCount && freeTripCount >= 3 && !isSubscriber,
+    )
 
     return (
         <div className="min-h-screen bg-stone-100">
@@ -36,7 +39,7 @@ export default function PlanTripPage({
                                 <TripForm
                                     promise={getDestinationsPromise}
                                     userId={userId}
-                                    reachedFreeTripLimit={reachedFreeTripLimit}
+                                    noMoreTrips={noMoreTrips}
                                 />
                             </div>
                         </div>

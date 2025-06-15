@@ -10,6 +10,6 @@ export default defineConfig({
         hookTimeout: 30000,
         watch: false,
         passWithNoTests: true,
-        globalSetup: './app/integration/setup.integration.ts'
+        globalSetup: './app/integration/setup.integration.ts',
     },
 })

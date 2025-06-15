@@ -12,24 +12,10 @@ export const QuickActions = () => {
             </div>
 
             <NavLink to="/trips">
-                <button className="neo-button w-full bg-amber-400 text-black border-black my-4">
-                    My Trips
-                </button>
-            </NavLink>
-            <NavLink to="/">
-                <button className="neo-button w-full bg-emerald-600 text-white border-black my-4">
-                    Browse Destinations
-                </button>
-            </NavLink>
-            <NavLink to="/">
-                <button className="neo-button w-full bg-orange-400 text-black border-black my-4">
-                    Fishing Tips
-                </button>
+                <button className="neo-button w-full mb-4">My Trips</button>
             </NavLink>
             <NavLink to="/billing">
-                <button className="neo-button w-full bg-stone-800 text-white border-black my-4">
-                    Billing
-                </button>
+                <button className="neo-button-secondary w-full">Billing</button>
             </NavLink>
         </div>
     )

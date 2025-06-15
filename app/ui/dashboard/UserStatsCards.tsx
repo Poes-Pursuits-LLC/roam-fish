@@ -5,12 +5,11 @@ export const UserStatsCards = ({
 }: {
     config: {
         freeTripCount: number
-        analytics?: {
-            totalDaysFishing: number
-            uniqueDestinations: string[]
-            totalTripCost: number
-            tripCount: number
-        }
+        isSubscriber: boolean
+        totalDaysFishing: number
+        uniqueDestinations: string[]
+        totalTripCost: number
+        tripCount: number
     }
 }) => {
     const stats = getStats(config)
@@ -37,47 +36,41 @@ export const UserStatsCards = ({
 
 const getStats = (config: {
     freeTripCount: number
-    analytics?: {
-        totalDaysFishing: number
-        uniqueDestinations: string[]
-        totalTripCost: number
-        tripCount: number
-    }
+    isSubscriber: boolean
+    totalDaysFishing: number
+    uniqueDestinations: string[]
+    totalTripCost: number
+    tripCount: number
 }) => {
-    const analytics = config.analytics || {
-        totalDaysFishing: 0,
-        uniqueDestinations: [],
-        totalTripCost: 0,
-        tripCount: 0,
-    }
-
     const avgCostPerTrip =
-        analytics.tripCount > 0
-            ? Math.round(analytics.totalTripCost / analytics.tripCount)
+        config.tripCount > 0
+            ? Math.round(config.totalTripCost / config.tripCount)
             : 0
 
     return [
         {
             icon: Fish,
             title: 'Free trips',
-            value: `${3 - config.freeTripCount} of 3`,
+            value: config.isSubscriber
+                ? 'Unlimited'
+                : `${3 - config.freeTripCount} of 3`,
             subtitle: 'remaining',
         },
         {
             icon: MapPin,
             title: 'Locations Visited',
-            value: analytics.uniqueDestinations.length.toString(),
-            subtitle: 'Different spots',
+            value: config.uniqueDestinations.length.toString(),
+            subtitle: 'Beautiful destinations',
         },
         {
             icon: Calendar,
             title: 'Days Fishing',
-            value: analytics.totalDaysFishing.toString(),
+            value: config.totalDaysFishing.toString(),
             subtitle: 'Total days',
         },
         {
             icon: TrendingUp,
-            title: 'Avg Trip Cost',
+            title: 'Avg Cost',
             value: `$${avgCostPerTrip}`,
             subtitle: 'Per trip',
         },

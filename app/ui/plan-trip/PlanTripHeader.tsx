@@ -1,6 +1,6 @@
 import { Fish } from 'lucide-react'
 
-export const PlanTripHeader = async () => {
+export const PlanTripHeader = () => {
     return (
         <div className="text-center mb-12">
             <div className="flex justify-center mb-4">

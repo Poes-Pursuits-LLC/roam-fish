@@ -1,24 +1,5 @@
 @import 'tailwindcss';
 
-/* Add your font faces */
-@font-face {
-    font-family: 'YOUR_FONT_NAME';
-    src: url('/fonts/your-font.woff2') format('woff2'),
-        url('/fonts/your-font.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'YOUR_FONT_NAME';
-    src: url('/fonts/your-font-bold.woff2') format('woff2'),
-        url('/fonts/your-font-bold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
 :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -195,7 +176,7 @@ body {
 }
 
 .neo-header {
-    @apply text-4xl md:text-5xl font-black uppercase tracking-tight;
+    @apply text-4xl md:text-4xl font-black uppercase tracking-tight;
 }
 
 .neo-subheader {

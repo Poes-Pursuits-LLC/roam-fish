@@ -4,7 +4,7 @@ export interface UserAnalytics {
     totalTripCost: number
     tripCount: number
     uniqueDestinations: string[]
-    type?: string
-    createdAt?: string
-    updatedAt?: string
+    type: string
+    createdAt: string
+    updatedAt: string
 }
