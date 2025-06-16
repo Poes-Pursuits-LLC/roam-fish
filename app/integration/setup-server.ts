@@ -15,7 +15,7 @@ export const setupServer = async ({
             { source: 'package-lock.json', target: '/app/package-lock.json' },
             { source: 'tsconfig.json', target: '/app/tsconfig.json' },
             {
-                source: './app/integration/helpers/http-wrapper.ts',
+                source: './app/integration/http-wrapper.ts',
                 target: '/app/index.ts',
             },
         ])

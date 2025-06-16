@@ -8,6 +8,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
     plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
     test: {
+        reporters: ['hanging-process'],
         watch: false,
         projects: [
             {
@@ -16,7 +17,6 @@ export default defineConfig({
                     name: 'unit-tests',
                     include: ['./app/**/*.test.ts'],
                     exclude: ['**/*.integration.test.ts'],
-                    environment: 'node',
                     mockReset: true,
                 },
             },
@@ -24,20 +24,20 @@ export default defineConfig({
                 plugins: [tailwindcss(), tsconfigPaths()],
                 test: {
                     name: 'ui-tests',
-                    include: ['./app/**/*.ui.test.ts'],
+                    include: ['./app/**/*.ui.test.tsx'],
                     environment: 'jsdom',
                     mockReset: true,
                 },
             },
             {
-                extends: true,
+                plugins: [tsconfigPaths()],
                 test: {
                     name: 'integration-tests',
                     include: ['**/*.integration.test.ts'],
                     globalSetup: './app/integration/setup-integration.ts',
-                    environment: 'node',
-                    testTimeout: 20000,
-                    hookTimeout: 20000,
+                    testTimeout: 10000,
+                    hookTimeout: 120000,
+                    globals: true,
                 },
             },
         ],

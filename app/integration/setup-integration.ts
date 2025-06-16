@@ -3,9 +3,9 @@ import {
     StartedNetwork,
     type StartedTestContainer,
 } from 'testcontainers'
-import { setupDynamo } from './helpers/setup-dynamo'
-import { setupTable } from './helpers/set-table'
-import { setupServer } from './helpers/setup-server'
+import { setupDynamo } from './setup-dynamo'
+import { setupTable } from './set-table'
+import { setupServer } from './setup-server'
 
 let network: StartedNetwork | undefined
 let dynamo: StartedTestContainer | undefined
@@ -29,10 +29,6 @@ export const setup = async () => {
         'Table setup completed successfully for endpoint:',
         hostEndpoint,
     )
-    // Adding a delay to ensure table is ready in DynamoDB
-    console.info('Waiting for table to be fully ready in DynamoDB...')
-    await new Promise((resolve) => setTimeout(resolve, 5000))
-    console.info('Proceeding to server setup after delay.')
 
     console.info('Setting up server')
     server = await setupServer({ endpoint: containerEndpoint, network })
@@ -42,10 +38,18 @@ export const setup = async () => {
     console.info('Integration setup complete')
 }
 
-export const teardown = () => {
+export const teardown = async () => {
     console.info('Tearing down network')
-    network?.stop()
-    dynamo?.stop()
-    server?.stop()
+    // (Optionally) close (or destroy) log consumer streams (if you have a reference to them) so that no pending (or "hanging") async handle remains.
+    // For example, if you have a logConsumer (or log stream) for dynamo and server, you can do:
+    // (dynamoLogConsumerStream && dynamoLogConsumerStream.destroy && dynamoLogConsumerStream.destroy());
+    // (serverLogConsumerStream && serverLogConsumerStream.destroy && serverLogConsumerStream.destroy());
+    // (If you do not have a reference, you can skip this step.)
+
+    // (Optionally) add a small delay (using setTimeout) to allow pending (or "hanging") async handles (like log streams) to close.
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
+    await dynamo?.stop()
+    await server?.stop()
     process.env = originalEnv
 }
