@@ -5,7 +5,9 @@ import { hc } from 'hono/client'
 import type { AppType } from '~/server/main'
 
 export const planTripLoader = async (args: Route.LoaderArgs) => {
-    const { userId } = await getAuth(args)
+    const { userId, has } = await getAuth(args)
+    const isSubscriber = has({ plan: 'roam_premium' })
+
     let freeTripCount: number | undefined
     if (userId) {
         const clerkClient = createClerkClient({
@@ -22,5 +24,5 @@ export const planTripLoader = async (args: Route.LoaderArgs) => {
         .then((res) => res.json())
         .then((data) => data.destinations)
 
-    return { userId, getDestinationsPromise, freeTripCount }
+    return { userId, getDestinationsPromise, freeTripCount, isSubscriber }
 }

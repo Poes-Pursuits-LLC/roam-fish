@@ -12,7 +12,3 @@ export const table = new sst.aws.Dynamo('Table', {
     stream: 'new-and-old-images',
     ttl: 'expireAt',
 })
-
-// export const outputs = {
-//     tableName: table.name,
-// }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { tripAction } from './trip.action'
 import type { Route } from '../routes/+types/trip'
@@ -47,7 +48,7 @@ it('should call the updateTrip endpoint with all form fields when all are provid
         updateTrip: {
             $post: mockUpdateTripPost,
         },
-    } as any)
+    } as unknown as any)
 
     await tripAction(actionArgs)
 

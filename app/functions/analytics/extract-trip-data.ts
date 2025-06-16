@@ -6,7 +6,7 @@ export type ExtractedTripData = {
     destinationName: string
     startDate: string
     duration: TripDurationEnum
-    totalCost: number
+    netCostChange: number
 }
 
 type BudgetItem = {
@@ -17,30 +17,40 @@ type BudgetItem = {
     }
 }
 
-export const extractTripData = (
-    record: DynamoDBRecord,
-): ExtractedTripData | null => {
-    const trip = record.dynamodb?.NewImage
-
-    if (!trip?.userId.S) {
-        return null
-    }
-
-    const userId = trip!.userId.S!
-    const destinationName = trip!.destinationName.S!
-    const startDate = trip!.startDate.S!
-    const duration = trip!.duration.S as TripDurationEnum
-    const budgetList = (trip!.budgetList?.L || []) as BudgetItem[]
-    const totalCost = budgetList.reduce((sum: number, item: BudgetItem) => {
+const calculateTotalCost = (budgetList: BudgetItem[] = []) => {
+    return budgetList.reduce((sum: number, item: BudgetItem) => {
         const price = parseFloat(item.M.price.S) || 0
         return sum + price
     }, 0)
+}
+
+export const extractTripData = (
+    record: DynamoDBRecord,
+): ExtractedTripData | null => {
+    const oldImage = record.dynamodb?.OldImage
+    const newImage = record.dynamodb?.NewImage
+
+    if (!newImage?.userId?.S) {
+        return null
+    }
+
+    const userId = newImage.userId.S!
+    const destinationName = newImage.destinationName.S!
+    const startDate = newImage.startDate.S!
+    const duration = newImage.duration.S! as TripDurationEnum
+
+    const oldBudgetList = (oldImage?.budgetList?.L || []) as BudgetItem[]
+    const newBudgetList = (newImage.budgetList?.L || []) as BudgetItem[]
+
+    const oldTotalCost = calculateTotalCost(oldBudgetList)
+    const newTotalCost = calculateTotalCost(newBudgetList)
+    const netCostChange = newTotalCost - oldTotalCost
 
     return {
         userId,
         destinationName,
         startDate,
         duration,
-        totalCost,
+        netCostChange,
     }
 }

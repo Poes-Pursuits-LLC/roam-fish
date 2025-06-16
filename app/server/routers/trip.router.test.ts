@@ -313,7 +313,6 @@ describe('/updateTrip', () => {
                 updateFields,
             },
         })
-        console.info(response)
 
         expect(updateTrip).toHaveBeenCalledOnce()
         expect(updateTrip).toHaveBeenCalledWith(tripId, {

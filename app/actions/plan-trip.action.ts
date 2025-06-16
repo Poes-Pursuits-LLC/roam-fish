@@ -28,7 +28,6 @@ export const planTripAction = async (args: Route.ActionArgs) => {
         .then((res) => res.json())
         .then((data) => data.tripId)
 
-    // TODO: user is also not subscriber. if they are, they can do unlimited trips so we do not fall into this block.
     if (userId) {
         const clerkClient = createClerkClient({
             secretKey: process.env.CLERK_SECRET_KEY,

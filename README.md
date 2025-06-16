@@ -1,9 +1,10 @@
-2. assess current tests and ensure they pass and line up with desired end state for trips.
+2. add "has" subcription check to PlanTrip page so we allow subscribers to keep creating trips.
 
 3. build integration tests
 
-4. assess UI and if it needs to change to derive stats sheet display.
+4. have analytics process trips just on UPDATE, since we do "update" them as a part of the creation flow regardless.
+   This will prevent double counting.
 
-5. add actual analytics query to return that data to frontend
+4b. We must also properly "diff" old and new image because otherwise, we will just be linearly adding days and budget costs without knowing what they were before!
 
-6. research error handling for streams
+5. research error handling for streams

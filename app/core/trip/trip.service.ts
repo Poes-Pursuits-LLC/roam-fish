@@ -2,6 +2,7 @@ import { DynamoTrip } from './trip.dynamo'
 import type { Trip } from './trip.model'
 import { fetchTripDetails } from './helpers/fetch-trip-details'
 import { postTripDetails } from './helpers/post-trip-details'
+import { isIntegrationTest } from '~/utils'
 
 const getTrip = async (tripId: string) => {
     const { data: trip } = await DynamoTrip().get({ tripId }).go()
@@ -9,6 +10,17 @@ const getTrip = async (tripId: string) => {
 }
 
 const getTripDetails = async (contentId: string) => {
+    if (isIntegrationTest()) {
+        return {
+            fishingSummary: 'fishingSummary',
+            weather: 'weather',
+            flies: ['fly1', 'fly2', 'fly3'],
+            hatches: ['hatch1', 'hatch2', 'hatch3'],
+            notes: 'notes',
+            airport: 'airport',
+            cities: ['city1', 'city2', 'city3'],
+        }
+    }
     const tripDetails = await fetchTripDetails(contentId)
     return tripDetails
 }
@@ -43,6 +55,10 @@ const submitTripDetails = async (inputs: {
     duration: string
     headcount: string
 }) => {
+    if (isIntegrationTest()) {
+        return 'contentId'
+    }
+
     const contentId = await postTripDetails(inputs)
     return contentId
 }

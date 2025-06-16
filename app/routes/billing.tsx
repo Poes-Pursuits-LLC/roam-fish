@@ -6,6 +6,8 @@ import { billingLoader } from '~/loaders/billing.loader'
 import { BillingFAQ } from '~/ui/billing/BillingFAQ'
 import { BillingHeader } from '~/ui/billing/BillingHeader'
 
+// TODO: detect when user unsubscribes so we can reset their free trip count to 3.
+
 export const loader = async (args: Route.LoaderArgs) => {
     return await billingLoader(args)
 }

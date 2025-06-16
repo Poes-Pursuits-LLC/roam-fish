@@ -5,8 +5,8 @@ let client: DynamoDBClient | undefined
 export const getDynamoClient = () => {
     if (!client) {
         client = new DynamoDBClient({
-            ...(process.env.DYNAMO_ENDPOINT && {
-                endpoint: process.env.DYNAMO_ENDPOINT,
+            ...(process.env.DYNAMODB_ENDPOINT && {
+                endpoint: process.env.DYNAMODB_ENDPOINT,
                 region: 'us-east-1',
                 credentials: {
                     accessKeyId: 'local',

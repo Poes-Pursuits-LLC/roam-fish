@@ -9,24 +9,30 @@ export const handleTripRecord = async (record: DynamoDBRecord) => {
         return
     }
 
-    const { userId, duration, destinationName, totalCost } = tripData
+    const { userId, duration, destinationName, netCostChange } = tripData
+
     const daysToAdd = getDaysFromDuration(duration)
 
-    const { data: existingUserAnalytics } =
+    const userAnalyticsSheet =
         await analyticsService.getUserAnalyticsSheet(userId)
 
-    if (existingUserAnalytics) {
+    if (userAnalyticsSheet) {
         await analyticsService.updateUserAnalyticsSheet(userId, {
-            tripCount: existingUserAnalytics.tripCount + 1,
-            totalDaysFishing: existingUserAnalytics.totalDaysFishing + daysToAdd,
-            totalTripCost: existingUserAnalytics.totalTripCost + totalCost,
-            uniqueDestinations: Array.from(new Set([...existingUserAnalytics.uniqueDestinations, destinationName])),
+            tripCount: userAnalyticsSheet.tripCount + 1,
+            totalDaysFishing: userAnalyticsSheet.totalDaysFishing + daysToAdd,
+            totalTripCost: userAnalyticsSheet.totalTripCost + netCostChange,
+            uniqueDestinations: Array.from(
+                new Set([
+                    ...userAnalyticsSheet.uniqueDestinations,
+                    destinationName,
+                ]),
+            ),
         })
     } else {
         await analyticsService.createUserAnalyticsSheet({
             userId,
             totalDaysFishing: daysToAdd,
-            totalTripCost: totalCost,
+            totalTripCost: netCostChange,
             tripCount: 1,
             uniqueDestinations: [destinationName],
         })

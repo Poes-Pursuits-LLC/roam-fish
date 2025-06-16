@@ -3,7 +3,10 @@ import type { UserAnalytics } from './analytics.model'
 import { DynamoUserAnalytics } from './user-analytics.dynamo'
 
 const getUserAnalyticsSheet = async (userId: string) => {
-    return await DynamoUserAnalytics().get({ userId }).go()
+    const { data: userAnalyticsSheet } = await DynamoUserAnalytics()
+        .get({ userId })
+        .go()
+    return userAnalyticsSheet
 }
 
 const createUserAnalyticsSheet = async (
@@ -16,9 +19,7 @@ const createUserAnalyticsSheet = async (
         | 'tripCount'
     >,
 ) => {
-    await DynamoUserAnalytics()
-        .create({ ...createFields })
-        .go()
+    await DynamoUserAnalytics().create(createFields).go()
 }
 
 const updateUserAnalyticsSheet = async (

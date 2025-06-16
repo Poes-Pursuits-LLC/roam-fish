@@ -5,7 +5,6 @@ import type { DynamoDBRecord } from 'aws-lambda'
 import { extractTripData } from './extract-trip-data'
 import type { ExtractedTripData } from './extract-trip-data'
 import { TripDurationEnum } from '~/core/trip/trip.model'
-import { getDaysFromDuration } from './get-days-from-duration'
 
 vi.mock('~/core/analytics/analytics.service', () => ({
     analyticsService: {
@@ -36,15 +35,13 @@ it('should create new analytics when user analytics sheet does not exist', async
         userId: 'user123',
         duration: TripDurationEnum.Weekend,
         destinationName: 'Lake Tahoe',
-        totalCost: 500,
+        netCostChange: 500,
         startDate: '2024-03-20',
     }
     vi.mocked(extractTripData).mockReturnValue(mockTripData)
     const mockGetAnalytics = vi
         .mocked(analyticsService.getUserAnalyticsSheet)
-        .mockResolvedValue({
-            data: null,
-        })
+        .mockResolvedValue(null)
 
     await handleTripRecord(mockRecord)
 
@@ -64,7 +61,7 @@ it('should update existing analytics when user analytics sheet already exists', 
         userId: 'user123',
         duration: TripDurationEnum.Weekend,
         destinationName: 'Lake Tahoe',
-        totalCost: 500,
+        netCostChange: 500,
         startDate: '2024-03-20',
     }
     const existingAnalytics = {
@@ -79,9 +76,7 @@ it('should update existing analytics when user analytics sheet already exists', 
     vi.mocked(extractTripData).mockReturnValue(mockTripData)
     const mockGetAnalytics = vi
         .mocked(analyticsService.getUserAnalyticsSheet)
-        .mockResolvedValue({
-            data: existingAnalytics,
-        })
+        .mockResolvedValue(existingAnalytics)
 
     await handleTripRecord(mockRecord)
 
