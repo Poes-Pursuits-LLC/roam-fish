@@ -10,7 +10,7 @@ export const setupDynamo = async (network: StartedNetwork) => {
             'DynamoDBLocal.jar',
             '-sharedDb',
             '-dbPath',
-            '/home/dynamodblocal/data',
+            './',
         ])
         .withWaitStrategy(Wait.forListeningPorts())
         .withLogConsumer((stream) => {

@@ -1,10 +1,10 @@
 import { Entity } from 'electrodb'
-// import { Resource } from 'sst'
+import { Resource } from 'sst'
 import { getDynamoClient } from '~/clients/table.client'
 
-export const DynamoCache = async () => {
+export const DynamoCache = () => {
     const client = getDynamoClient()
-    const table = process.env.TABLE_NAME
+    const table = process.env.TABLE_NAME || Resource.Table.name
 
     return new Entity(
         {

@@ -19,12 +19,18 @@ const mockContext: LambdaContext = {
     succeed: () => {},
 }
 
-function createLambdaEvent(method: string, path: string, body?: unknown) {
+function createLambdaEvent(
+    method: string,
+    path: string,
+    body?: unknown,
+    queryParams?: Record<string, string>,
+) {
     return {
         httpMethod: method,
         path,
         headers: { 'Content-Type': 'application/json' },
         body: body ? JSON.stringify(body) : null,
+        queryStringParameters: queryParams || {},
         requestContext: {
             http: { method, path },
             elb: {
@@ -52,12 +58,17 @@ function parseLambdaResponse(lambdaResponse: LambdaResponse): {
 }
 
 const app = new Hono()
+
 app.all('*', async (c) => {
     const method = c.req.method
     const path = c.req.path
     const body = method === 'POST' ? await c.req.json() : undefined
-    const event = createLambdaEvent(method, path, body)
+    const queryParams = c.req.query() as Record<string, string>
+
+    const event = createLambdaEvent(method, path, body, queryParams)
+    console.info('Lambda Event created:', JSON.stringify(event, null, 2))
     const result = await handler(event, mockContext)
+    console.info('Lambda Handler result:', JSON.stringify(result, null, 2))
     const { statusCode, body: responseBody } = parseLambdaResponse(result)
 
     return c.json(

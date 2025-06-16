@@ -1,47 +1,197 @@
-// import { it, expect, beforeAll } from 'vitest'
-// import { hc } from 'hono/client'
-// import type { AppType } from '~/server/main'
-// import { TripDurationEnum, TripStatusEnum } from './trip.model'
+import { it, expect } from 'vitest'
+import { TripDurationEnum, TripStatusEnum } from './trip.model'
+import { v4 } from 'uuid'
 
-// let client: ReturnType<typeof hc<AppType>>
-// beforeAll(async () => {
-//     client = hc<AppType>(process.env.SERVER_URL!)
-// })
+const SERVER_URL = `http://localhost:${process.env.SERVER_PORT}`
 
-// it('should be able to create and retrieve a trip', async () => {
-//     const createTripArgs = {
-//         startDate: '2026-05-21',
-//         duration: TripDurationEnum.Week,
-//         userId: 'user123',
-//         status: TripStatusEnum.Generating,
-//         destinationName: 'Yellowstone',
-//         headcount: '2',
-//     }
+it('should be able to create and retrieve a trip', async () => {
+    const createTripArgs = {
+        startDate: '2026-05-21',
+        duration: TripDurationEnum.Week,
+        userId: 'user123',
+        status: TripStatusEnum.Generating,
+        destinationName: 'Yellowstone',
+        headcount: '2',
+    }
 
-//     const returnedTripId = await client.createTrip
-//         .$post({
-//             json: createTripArgs,
-//         })
-//         .then((response) => response.json())
-//         .then((data) => data.tripId)
+    const returnedTripId = await fetch(`${SERVER_URL}/createTrip`, {
+        method: 'POST',
+        body: JSON.stringify(createTripArgs),
+    })
+        .then((res) => res.json())
+        .then((data) => data.tripId)
 
-//     const fetchedTrip = await client.getTrip.$get({
-//         query: {
-//             tripId: returnedTripId!,
-//         },
-//     })
+    const fetchedTrip = await fetch(
+        `${SERVER_URL}/getTrip?tripId=${returnedTripId}`,
+        {
+            method: 'GET',
+        },
+    )
+        .then((response) => response.json())
+        .then((data) => {
+            console.info(
+                'Fetched Trip Data:',
+                JSON.stringify(data.trip, null, 2),
+            )
+            return data.trip
+        })
 
-//     expect(returnedTripId).toBeDefined()
-//     expect(fetchedTrip).toEqual({
-//         tripId: returnedTripId,
-//         startDate: '2026-05-21',
-//         duration: TripDurationEnum.Week,
-//         userId: 'user123',
-//         status: TripStatusEnum.Generating,
-//         destinationName: 'Yellowstone',
-//         headcount: '2',
-//         packingList: expect.any([]),
-//         budgetList: expect.any([]),
-//         checkList: expect.any([]),
-//     })
-// })
+    expect(returnedTripId).toBeDefined()
+    expect(fetchedTrip).toBeDefined()
+    expect(fetchedTrip.tripId).toBe(returnedTripId)
+    expect(fetchedTrip.startDate).toBe('2026-05-21')
+    expect(fetchedTrip.duration).toBe(TripDurationEnum.Week)
+    expect(fetchedTrip.userId).toBe('user123')
+    expect(fetchedTrip.status).toBe(TripStatusEnum.Planned)
+    expect(fetchedTrip.destinationName).toBe('Yellowstone')
+    expect(fetchedTrip.headcount).toBe('2')
+    expect(fetchedTrip.airport).toBeDefined()
+    expect(Array.isArray(fetchedTrip.cities)).toBe(true)
+    expect(Array.isArray(fetchedTrip.flies)).toBe(true)
+    expect(Array.isArray(fetchedTrip.hatches)).toBe(true)
+    expect(fetchedTrip.weather).toBeDefined()
+    expect(fetchedTrip.fishingSummary).toBeDefined()
+    expect(fetchedTrip.notes).toBeDefined()
+    expect(fetchedTrip.contentId).toBeDefined()
+    expect(Array.isArray(fetchedTrip.packingList)).toBe(true)
+    expect(Array.isArray(fetchedTrip.budgetList)).toBe(true)
+    expect(Array.isArray(fetchedTrip.checkList)).toBe(true)
+})
+
+it('should still create a trip if no userId is provided, as this means it is a visitor trying the app', async () => {
+    const createTripArgs = {
+        startDate: '2026-05-21',
+        duration: TripDurationEnum.Week,
+        status: TripStatusEnum.Generating,
+        destinationName: 'Yellowstone',
+        headcount: '2',
+    }
+
+    const returnedTripId = await fetch(`${SERVER_URL}/createTrip`, {
+        method: 'POST',
+        body: JSON.stringify(createTripArgs),
+    })
+        .then((res) => res.json())
+        .then((data) => data.tripId)
+
+    expect(returnedTripId).toBeDefined()
+})
+
+it('should update a trip', async () => {
+    const createTripArgs = {
+        startDate: '2026-05-21',
+        duration: TripDurationEnum.Week,
+        userId: 'user123',
+        status: TripStatusEnum.Generating,
+        destinationName: 'Yellowstone',
+        headcount: '2',
+    }
+
+    const createdTripId = await fetch(`${SERVER_URL}/createTrip`, {
+        method: 'POST',
+        body: JSON.stringify(createTripArgs),
+    })
+        .then((response) => response.json())
+        .then((data) => data.tripId)
+
+    await fetch(`${SERVER_URL}/updateTrip`, {
+        method: 'POST',
+        body: JSON.stringify({
+            tripId: createdTripId,
+            updateFields: {
+                packingList: [
+                    {
+                        id: 'id',
+                        category: 'Toiletries',
+                        name: 'Deodorant',
+                        quantity: '50',
+                    },
+                ],
+            },
+        }),
+    })
+
+    const updatedTrip = await fetch(
+        `${SERVER_URL}/getTrip?tripId=${createdTripId}`,
+        {
+            method: 'GET',
+        },
+    )
+        .then((response) => response.json())
+        .then((data) => data.trip)
+
+    expect(createdTripId).toBeDefined()
+    expect(updatedTrip.tripId).toBe(createdTripId)
+    expect(updatedTrip.startDate).toBe('2026-05-21')
+    expect(updatedTrip.duration).toBe(TripDurationEnum.Week)
+    expect(updatedTrip.userId).toBe('user123')
+    expect(updatedTrip.status).toBe(TripStatusEnum.Planned)
+    expect(updatedTrip.destinationName).toBe('Yellowstone')
+    expect(updatedTrip.headcount).toBe('2')
+    expect(updatedTrip.airport).toBeDefined()
+    expect(Array.isArray(updatedTrip.cities)).toBe(true)
+    expect(Array.isArray(updatedTrip.flies)).toBe(true)
+    expect(Array.isArray(updatedTrip.hatches)).toBe(true)
+    expect(updatedTrip.weather).toBeDefined()
+    expect(updatedTrip.fishingSummary).toBeDefined()
+    expect(updatedTrip.notes).toBeDefined()
+    expect(updatedTrip.contentId).toBeDefined()
+    expect(Array.isArray(updatedTrip.packingList)).toBe(true)
+    expect(updatedTrip.packingList).toContainEqual({
+        category: 'Toiletries',
+        id: 'id',
+        name: 'Deodorant',
+        quantity: '50',
+    })
+    expect(Array.isArray(updatedTrip.budgetList)).toBe(true)
+    expect(Array.isArray(updatedTrip.checkList)).toBe(true)
+})
+
+it('should fetch trips for a specific user', async () => {
+    const userId = v4()
+    const trips = [
+        {
+            startDate: '2026-05-21',
+            duration: TripDurationEnum.Week,
+            userId,
+            status: TripStatusEnum.Generating,
+            destinationName: 'Yellowstone',
+            headcount: '2',
+        },
+        {
+            startDate: '2026-05-21',
+            duration: TripDurationEnum.Week,
+            userId,
+            status: TripStatusEnum.Generating,
+            destinationName: 'Yellowstone',
+            headcount: '2',
+        },
+        {
+            startDate: '2026-05-21',
+            duration: TripDurationEnum.Week,
+            status: TripStatusEnum.Generating,
+            destinationName: 'Yellowstone',
+            headcount: '3',
+        },
+    ]
+
+    await Promise.all(
+        trips.map((trip) => {
+            return fetch(`${SERVER_URL}/createTrip`, {
+                method: 'POST',
+                body: JSON.stringify(trip),
+            })
+        }),
+    )
+
+    const userTrips = await fetch(
+        `${SERVER_URL}/getUserTrips?userId=${userId}`,
+        {
+            method: 'GET',
+        },
+    )
+        .then((response) => response.json())
+        .then((data) => data.trips)
+
+    expect(userTrips.length).toEqual(2)
+})

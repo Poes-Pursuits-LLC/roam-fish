@@ -28,8 +28,9 @@ export const setupServer = async ({
         .withEnvironment({
             DYNAMODB_ENDPOINT: endpoint,
             TABLE_NAME: 'integration-table',
+            TEST_FLAG_INTEGRATION: 'true',
         })
-        .withStartupTimeout(20000)
+        .withStartupTimeout(30000)
         .withWaitStrategy(Wait.forListeningPorts())
         .withLogConsumer((stream) => {
             stream.on('data', (line) => console.log(line))

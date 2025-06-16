@@ -49,3 +49,7 @@ export const getTTL = (hours: number) => {
     const futureDate = new Date(now.getTime() + hours * 60 * 60 * 1000)
     return Math.floor(futureDate.getTime() / 1000)
 }
+
+export const isIntegrationTest = () => {
+    return process.env.TEST_FLAG_INTEGRATION === 'true'
+}
