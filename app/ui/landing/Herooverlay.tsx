@@ -1,9 +1,9 @@
-import { NavLink } from "react-router"
-import { scrollToElement } from "~/utils"
+import { NavLink } from 'react-router'
+import { scrollToElement } from '~/utils'
 
 export const HeroOverlay = () => {
     return (
-        <div className="relative max-w-4xl mx-auto text-center py-16 z-2">
+        <div className="relative max-w-4xl mx-auto text-center py-32 z-2 h-full flex flex-col justify-center">
             <h1 className="neo-header mb-4 text-slate-50">
                 The simplest fishing planner on the internet
             </h1>
@@ -11,10 +11,7 @@ export const HeroOverlay = () => {
                 Plan your next fishing trip in seconds
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <NavLink
-                    to="/plan-trip"
-                    className="neo-button"
-                >
+                <NavLink to="/plan-trip" className="neo-button">
                     Start Planning
                 </NavLink>
                 <button

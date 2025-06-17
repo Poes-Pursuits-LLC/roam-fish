@@ -10,7 +10,6 @@ export const RecentTrips = () => {
                     Recent Trips
                 </h2>
             </div>
-
             <div className="space-y-4">
                 {recentTrips.map((trip, index) => (
                     <div

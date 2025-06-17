@@ -23,8 +23,10 @@ export default defineConfig({
                 plugins: [tailwindcss(), tsconfigPaths()],
                 test: {
                     name: 'ui-tests',
-                    include: ['./app/**/*.ui.test.tsx'],
+                    include: ['./app/**/*.spec.tsx'],
                     environment: 'jsdom',
+                    setupFiles: ['./app/ui/ui-test-setup.ts'],
+                    globals: true,
                     mockReset: true,
                 },
             },

@@ -1,5 +1,5 @@
 import type { Route } from './+types/trip'
-import Navbar from '~/ui/Navbar'
+import { Navbar } from '~/ui/Navbar'
 import { InfoCards } from '~/ui/trip/Trip.InfoCards'
 import { Budget } from '~/ui/trip/Budget'
 import { Notes } from '~/ui/trip/Notes'
