@@ -47,7 +47,9 @@ jobs:
               run: npx playwright install chromium
 
             - name: Run e2e tests
-              run: npx magnitude -p
+              uses: GabrielBB/xvfb-action@v1
+              with:
+                  run: npx magnitude -p
 
             - name: Merge develop -> main
               uses: devmasx/merge-branch@master
