@@ -1,3 +1,5 @@
+import type {} from '../.sst/platform/config'
+
 export const table = new sst.aws.Dynamo('Table', {
     fields: {
         pk: 'string',

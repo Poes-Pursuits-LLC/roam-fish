@@ -1,4 +1,3 @@
-import type { } from '../.sst/platform/config'
 import { allSecrets } from './secret'
 import { table } from './table'
 
@@ -14,7 +13,7 @@ table.subscribe(
                 dynamodb: {
                     NewImage: {
                         type: {
-                            S: ["trip"],
+                            S: ['trip'],
                         },
                     },
                 },

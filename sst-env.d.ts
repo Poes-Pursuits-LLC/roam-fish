@@ -13,10 +13,6 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
-    "MoondreamApiKey": {
-      "type": "sst.sst.Secret"
-      "value": string
-    }
     "Server": {
       "name": string
       "type": "sst.aws.Function"

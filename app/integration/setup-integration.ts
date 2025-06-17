@@ -4,7 +4,7 @@ import {
     type StartedTestContainer,
 } from 'testcontainers'
 import { setupDynamo } from './setup-dynamo'
-import { setupTable } from './set-table'
+import { setupTable } from './setup-table'
 import { setupServer } from './setup-server'
 
 let network: StartedNetwork | undefined
@@ -38,15 +38,9 @@ export const setup = async () => {
     console.info('Integration setup complete')
 }
 
+// TODO: get network to shut down gracefully.
 export const teardown = async () => {
     console.info('Tearing down network')
-    // (Optionally) close (or destroy) log consumer streams (if you have a reference to them) so that no pending (or "hanging") async handle remains.
-    // For example, if you have a logConsumer (or log stream) for dynamo and server, you can do:
-    // (dynamoLogConsumerStream && dynamoLogConsumerStream.destroy && dynamoLogConsumerStream.destroy());
-    // (serverLogConsumerStream && serverLogConsumerStream.destroy && serverLogConsumerStream.destroy());
-    // (If you do not have a reference, you can skip this step.)
-
-    // (Optionally) add a small delay (using setTimeout) to allow pending (or "hanging") async handles (like log streams) to close.
     await new Promise((resolve) => setTimeout(resolve, 500))
 
     await dynamo?.stop()
