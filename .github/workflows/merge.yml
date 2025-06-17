@@ -12,6 +12,10 @@ permissions:
 jobs:
     merge-to-main:
         runs-on: ubuntu-latest
+        env:
+            ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+            MOONDREAM_API_KEY: ${{ secrets.MOONDREAM_API_KEY }}
+            WEB_URL: ${{ secrets.WEB_URL }}
         steps:
             - name: Checkout develop branch
               uses: actions/checkout@v4
@@ -39,8 +43,11 @@ jobs:
               if: steps.npm-cache.outputs.cache-hit != 'true'
               run: npm ci
 
-            - name: Run unit tests
-              run: npm run unit-tests
+            - name: Install playwright
+              run: npx playwright install chromium
+
+            - name: Run e2e tests
+              run: npx magnitude -p
 
             - name: Merge develop -> main
               uses: devmasx/merge-branch@master

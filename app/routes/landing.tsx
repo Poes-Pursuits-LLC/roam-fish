@@ -1,12 +1,6 @@
-import Hero from '~/ui/landing/Hero'
-import { Destinations, DestinationsFallback } from '~/ui/landing/Destinations'
-import { Footer } from '~/ui/landing/Footer'
-import Navbar from '~/ui/Navbar'
 import type { Route } from './+types/landing'
-import { Suspense } from 'react'
 import { landingLoader } from '../loaders/landing.loader'
-import { LandingFAQ } from '~/ui/landing/LandingFAQ'
-import { LandingFeatureSet } from '~/ui/landing/LandingFeatureSet'
+import { LandingPage } from '~/ui/landing/LandingPage'
 
 export function meta() {
     return [
@@ -22,19 +16,6 @@ export async function loader(args: Route.LoaderArgs) {
     return await landingLoader(args)
 }
 
-export default function LandingPage({ loaderData }: Route.ComponentProps) {
-    const { getDestinationsPromise, userId, isSubscriber } = loaderData
-
-    return (
-        <div className="min-h-screen bg-white">
-            <Navbar userId={userId} isSubscriber={isSubscriber} />
-            <Hero />
-            <LandingFeatureSet />
-            <Suspense fallback={<DestinationsFallback />}>
-                <Destinations promise={getDestinationsPromise} />
-            </Suspense>
-            <LandingFAQ />
-            <Footer />
-        </div>
-    )
+export default function Landing({ loaderData }: Route.ComponentProps) {
+    return <LandingPage {...loaderData} />
 }

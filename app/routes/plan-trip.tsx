@@ -1,10 +1,10 @@
 import TripForm from '~/ui/plan-trip/TripForm'
 import TripLoader from '~/ui/plan-trip/TripLoader'
-import type { Route } from './+types/plan-trip'
 import { planTripLoader } from '~/loaders/plan-trip.loader'
 import { PlanTripHeader } from '~/ui/plan-trip/PlanTripHeader'
 import { planTripAction } from '~/actions/plan-trip.action'
 import { BackButton } from '~/ui/BackButton'
+import type { Route } from './+types/plan-trip'
 
 export async function loader(args: Route.LoaderArgs) {
     return await planTripLoader(args)
