@@ -1,5 +1,5 @@
 import type { Route } from './+types/dashboard'
-import Navbar from '~/ui/Navbar'
+import { Navbar } from '~/ui/Navbar'
 import { UserStatsCards } from '~/ui/dashboard/UserStatsCards'
 import { QuickActions } from '~/ui/dashboard/QuickActions'
 import { RecentTrips } from '~/ui/dashboard/RecentTrips'

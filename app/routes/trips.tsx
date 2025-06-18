@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import Navbar from '~/ui/Navbar'
+import { Navbar } from '~/ui/Navbar'
 import { Trips } from '~/ui/trips/Trips'
 import { TripsSkeleton } from '~/ui/trips/TripsSkeleton'
 import type { Route } from './+types/trips'

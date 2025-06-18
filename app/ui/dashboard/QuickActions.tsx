@@ -10,7 +10,6 @@ export const QuickActions = () => {
                     Quick Actions
                 </h2>
             </div>
-
             <NavLink to="/trips">
                 <button className="neo-button w-full mb-4">My Trips</button>
             </NavLink>
