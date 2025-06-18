@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Progress } from './Progress'
 import { useNavigate } from 'react-router'
 
-const TripLoader = ({ tripId }: { tripId: string }) => {
+export const TripLoader = ({ tripId }: { tripId: string }) => {
     const navigate = useNavigate()
     const [progress, setProgress] = useState(0)
     const [shouldNavigate, setShouldNavigate] = useState(false)
@@ -77,5 +77,3 @@ const TripLoader = ({ tripId }: { tripId: string }) => {
         </div>
     )
 }
-
-export default TripLoader

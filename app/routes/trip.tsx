@@ -20,10 +20,6 @@ export async function action(args: Route.ActionArgs) {
     await tripAction(args)
 }
 
-// TODO: enforce limits on length of notes, packing list, checklist, budget list
-// TODO: make fishing summary behind paywall.
-// TODO: new licensing and local regulations section, behind paywall as well.
-
 export default function TripPage({ loaderData }: Route.ComponentProps) {
     const { trip, userId, isSubscriber } = loaderData
     const canEditTrip = Boolean(userId)

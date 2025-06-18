@@ -20,11 +20,10 @@ export default function PricingRoute({ loaderData }: Route.ComponentProps) {
             <div className="border-b-4 border-black bg-white">
                 <BillingFeatureSet />
             </div>
-            <div className="max-w-6xl mx-auto px-6 py-16">
-                <div className="max-w-4xl mx-auto">
-                    <div className="neo-card bg-white p-8">
-                        <PricingTable />
-                    </div>
+            <div className="flex flex-col items-center max-w-6xl mx-auto px-6 py-16">
+                <h1 className="neo-subheader mb-8">Available Plans</h1>
+                <div className="neo-card bg-white p-8">
+                    <PricingTable />
                 </div>
             </div>
             <BillingFAQ />

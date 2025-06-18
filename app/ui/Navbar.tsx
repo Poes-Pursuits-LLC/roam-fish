@@ -14,7 +14,7 @@ export const Navbar = ({
             <nav className="border-2 border-black px-6 py-4">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <NavLink
-                        className="flex items-center space-x-2 cursor-pointer"
+                        className="items-center space-x-2 cursor-pointer hidden sm:flex"
                         to="/"
                     >
                         <span className="text-2xl font-black uppercase tracking-wide text-slate-800">
