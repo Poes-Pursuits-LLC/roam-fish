@@ -42,53 +42,55 @@ export const Checklist = ({ checkList }: { checkList: ChecklistItem[] }) => {
                 <h2 className="neo-subheader text-slate-800">Checklist</h2>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4">
                 {items.map((item) => (
                     <div
                         key={item.id}
-                        className="flex items-center gap-3 p-3 bg-white border-2 border-black hover:bg-stone-100 transition-colors"
+                        className="bg-white border-2 border-black p-4"
                     >
-                        <Checkbox
-                            checked={item.completed}
-                            onCheckedChange={() => toggleItem(item.id)}
-                            className="w-5 h-5 border-2 border-black rounded-sm data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 data-[state=checked]:text-white"
-                        >
-                            <svg
-                                width="15"
-                                height="15"
-                                viewBox="0 0 15 15"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="text-white"
+                        <div className="flex items-start gap-3 min-w-0">
+                            <Checkbox
+                                checked={item.completed}
+                                onCheckedChange={() => toggleItem(item.id)}
+                                className="w-6 h-6 border-2 border-black rounded-sm data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 data-[state=checked]:text-white flex-shrink-0 mt-1"
                             >
-                                <path
-                                    d="M11.4669 3.72684C11.7558 3.91574 11.8369 4.30308 11.648 4.59198L7.39799 11.092C7.29783 11.2452 7.13556 11.3467 6.95402 11.3699C6.77247 11.3931 6.58989 11.3355 6.45446 11.2124L3.70446 8.71241C3.44905 8.48022 3.43023 8.08494 3.66242 7.82953C3.89461 7.57412 4.28989 7.55529 4.5453 7.78749L6.75292 9.79441L10.6018 3.90792C10.7907 3.61902 11.178 3.53795 11.4669 3.72684Z"
-                                    fill="currentColor"
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                        </Checkbox>
-                        <input
-                            type="text"
-                            value={item.name}
-                            onChange={(e) =>
-                                handleItemChange(item.id, e.target.value)
-                            }
-                            placeholder="Add checklist item..."
-                            className={`flex-1 font-semibold bg-transparent focus:outline-none cursor-pointer ${
-                                item.completed
-                                    ? 'line-through text-slate-500'
-                                    : 'text-slate-800'
-                            }`}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => handleRemoveItem(item.id)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded-full"
-                        >
-                            <Trash2 className="w-5 h-5" />
-                        </button>
+                                <svg
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 15 15"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="text-white"
+                                >
+                                    <path
+                                        d="M11.4669 3.72684C11.7558 3.91574 11.8369 4.30308 11.648 4.59198L7.39799 11.092C7.29783 11.2452 7.13556 11.3467 6.95402 11.3699C6.77247 11.3931 6.58989 11.3355 6.45446 11.2124L3.70446 8.71241C3.44905 8.48022 3.43023 8.08494 3.66242 7.82953C3.89461 7.57412 4.28989 7.55529 4.5453 7.78749L6.75292 9.79441L10.6018 3.90792C10.7907 3.61902 11.178 3.53795 11.4669 3.72684Z"
+                                        fill="currentColor"
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </Checkbox>
+                            <input
+                                type="text"
+                                value={item.name}
+                                onChange={(e) =>
+                                    handleItemChange(item.id, e.target.value)
+                                }
+                                placeholder="Add checklist item..."
+                                className={`flex-1 min-w-0 font-semibold bg-transparent focus:outline-none text-lg p-2 border-b border-gray-300 ${
+                                    item.completed
+                                        ? 'line-through text-slate-500'
+                                        : 'text-slate-800'
+                                }`}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveItem(item.id)}
+                                className="p-3 text-red-600 hover:bg-red-50 rounded-full flex-shrink-0"
+                            >
+                                <Trash2 className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>
@@ -96,7 +98,7 @@ export const Checklist = ({ checkList }: { checkList: ChecklistItem[] }) => {
             <button
                 type="button"
                 onClick={handleAddItem}
-                className="w-full p-3 mt-2 flex items-center justify-center gap-2 bg-emerald-100 text-emerald-700 font-bold border-2 border-black hover:bg-emerald-200"
+                className="neo-button w-full mt-6 flex items-center justify-center gap-2"
             >
                 <Plus className="w-5 h-5" />
                 Add Checklist Item

@@ -45,63 +45,69 @@ export const Budget = ({ budgetList }: { budgetList: BudgetItem[] }) => {
 
     return (
         <div className="neo-card bg-stone-50">
-            <div className="flex items-center gap-3 mb-6">
-                <DollarSign className="w-6 h-6 text-emerald-700" />
-                <h2 className="neo-subheader text-slate-800">Budget</h2>
-                <div className="ml-auto bg-emerald-400 text-black px-3 py-1 font-bold border-2 border-black">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
+                <div className="flex items-center gap-3">
+                    <DollarSign className="w-6 h-6 text-emerald-700" />
+                    <h2 className="neo-subheader text-slate-800">Budget</h2>
+                </div>
+                <div className="sm:ml-auto bg-emerald-400 text-black px-3 py-2 font-bold border-2 border-black text-center sm:text-left">
                     Total: ${total}
                 </div>
             </div>
 
-            {localBudgetList.map((item) => (
-                <div
-                    key={item.id}
-                    className="flex items-center justify-between p-3 mb-3 bg-white border-2 border-black hover:bg-stone-100 transition-colors"
-                >
-                    <div className="flex-1 mr-4">
-                        <input
-                            type="text"
-                            name={`budget-${item.id}-name`}
-                            value={item.name}
-                            onChange={(e) =>
-                                handleItemChange(
-                                    item.id,
-                                    'name',
-                                    e.target.value,
-                                )
-                            }
-                            placeholder="Item name"
-                            className="w-full font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer"
-                        />
-                        <input
-                            type="text"
-                            name={`budget-${item.id}-price`}
-                            value={item.price}
-                            onChange={(e) =>
-                                handleItemChange(
-                                    item.id,
-                                    'price',
-                                    e.target.value,
-                                )
-                            }
-                            placeholder="0.00"
-                            className="w-full text-slate-600 text-sm bg-transparent focus:outline-none cursor-pointer"
-                        />
-                    </div>
-                    <button
-                        type="button"
-                        onClick={() => handleRemoveItem(item.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-full"
+            <div className="space-y-3">
+                {localBudgetList.map((item) => (
+                    <div
+                        key={item.id}
+                        className="p-4 bg-white border-2 border-black hover:bg-stone-100 transition-colors"
                     >
-                        <Trash2 className="w-5 h-5" />
-                    </button>
-                </div>
-            ))}
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                            <div className="flex-1 min-w-0">
+                                <input
+                                    type="text"
+                                    name={`budget-${item.id}-name`}
+                                    value={item.name}
+                                    onChange={(e) =>
+                                        handleItemChange(
+                                            item.id,
+                                            'name',
+                                            e.target.value,
+                                        )
+                                    }
+                                    placeholder="Item name"
+                                    className="w-full font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer text-base sm:text-lg py-2"
+                                />
+                                <input
+                                    type="text"
+                                    name={`budget-${item.id}-price`}
+                                    value={item.price}
+                                    onChange={(e) =>
+                                        handleItemChange(
+                                            item.id,
+                                            'price',
+                                            e.target.value,
+                                        )
+                                    }
+                                    placeholder="0.00"
+                                    className="w-full text-slate-600 text-sm sm:text-base bg-transparent focus:outline-none cursor-pointer py-1"
+                                />
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveItem(item.id)}
+                                className="p-3 text-red-600 hover:bg-red-50 rounded-full self-start sm:self-center"
+                            >
+                                <Trash2 className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
 
             <button
                 type="button"
                 onClick={handleAddItem}
-                className="w-full p-3 mt-2 flex items-center justify-center gap-2 bg-emerald-100 text-emerald-700 font-bold border-2 border-black hover:bg-emerald-200"
+                className="neo-button w-full mt-6 flex items-center justify-center gap-2"
             >
                 <Plus className="w-5 h-5" />
                 Add Budget Item

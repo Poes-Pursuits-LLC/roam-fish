@@ -14,7 +14,7 @@ export const TripHeader = ({
 
     return (
         <div className="mb-8">
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-between gap-2 flex-col sm:flex-row">
                 <input
                     name="tripName"
                     className="neo-header cursor-pointer truncate text-slate-700 bg-stone-100 focus:outline-none hover:bg-stone-200 transition-colors"
