@@ -45,19 +45,21 @@ export const Trips = ({ promise }: { promise: Promise<Trip[]> }) => {
             <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
                 <button
                     onClick={() => setActiveTab('upcoming')}
-                    className={`px-4 py-2 font-bold border-2 border-black whitespace-nowrap transition-colors ${activeTab === 'upcoming'
-                        ? 'bg-amber-400 text-black'
-                        : 'bg-white text-slate-800 hover:bg-stone-50'
-                        }`}
+                    className={`px-4 py-2 font-bold border-2 border-black whitespace-nowrap transition-colors ${
+                        activeTab === 'upcoming'
+                            ? 'bg-amber-400 text-black'
+                            : 'bg-white text-slate-800 hover:bg-stone-50'
+                    }`}
                 >
                     Upcoming
                 </button>
                 <button
                     onClick={() => setActiveTab('past')}
-                    className={`px-4 py-2 font-bold border-2 border-black whitespace-nowrap transition-colors ${activeTab === 'past'
-                        ? 'bg-emerald-400 text-black'
-                        : 'bg-white text-slate-800 hover:bg-stone-50'
-                        }`}
+                    className={`px-4 py-2 font-bold border-2 border-black whitespace-nowrap transition-colors ${
+                        activeTab === 'past'
+                            ? 'bg-emerald-600 text-black'
+                            : 'bg-white text-slate-800 hover:bg-stone-50'
+                    }`}
                 >
                     Past Trips
                 </button>

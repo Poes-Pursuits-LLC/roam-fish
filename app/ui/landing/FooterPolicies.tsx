@@ -1,19 +1,27 @@
+import { NavLink } from 'react-router'
+
 export const FooterPolicies = () => {
     return (
         <div>
-            <h3 className="text-xl font-bold uppercase tracking-wide mb-4 text-amber-400">
+            <h3 className="text-xl font-bold text-[#1F513F] uppercase tracking-wide mb-4">
                 Policy
             </h3>
             <ul className="space-y-2 font-semibold">
                 <li>
-                    <a href="#" className="hover:text-emerald-400">
+                    <NavLink
+                        to="/terms-of-service"
+                        className="hover:text-emerald-600"
+                    >
                         Terms of Service
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="#" className="hover:text-emerald-400">
+                    <NavLink
+                        to="/privacy-policy"
+                        className="hover:text-emerald-600"
+                    >
                         Privacy Policy
-                    </a>
+                    </NavLink>
                 </li>
             </ul>
         </div>

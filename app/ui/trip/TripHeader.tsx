@@ -21,19 +21,20 @@ export const TripHeader = ({
                     value={localTripName}
                     onChange={(e) => setLocalTripName(e.target.value)}
                 />
-                <button
-                    type="submit"
-                    disabled={!canEditTrip}
-                    className="neo-button bg-slate-700 text-white rounded-lg px-4 py-2 text-sm"
-                >
-                    Save Changes
-                </button>
+                {userId && (
+                    <button
+                        type="submit"
+                        disabled={!canEditTrip}
+                        className="neo-button bg-slate-700 text-white rounded-lg px-4 py-2 text-sm"
+                    >
+                        Save Changes
+                    </button>
+                )}
             </div>
             {!userId && (
                 <SignUpCTA
                     title="Want to save this trip?"
                     description="Sign up for free to access our trip management tools and save many more trips!"
-                    className="mt-4 bg-white rounded-lg shadow-sm border border-stone-200"
                 />
             )}
         </div>

@@ -5,7 +5,7 @@ import { Form, NavLink } from 'react-router'
 import { TripDurationEnum } from '~/core/trip/trip.model'
 import { SuspendedDestinationSelect } from './DestinationSelect'
 
-const TripForm = ({
+export const TripForm = ({
     promise,
     userId,
     noMoreTrips,
@@ -100,8 +100,7 @@ const TripForm = ({
                 ) : (
                     <button
                         type="submit"
-                        className="neo-button w-full text-black bg-amber-400 text-xl py-4"
-                        disabled={noMoreTrips}
+                        className="neo-button w-full text-black text-xl py-4"
                     >
                         Generate Trip Plan
                     </button>
@@ -110,5 +109,3 @@ const TripForm = ({
         </div>
     )
 }
-
-export default TripForm
