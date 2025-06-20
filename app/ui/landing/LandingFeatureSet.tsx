@@ -6,25 +6,25 @@ export const LandingFeatureSet = () => {
 }
 
 const config = {
-    header: 'Everything You Need To Fish Better',
+    header: 'AI-Powered Fly Fishing Trip Planning in 30 Seconds',
     features: [
         {
             icon: MapPin,
-            title: 'Find Perfect Spots',
+            title: 'Expert Destination Planning',
             description:
-                'Discover the best fishing locations based on your preferences and skill level',
-        },
-        {
-            icon: Calendar,
-            title: 'Plan Your Schedule',
-            description:
-                'Optimize timing for weather, tides, and fish activity patterns',
+                'Get detailed trip plans with recommended cities, airports, and places to stay for hundreds of fishing destinations',
         },
         {
             icon: Fish,
-            title: 'Track Your Catches',
+            title: 'Fishy Information',
             description:
-                'Log your successful trips and build your fishing knowledge base',
+                'Receive expert fly selection, hatch patterns, weather insights, and tactical advice tailored to your trip',
+        },
+        {
+            icon: Calendar,
+            title: 'Complete Trip Management',
+            description:
+                'Manage packing lists, budgets, checklists, and travel details all in one place.',
         },
     ],
 }

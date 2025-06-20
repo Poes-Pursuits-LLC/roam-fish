@@ -23,6 +23,7 @@ export interface Trip {
     fishingSummary?: string
     createdAt: string
     updatedAt: string
+    expireAt?: string
 }
 
 interface PackingListItem {

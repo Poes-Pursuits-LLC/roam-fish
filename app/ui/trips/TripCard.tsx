@@ -1,21 +1,9 @@
 import { Calendar, Clock, Eye } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import type { Trip } from '~/core/trip/trip.model'
-import { TripStatusEnum } from '~/core/trip/trip.model'
 
 export const TripCard = ({ trip }: { trip: Trip }) => {
     const navigate = useNavigate()
-
-    const getStatusColor = (status: TripStatusEnum) => {
-        switch (status) {
-            case TripStatusEnum.Completed:
-                return 'bg-emerald-400'
-            case TripStatusEnum.Planned:
-                return 'bg-amber-400'
-            default:
-                return 'bg-stone-400'
-        }
-    }
 
     return (
         <div className="neo-card group cursor-pointer hover:translate-x-2 hover:translate-y-2 transition-transform bg-stone-50 flex flex-col">
@@ -24,11 +12,6 @@ export const TripCard = ({ trip }: { trip: Trip }) => {
                     <h3 className="text-xl font-bold uppercase tracking-wide text-slate-800">
                         {trip.destinationName}
                     </h3>
-                    <span
-                        className={`${getStatusColor(trip.status)} text-black px-2 py-1 text-sm font-bold border-2 border-black uppercase`}
-                    >
-                        {trip.status}
-                    </span>
                 </div>
 
                 <div className="flex items-center space-x-2 mb-3">

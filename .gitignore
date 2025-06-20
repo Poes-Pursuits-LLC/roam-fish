@@ -13,3 +13,5 @@ docker
 seed.ts
 
 .env
+# Sentry Config File
+.env.sentry-build-plugin

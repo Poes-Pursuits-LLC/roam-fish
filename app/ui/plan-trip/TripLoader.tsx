@@ -18,7 +18,6 @@ export const TripLoader = ({ tripId }: { tripId: string }) => {
                     100,
                     oldProgress + incrementPerStep,
                 )
-                console.log('Progress updated:', newProgress)
 
                 if (newProgress >= 100) {
                     console.log(
