@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
-    testDir: './app',
+    testDir: './app/e2e',
     fullyParallel: true,
     forbidOnly: Boolean(!process.env.CI),
     retries: process.env.CI ? 1 : 0,
@@ -9,7 +9,6 @@ export default defineConfig({
     reporter: 'html',
     use: {
         baseURL: `${process.env.WEB_URL!}`,
-        trace: 'on-first-retry',
     },
     projects: [
         {
