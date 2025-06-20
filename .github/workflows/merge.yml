@@ -15,7 +15,7 @@ jobs:
         env:
             ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
             MOONDREAM_API_KEY: ${{ secrets.MOONDREAM_API_KEY }}
-            MAGNITUDE_TEST_URL: ${{ secrets.WEB_URL }}
+            MAGNITUDE_TEST_URL: ${{ secrets.MAGNITUDE_TEST_URL }}
         steps:
             - name: Checkout develop branch
               uses: actions/checkout@v4
