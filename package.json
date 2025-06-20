@@ -9,7 +9,7 @@
     "unit-tests": "vitest --project unit-tests",
     "ui-tests": "vitest --project ui-tests",
     "integration-tests": "vitest --project integration-tests",
-    "e2e-tests": "npx playwright test",
+    "e2e-tests": "npx playwright test app/e2e.spec.ts",
     "quality-check": "npx eslint . && react-router typegen && tsc --noEmit",
     "deploy-dev": "npx sst deploy --stage develop",
     "deploy-prod": "npx sst deploy --stage production"
