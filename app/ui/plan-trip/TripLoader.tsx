@@ -39,7 +39,6 @@ export const TripLoader = ({ tripId }: { tripId: string }) => {
 
     useEffect(() => {
         if (shouldNavigate) {
-            console.log('Navigating to:', `/trip/${tripId}`)
             navigate(`/trip/${tripId}`, { replace: true })
         }
     }, [shouldNavigate, navigate, tripId])

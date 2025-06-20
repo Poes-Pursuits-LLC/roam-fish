@@ -26,6 +26,7 @@ export const Navbar = ({
                         <NavLink
                             to="/plan-trip"
                             className="neo-button-secondary"
+                            test-id="plan-trip-button"
                         >
                             Plan Trip
                         </NavLink>
