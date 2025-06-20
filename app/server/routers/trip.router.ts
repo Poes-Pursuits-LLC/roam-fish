@@ -48,7 +48,6 @@ const tripRouter = new Hono()
                 const [tripContent, getTripContentError] = await handleAsync(
                     tripService.getTripDetails(trip!.contentId),
                 )
-                console.info('TRIP CONTENT BRUH', tripContent)
                 if (getTripContentError) {
                     throw new HTTPException(500, {
                         message: getTripContentError.message,
@@ -126,7 +125,6 @@ const tripRouter = new Hono()
                 tripService.submitTripDetails(inputs),
             )
             if (submitTripDetailsError) {
-                console.error('hey whats up', submitTripDetailsError)
                 throw new HTTPException(500, {
                     message: submitTripDetailsError.message,
                 })

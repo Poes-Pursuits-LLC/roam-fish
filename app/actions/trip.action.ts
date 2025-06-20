@@ -8,6 +8,7 @@ export const tripAction = async (args: Route.ActionArgs) => {
     const tripName = formData.get('tripName') as string
     const budgetListJson = formData.get('budgetList') as string
     const checkListJson = formData.get('checkList') as string
+    const packingListJson = formData.get('packingList') as string
     const notes = formData.get('notes') as string
 
     const client = hc<AppType>(process.env.SERVER_URL!)
@@ -21,6 +22,9 @@ export const tripAction = async (args: Route.ActionArgs) => {
                 }),
                 ...(checkListJson && {
                     checkList: JSON.parse(checkListJson),
+                }),
+                ...(packingListJson && {
+                    packingList: JSON.parse(packingListJson),
                 }),
                 ...(notes && { notes }),
             },
