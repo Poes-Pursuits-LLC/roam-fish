@@ -13,7 +13,7 @@ jobs:
     merge-to-main:
         runs-on: ubuntu-latest
         env:
-            WEB_URL: ${{ secrets.WEB_URL }}
+            CICD_WEB_URL: ${{ secrets.CICD_WEB_URL }}
         steps:
             - name: Checkout develop branch
               uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
               run: npm ci
 
             - name: Install Playwright Browsers
-              run: npx playwright install --with-deps
+              run: npx playwright install chromium
 
             - name: Run e2e tests
               run: npm run e2e-tests
