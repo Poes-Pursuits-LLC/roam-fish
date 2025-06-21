@@ -1,10 +1,5 @@
 DEVELOPER TASKS
 
-1. Capture a visitors first trip for their signup. (local storage?). Also use localstorage
-   to stop them from endlessly making free trips.
-
-2. "Recent Trips" query on dashboard page. Use Suspense.
-
 3. Testing around sentry exception capturing
 
 4. expand e2e testing to Safari/mobile.
@@ -26,3 +21,8 @@ DEVELOPER TASKS
     userId is present in the sharedUsers list and let them edit the trip accordingly.
     --we can also introduce a changelog so the group can see latest changes and who made them (maybe?)
     --(maybe the simplest option is a simple "last edited by" stamp on the trip page)
+
+
+
+
+---refactor recent trips functiopnkality to return promise and stream to client via Suspense.

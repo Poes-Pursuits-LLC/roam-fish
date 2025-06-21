@@ -25,8 +25,8 @@ const getTripDetails = async (contentId: string) => {
     return tripDetails
 }
 
-const getUserTrips = async (userId: string) => {
-    const { data: trips } = await DynamoTrip().query.byUserId({ userId }).go()
+const getUserTrips = async (userId: string, count?: number) => {
+    const { data: trips } = await DynamoTrip().query.byUserId({ userId }).go({ order: 'desc', ...(count && { count }) })
     return trips
 }
 

@@ -22,7 +22,6 @@ vi.mock('~/core/trip/trip.service.ts', () => ({
         updateTrip: vi.fn(),
     },
 }))
-
 vi.mock('~/core/trip/helpers/create-default-packing-list', () => {
     return {
         createDefaultPackingList: vi.fn(),
@@ -38,7 +37,6 @@ vi.mock('~/core/trip/helpers/create-defaultcheckList', () => {
         createDefaultCheckList: vi.fn(),
     }
 })
-
 vi.mock('../main', () => ({
     main: new Hono().route('/', tripRouter),
 }))
@@ -262,7 +260,7 @@ describe('/getUserTrips', () => {
     it('should get a list of trips for a user', async () => {
         const client = testClient(main)
         const userId = 'userId'
-        const trips = [{ tripId: 'tripId' }] as Trip[]
+        const trips = [{ tripId: 'tripId', createdAt: '2021-11-09' }, { tripId: 'tripId2', createdAt: '2022-07-19' }] as Trip[]
         const getUserTrips = vi
             .mocked(tripService.getUserTrips)
             .mockResolvedValue(trips)
@@ -270,12 +268,13 @@ describe('/getUserTrips', () => {
         const response = await client.getUserTrips.$get({
             query: {
                 userId,
+                count: '2',
             },
         })
 
         expect(getUserTrips).toHaveBeenCalledOnce()
-        expect(getUserTrips).toHaveBeenCalledWith(userId)
-        expect(await response.json()).toEqual({ trips })
+        expect(getUserTrips).toHaveBeenCalledWith(userId, 2)
+        expect(await response.json()).toEqual({ trips: trips.sort((a, b) => a.createdAt.localeCompare(b.createdAt)) })
     })
 
     it('should throw an HTTP exception and return a 500 status code if an error occurs', async () => {
@@ -288,11 +287,12 @@ describe('/getUserTrips', () => {
         const response = await client.getUserTrips.$get({
             query: {
                 userId,
+                count: '2',
             },
         })
 
         expect(getUserTrips).toHaveBeenCalledOnce()
-        expect(getUserTrips).toHaveBeenCalledWith(userId)
+        expect(getUserTrips).toHaveBeenCalledWith(userId, 2)
         expect(response.status).toBe(500)
     })
 })

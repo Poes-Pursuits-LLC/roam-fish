@@ -90,13 +90,13 @@ const tripRouter = new Hono()
     )
     .get(
         '/getUserTrips',
-        zValidator('query', z.object({ userId: z.string() })),
+        zValidator('query', z.object({ userId: z.string(), count: z.string().optional() })),
         async (c) => {
-            const { userId } = c.req.valid('query')
-            console.info('Invoked server.getUserTrips with userId:', userId)
+            const { userId, count } = c.req.valid('query')
+            console.info('Invoked server.getUserTrips with userId:', userId, count)
 
             const [trips, getTripsError] = await handleAsync(
-                tripService.getUserTrips(userId),
+                tripService.getUserTrips(userId, Number(count)),
             )
             if (getTripsError) {
                 throw new HTTPException(500, {

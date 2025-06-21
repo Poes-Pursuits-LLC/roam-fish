@@ -8,7 +8,7 @@ import { deleteLocalTripId, getLocalTripId } from "~/utils"
 import { useSubmit } from "react-router"
 
 export const DashboardPage = (loaderData: Route.ComponentProps['loaderData']) => {
-    const { userId, isSubscriber, freeTripCount, userAnalyticsSheet } =
+    const { userId, isSubscriber, freeTripCount, userAnalyticsSheet, userRecentTrips } =
         loaderData
     const submit = useSubmit();
 
@@ -41,7 +41,7 @@ export const DashboardPage = (loaderData: Route.ComponentProps['loaderData']) =>
                         }}
                     />
                     <div className="grid lg:grid-cols-2 gap-8">
-                        <RecentTrips />
+                        <RecentTrips userRecentTrips={userRecentTrips} />
                         <QuickActions />
                     </div>
                 </div>
