@@ -63,10 +63,10 @@ export const getLocalTripId = () => {
 
 export const setLocalTripId = (tripId: string) => {
     if (typeof window === 'undefined' || !window.localStorage) return
-    localStorage.set('roamfish-tripId', tripId)
+    localStorage.setItem('roamfish-tripId', tripId)
 }
 
 export const deleteLocalTripId = () => {
     if (typeof window === 'undefined' || !window.localStorage) return
-    localStorage.delete('roamfish-tripId')
+    localStorage.removeItem('roamfish-tripId')
 }

@@ -18,6 +18,7 @@ const updatableTripFields = TripSchema.pick({
     notes: true,
     status: true,
     packingList: true,
+    userId: true,
     budgetList: true,
     checkList: true,
     startDate: true,

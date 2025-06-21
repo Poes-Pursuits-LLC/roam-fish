@@ -1,11 +1,14 @@
 import { act, render, waitFor, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 import { TripForm } from './TripForm'
 import type { Destination } from '~/core/destination/destination.model'
 import type { ComponentProps, ReactNode } from 'react'
 
-vi.mock('react-router', () => {
+vi.mock('react-router', async () => {
+    const { MemoryRouter
+    } = await vi.importActual('react-router')
     return {
+        MemoryRouter,
         useSubmit: vi.fn(),
         Form: ({ children, ...props }: ComponentProps<'form'>) => (
             <form {...props}>{children}</form>
@@ -57,6 +60,7 @@ test('renders fetched destinations in the select input so users can select one t
                     userId={null}
                     promise={Promise.resolve(destinations)}
                     noMoreTrips={false}
+                    visitorAlreadyCreatedTrip={false}
                 />
             </MemoryRouter>,
         )
@@ -93,6 +97,8 @@ test('renders a Subscribe button and CTA to subscribe if the user is out of free
                     userId={'user123'}
                     promise={Promise.resolve(destinations)}
                     noMoreTrips={true}
+                    visitorAlreadyCreatedTrip={false}
+
                 />
             </MemoryRouter>,
         )

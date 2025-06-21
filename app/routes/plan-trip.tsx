@@ -1,5 +1,5 @@
 import { planTripLoader } from '~/loaders/plan-trip.loader'
-import { planTripAction } from '~/actions/plan-trip.action'
+import { planTripAction } from '~/actions/plan-trip-action'
 import type { Route } from './+types/plan-trip'
 import { PlanTripPage } from '~/ui/plan-trip/PlanTripPage'
 

@@ -14,6 +14,7 @@ export default defineConfig({
         sentryVitePlugin({
             org: 'roam-fish',
             project: 'roam-fish',
+            telemetry: false,
         }),
     ],
     test: {

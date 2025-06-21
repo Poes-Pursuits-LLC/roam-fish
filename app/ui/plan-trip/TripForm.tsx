@@ -111,7 +111,7 @@ export const TripForm = ({
                                     You have already created a free trip. Sign
                                     up to create more!
                                 </div>
-                                <NavLink to="/billing">
+                                <NavLink to="/login">
                                     <button className="neo-button w-full text-black bg-red-400 text-xl py-4">
                                         Sign Up Free
                                     </button>
