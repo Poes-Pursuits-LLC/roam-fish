@@ -8,3 +8,4 @@
 9. resend and basic re-usable email to send and its invocations in server. (probably react-email too)
 
 -- update subscription details.
+-- edge case where user is redirected to trip page and trip content is still not ready.

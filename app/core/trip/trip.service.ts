@@ -48,7 +48,7 @@ const createTrip = async (
     const { data } = await DynamoTrip()
         .put({
             ...trip,
-            ...(process.env.WEB_URL && { expireAt: getTTL(1) }),
+            ...(process.env.CICD_WEB_URL && { expireAt: getTTL(1) }),
         })
         .go()
     return data.tripId

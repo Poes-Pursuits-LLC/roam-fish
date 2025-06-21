@@ -6,7 +6,7 @@ export const TripLoader = ({ tripId }: { tripId: string }) => {
     const navigate = useNavigate()
     const [progress, setProgress] = useState(0)
     const [shouldNavigate, setShouldNavigate] = useState(false)
-    const DURATION = 15000
+    const DURATION = 16000
     const INTERVAL = 50
     const totalSteps = Math.ceil(DURATION / INTERVAL)
     const incrementPerStep = 100 / totalSteps

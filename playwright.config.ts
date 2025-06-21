@@ -1,7 +1,5 @@
 import { defineConfig, devices } from '@playwright/test'
 
-console.info('the web url!', process.env.CICD_WEB_URL)
-
 export default defineConfig({
     fullyParallel: true,
     forbidOnly: Boolean(!process.env.CI),
@@ -9,7 +7,8 @@ export default defineConfig({
     workers: process.env.CI ? 1 : undefined,
     reporter: 'html',
     use: {
-        baseURL: `${process.env.CICD_WEB_URL!}`,
+        // baseURL: `${process.env.CICD_WEB_URL!}`,
+        baseURL: 'https://d116pk7ng6dkt6.cloudfront.net',
     },
     projects: [
         {

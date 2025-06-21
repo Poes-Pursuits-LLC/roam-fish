@@ -4,7 +4,7 @@ test('Visitor flow: Visitor can submit a trip, see its content, then click on a 
     page,
 }) => {
     await page.goto('/')
-    await page.getByTestId('plan-trip-button').click()
+    await page.getByTestId('plan-trip-button').click({ timeout: 5000 })
 
     await expect(page).toHaveURL('/plan-trip')
 
