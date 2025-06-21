@@ -11,27 +11,22 @@ it('should create a default budget list for a trip', () => {
         {
             id: 'lodging',
             name: 'Lodging',
-            price: '800',
+            price: '400',
         },
         {
             id: 'food',
             name: 'Food',
-            price: '800',
+            price: '320',
         },
         {
             id: 'transportation',
             name: 'Transportation',
-            price: '800',
+            price: '400',
         },
         {
             id: 'activities',
             name: 'Activities',
-            price: '800',
-        },
-        {
-            id: 'other',
-            name: 'Other',
-            price: '800',
+            price: '400',
         },
     ])
 })

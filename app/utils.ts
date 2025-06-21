@@ -51,5 +51,5 @@ export const getTTL = (hours: number) => {
 }
 
 export const isIntegrationTest = () => {
-    return process.env.TEST_FLAG_INTEGRATION === 'true'
+    return process.env.INTEGRATION_TEST_FLAG === 'true'
 }

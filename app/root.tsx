@@ -11,6 +11,12 @@ import { ClerkProvider } from '@clerk/react-router'
 import { neobrutalism } from '@clerk/themes'
 import type { Route } from './+types/root'
 import './app.css'
+import * as Sentry from '@sentry/react'
+
+Sentry.init({
+    dsn: 'https://81f4e9f76eb074232d02c47f66858dc5@o4509523849838592.ingest.us.sentry.io/4509523864584192',
+    sendDefaultPii: true,
+})
 
 export async function loader(args: Route.LoaderArgs) {
     return rootAuthLoader(args)
@@ -61,6 +67,35 @@ export default function App({ loaderData }: Route.ComponentProps) {
                         width: '2.5rem',
                         height: '2.5rem',
                     },
+                    card: {
+                        backgroundColor: '#F4F2ED',
+                    },
+                    formButtonPrimary: {
+                        backgroundColor: '#1F513F',
+                        color: 'white',
+                        border: '2px solid black',
+                        borderRadius: '8px',
+                        padding: '12px 24px',
+                        fontWeight: 'bold',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        boxShadow: '4px 4px 0px 0px #000000',
+                        transition: 'all 150ms ease-in-out',
+                        '&:hover': {
+                            backgroundColor: '#2a6b54',
+                            transform: 'translate(4px, 4px)',
+                            boxShadow: 'none',
+                        },
+                        '&:active': {
+                            transform: 'translate(0px, 0px)',
+                            boxShadow: 'none',
+                        },
+                        '&:focus': {
+                            outline: 'none',
+                            boxShadow:
+                                '0 0 0 2px #1F513F, 0 0 0 4px white, 4px 4px 0px 0px #000000',
+                        },
+                    },
                     pricingTableCardFooterButton: {
                         backgroundColor: '#1F513F',
                         color: 'white',
@@ -96,30 +131,12 @@ export default function App({ loaderData }: Route.ComponentProps) {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-    let message = 'Oops!'
-    let details = 'An unexpected error occurred.'
-    let stack: string | undefined
-
     if (isRouteErrorResponse(error)) {
-        message = error.status === 404 ? '404' : 'Error'
-        details =
-            error.status === 404
-                ? 'The requested page could not be found.'
-                : error.statusText || details
-    } else if (import.meta.env.DEV && error && error instanceof Error) {
-        details = error.message
-        stack = error.stack
+        // handle not found error
+    } else if (error && error instanceof Error) {
+        console.info('error', error)
+        // Sentry.captureException(error)
     }
 
-    return (
-        <main className="pt-16 p-4 container mx-auto">
-            <h1>{message}</h1>
-            <p>{details}</p>
-            {stack && (
-                <pre className="w-full p-4 overflow-x-auto">
-                    <code>{stack}</code>
-                </pre>
-            )}
-        </main>
-    )
+    return <main className="pt-16 p-4 container mx-auto">oops</main>
 }

@@ -2,7 +2,7 @@ import { DynamoTrip } from './trip.dynamo'
 import type { Trip } from './trip.model'
 import { fetchTripDetails } from './helpers/fetch-trip-details'
 import { postTripDetails } from './helpers/post-trip-details'
-import { isIntegrationTest } from '~/utils'
+import { getTTL, isIntegrationTest } from '~/utils'
 
 const getTrip = async (tripId: string) => {
     const { data: trip } = await DynamoTrip().get({ tripId }).go()
@@ -45,7 +45,12 @@ const createTrip = async (
         | 'checkList'
     >,
 ) => {
-    const { data } = await DynamoTrip().put(trip).go()
+    const { data } = await DynamoTrip()
+        .put({
+            ...trip,
+            ...(process.env.CICD_WEB_URL && { expireAt: getTTL(1) }),
+        })
+        .go()
     return data.tripId
 }
 

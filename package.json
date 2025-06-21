@@ -9,7 +9,7 @@
     "unit-tests": "vitest --project unit-tests",
     "ui-tests": "vitest --project ui-tests",
     "integration-tests": "vitest --project integration-tests",
-    "e2e-tests": "npx sst shell magnitude",
+    "e2e-tests": "npx playwright test app/e2e.spec.ts",
     "quality-check": "npx eslint . && react-router typegen && tsc --noEmit",
     "deploy-dev": "npx sst deploy --stage develop",
     "deploy-prod": "npx sst deploy --stage production"
@@ -29,6 +29,8 @@
     "@radix-ui/react-progress": "^1.1.7",
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
+    "@sentry/react": "^9.30.0",
+    "@sentry/vite-plugin": "^3.5.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/aws-lambda": "^8.10.149",
     "aws-lambda": "^1.0.7",
@@ -38,7 +40,6 @@
     "hono": "^4.7.11",
     "isbot": "^5.1.27",
     "lucide-react": "^0.511.0",
-    "magnitude-test": "^0.1.4",
     "nanoid": "^5.1.5",
     "nock": "^14.0.5",
     "openai": "^5.1.0",
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.28.0",
+    "@playwright/test": "^1.53.1",
     "@react-router/dev": "^7.5.3",
     "@tailwindcss/vite": "^4.1.10",
     "@testing-library/jest-dom": "^6.6.3",

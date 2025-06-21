@@ -7,7 +7,7 @@ export const LandingFAQ = () => {
 const config = [
     {
         question: 'How does it work?',
-        answer: "It's simple. You specify your desired destination, the amount of people going, when you want to go,  and we'll do the rest. A custom trip with flights, accommodations, a packing list, and fly-fishing specific information like flies, weather, and tactics will be generated for you in under thirty seconds.",
+        answer: 'As the simplest fishing planner on the internet, we pride ourselves on making your life easy. Just select your destination, travel dates, headcount, and we will do the rest. Your custom trip will be generated in about 10 seconds.',
     },
     {
         question: 'Why not just use Yellow Dog?',
@@ -15,10 +15,10 @@ const config = [
     },
     {
         question: 'I made my first trip. Now what?',
-        answer: 'Once you have made your free trip, you can sign up to create more trips and use our trip management tools for free.',
+        answer: 'Once you have made your free trip, you can sign up to use our trip management tools to actually manage your trips and unlock advanced functionality',
     },
     {
         question: 'How much does it cost?',
-        answer: 'Roam is completely free to use. A fully optional yearly plan is available to unlock advanced features and manage unlimited trips.',
+        answer: 'Roam is completely free to use. A fully optional paid plan exists that enables sharing your trips with others and an unlimited trip count, but it is completely optional.',
     },
 ]

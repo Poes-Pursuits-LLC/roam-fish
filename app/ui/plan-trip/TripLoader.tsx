@@ -6,7 +6,7 @@ export const TripLoader = ({ tripId }: { tripId: string }) => {
     const navigate = useNavigate()
     const [progress, setProgress] = useState(0)
     const [shouldNavigate, setShouldNavigate] = useState(false)
-    const DURATION = 15000
+    const DURATION = 16000
     const INTERVAL = 50
     const totalSteps = Math.ceil(DURATION / INTERVAL)
     const incrementPerStep = 100 / totalSteps
@@ -18,7 +18,6 @@ export const TripLoader = ({ tripId }: { tripId: string }) => {
                     100,
                     oldProgress + incrementPerStep,
                 )
-                console.log('Progress updated:', newProgress)
 
                 if (newProgress >= 100) {
                     console.log(
@@ -40,7 +39,6 @@ export const TripLoader = ({ tripId }: { tripId: string }) => {
 
     useEffect(() => {
         if (shouldNavigate) {
-            console.log('Navigating to:', `/trip/${tripId}`)
             navigate(`/trip/${tripId}`, { replace: true })
         }
     }, [shouldNavigate, navigate, tripId])

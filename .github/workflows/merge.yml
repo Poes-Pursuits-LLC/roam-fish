@@ -13,9 +13,7 @@ jobs:
     merge-to-main:
         runs-on: ubuntu-latest
         env:
-            ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-            MOONDREAM_API_KEY: ${{ secrets.MOONDREAM_API_KEY }}
-            WEB_URL: ${{ secrets.WEB_URL }}
+            CICD_WEB_URL: ${{ secrets.CICD_WEB_URL }}
         steps:
             - name: Checkout develop branch
               uses: actions/checkout@v4
@@ -36,20 +34,24 @@ jobs:
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: '20'
+                  node-version: 'lts/*'
                   cache: 'npm'
 
             - name: Install dependencies
               if: steps.npm-cache.outputs.cache-hit != 'true'
               run: npm ci
 
-            - name: Install playwright
+            - name: Install Playwright Browser
               run: npx playwright install chromium
 
             - name: Run e2e tests
-              uses: GabrielBB/xvfb-action@v1
+              run: npm run e2e-tests
+            - uses: actions/upload-artifact@v4
+              if: ${{ !cancelled() }}
               with:
-                  run: npx magnitude -p
+                  name: playwright-report
+                  path: playwright-report/
+                  retention-days: 30
 
             - name: Merge develop -> main
               uses: devmasx/merge-branch@master

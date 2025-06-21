@@ -15,27 +15,22 @@ export const createDefaultBudgetList = (
         {
             id: 'lodging',
             name: 'Lodging',
-            price: `${Number(headcount) * 100 * Number(durationInDays)}`,
+            price: `${Number(headcount) * 50 * Number(durationInDays)}`,
         },
         {
             id: 'food',
             name: 'Food',
-            price: `${Number(headcount) * 100 * Number(durationInDays)}`,
+            price: `${Number(headcount) * 40 * Number(durationInDays)}`,
         },
         {
             id: 'transportation',
             name: 'Transportation',
-            price: `${Number(headcount) * 100 * Number(durationInDays)}`,
+            price: `${Number(headcount) * 50 * Number(durationInDays)}`,
         },
         {
             id: 'activities',
             name: 'Activities',
-            price: `${Number(headcount) * 100 * Number(durationInDays)}`,
-        },
-        {
-            id: 'other',
-            name: 'Other',
-            price: `${Number(headcount) * 100 * Number(durationInDays)}`,
+            price: `${Number(headcount) * 50 * Number(durationInDays)}`,
         },
     ]
 }

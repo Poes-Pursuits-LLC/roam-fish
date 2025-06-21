@@ -21,11 +21,11 @@ export const Navbar = ({
                             Roam.Fish
                         </span>
                     </NavLink>
-
                     <div className="flex items-center space-x-4">
                         <NavLink
                             to="/plan-trip"
                             className="neo-button-secondary"
+                            data-testid="plan-trip-button"
                         >
                             Plan Trip
                         </NavLink>
