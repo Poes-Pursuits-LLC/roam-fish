@@ -9,6 +9,7 @@ export default defineConfig({
     use: {
         baseURL: process.env.CICD_WEB_URL,
     },
+    testMatch: '**/e2e.spec.ts',
     timeout: 60000,
     projects: [
         {

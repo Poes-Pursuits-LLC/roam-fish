@@ -9,10 +9,12 @@ export const TripForm = ({
     promise,
     userId,
     noMoreTrips,
+    visitorAlreadyCreatedTrip,
 }: {
     promise: Promise<Destination[]>
     userId: string | null
     noMoreTrips: boolean
+    visitorAlreadyCreatedTrip: boolean
 }) => {
     const [destination, setDestination] = useState<Destination | null>(null)
     const [startDate, setStartDate] = useState('')
@@ -85,26 +87,48 @@ export const TripForm = ({
                     </select>
                 </div>
 
-                {noMoreTrips ? (
-                    <div className="flex flex-col gap-4">
-                        <div className="text-red-400 text-lg">
-                            You have reached your free trip limit. Subscribe to
-                            get access to more!
-                        </div>
-                        <NavLink to="/billing">
-                            <button className="neo-button w-full text-black bg-red-400 text-xl py-4">
-                                Subscribe
-                            </button>
-                        </NavLink>
-                    </div>
-                ) : (
-                    <button
-                        type="submit"
-                        className="neo-button w-full text-black text-xl py-4"
-                    >
-                        Generate Trip Plan
-                    </button>
-                )}
+                {(() => {
+                    if (noMoreTrips) {
+                        return (
+                            <div className="flex flex-col gap-4">
+                                <div className="text-red-400 text-lg">
+                                    You have reached your free trip limit.
+                                    Subscribe to get access to more!
+                                </div>
+                                <NavLink to="/billing">
+                                    <button className="neo-button w-full text-black bg-red-400 text-xl py-4">
+                                        Subscribe
+                                    </button>
+                                </NavLink>
+                            </div>
+                        )
+                    }
+
+                    if (visitorAlreadyCreatedTrip) {
+                        return (
+                            <div className="flex flex-col gap-4">
+                                <div className="text-red-400 text-lg">
+                                    You have already created a free trip. Sign
+                                    up to create more!
+                                </div>
+                                <NavLink to="/billing">
+                                    <button className="neo-button w-full text-black bg-red-400 text-xl py-4">
+                                        Sign Up Free
+                                    </button>
+                                </NavLink>
+                            </div>
+                        )
+                    }
+
+                    return (
+                        <button
+                            type="submit"
+                            className="neo-button w-full text-black text-xl py-4"
+                        >
+                            Generate Trip Plan
+                        </button>
+                    )
+                })()}
             </Form>
         </div>
     )

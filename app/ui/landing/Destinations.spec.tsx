@@ -38,9 +38,7 @@ test('lets a user search by destination name and display results accordingly', a
     await waitFor(() => {
         expect(screen.getByText('Yellowstone')).toBeInTheDocument()
     })
-    const searchInput = screen.getByPlaceholderText(
-        'Search by location, fish type, or water body...',
-    )
+    const searchInput = screen.getByPlaceholderText('Search by location...')
     fireEvent.change(searchInput, { target: { value: 'Yellowstone' } })
 
     await waitFor(() => {
@@ -84,9 +82,7 @@ test('lets a user search by destination state (province) and display results acc
     await waitFor(() => {
         expect(screen.getByText('Yellowstone')).toBeInTheDocument()
     })
-    const searchInput = screen.getByPlaceholderText(
-        'Search by location, fish type, or water body...',
-    )
+    const searchInput = screen.getByPlaceholderText('Search by location...')
     fireEvent.change(searchInput, { target: { value: 'Wyoming' } })
     await waitFor(() => {
         expect(screen.getByText('Yellowstone')).toBeInTheDocument()
@@ -129,9 +125,7 @@ test('lets a user search by destination country and display results accordingly'
     await waitFor(() => {
         expect(screen.getByText('Yellowstone')).toBeInTheDocument()
     })
-    const searchInput = screen.getByPlaceholderText(
-        'Search by location, fish type, or water body...',
-    )
+    const searchInput = screen.getByPlaceholderText('Search by location...')
     fireEvent.change(searchInput, { target: { value: 'Canada' } })
     await waitFor(() => {
         expect(screen.getByText('Banff')).toBeInTheDocument()
@@ -174,9 +168,7 @@ test('shows all destinations when search is cleared', async () => {
     await waitFor(() => {
         expect(screen.getByText('Yellowstone')).toBeInTheDocument()
     })
-    const searchInput = screen.getByPlaceholderText(
-        'Search by location, fish type, or water body...',
-    )
+    const searchInput = screen.getByPlaceholderText('Search by location...')
     fireEvent.change(searchInput, { target: { value: 'Yellowstone' } })
     await waitFor(() => {
         expect(screen.getByText('Yellowstone')).toBeInTheDocument()

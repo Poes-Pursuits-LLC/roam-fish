@@ -3,6 +3,7 @@ import { BackButton } from '../BackButton'
 import { PlanTripHeader } from './PlanTripHeader'
 import { TripForm } from './TripForm'
 import { TripLoader } from './TripLoader'
+import { getLocalTripId } from '~/utils'
 
 export const PlanTripPage = ({
     loaderData,
@@ -14,6 +15,7 @@ export const PlanTripPage = ({
     const { getDestinationsPromise, userId, freeTripCount, isSubscriber } =
         loaderData
     const { tripId } = actionData || { tripId: null }
+    const visitorAlreadyCreatedTrip = Boolean(getLocalTripId())
     const noMoreTrips = Boolean(
         freeTripCount && freeTripCount >= 3 && !isSubscriber,
     )
@@ -33,6 +35,9 @@ export const PlanTripPage = ({
                                     promise={getDestinationsPromise}
                                     userId={userId}
                                     noMoreTrips={noMoreTrips}
+                                    visitorAlreadyCreatedTrip={
+                                        visitorAlreadyCreatedTrip
+                                    }
                                 />
                             </div>
                         </div>

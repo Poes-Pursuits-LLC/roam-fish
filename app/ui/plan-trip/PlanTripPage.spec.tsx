@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom'
 import type { Destination } from '~/core/destination/destination.model'
 import type { ComponentProps, ReactNode } from 'react'
 import { PlanTripPage } from './PlanTripPage'
+import { getLocalTripId } from '~/utils'
 
 vi.mock('react-router', () => {
     return {
@@ -32,7 +33,16 @@ vi.mock('./TripLoader', () => ({
     ),
 }))
 
-test('renders TripLoader when tripId is provided from form submission', async () => {
+vi.mock('~/utils.ts', async () => {
+    const actualUtils = await vi.importActual('~/utils.ts')
+
+    return {
+        ...actualUtils,
+        getLocalTripId: vi.fn(),
+    }
+})
+
+test('renders TripLoader when tripId is returned from form submission', async () => {
     const destinations: Destination[] = [
         {
             destinationId: '1',
@@ -76,4 +86,46 @@ test('renders TripLoader when tripId is provided from form submission', async ()
         screen.getByText('Trip Loader for trip: trip-123'),
     ).toBeInTheDocument()
     expect(screen.queryByText('Trip Details')).not.toBeInTheDocument()
+})
+
+test('Attempts to check local storage to see if a visitor has already made trip, and if so renders a distinct CTA', async () => {
+    vi.mocked(getLocalTripId).mockReturnValue('localTripId')
+    const destinations: Destination[] = [
+        {
+            destinationId: '1',
+            name: 'Yellowstone',
+            province: 'Wyoming',
+            country: 'USA',
+            type: 'National Park',
+            imageUrl: '/yellowstone.jpg',
+            createdAt: '2024-01-01',
+            updatedAt: '2024-01-01',
+        },
+    ]
+
+    const mockLoaderData = {
+        userId: null,
+        getDestinationsPromise: Promise.resolve(destinations),
+        freeTripCount: 0,
+        isSubscriber: false,
+    }
+
+    const mockActionData = {
+        tripId: null,
+    }
+
+    await act(async () => {
+        render(
+            <MemoryRouter initialEntries={['/plan-trip']}>
+                <PlanTripPage
+                    loaderData={mockLoaderData}
+                    actionData={mockActionData}
+                />
+            </MemoryRouter>,
+        )
+    })
+
+    await waitFor(() => {
+        expect(screen.getByText('Sign Up Free')).toBeInTheDocument()
+    })
 })
