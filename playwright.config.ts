@@ -7,9 +7,9 @@ export default defineConfig({
     workers: process.env.CI ? 1 : undefined,
     reporter: 'html',
     use: {
-        // baseURL: `${process.env.CICD_WEB_URL!}`,
-        baseURL: 'https://d116pk7ng6dkt6.cloudfront.net',
+        baseURL: process.env.CICD_WEB_URL,
     },
+    timeout: 60000,
     projects: [
         {
             name: 'chromium',

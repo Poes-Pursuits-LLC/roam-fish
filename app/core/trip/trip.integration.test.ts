@@ -28,13 +28,7 @@ it('should be able to create and retrieve a trip', async () => {
         },
     )
         .then((response) => response.json())
-        .then((data) => {
-            console.info(
-                'Fetched Trip Data:',
-                JSON.stringify(data.trip, null, 2),
-            )
-            return data.trip
-        })
+        .then((data) => data.trip)
 
     expect(returnedTripId).toBeDefined()
     expect(fetchedTrip).toBeDefined()

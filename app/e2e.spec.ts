@@ -37,30 +37,47 @@ test('Visitor flow: Visitor can submit a trip, see its content, then click on a 
         page.getByRole('heading', { name: 'Planning Your Trip...' }),
     ).toBeVisible()
 
-    await page.waitForURL(/\/trip\/[^/]+$/, { timeout: 30000 })
+    await page.waitForURL(/\/trip\/[^/]+$/, { timeout: 50000 })
 
-    await expect(page.getByRole('textbox', { name: 'tripName' })).toBeVisible()
+    await expect(page.getByTestId('trip-name-input')).toBeVisible()
     await expect(page.getByText('Location')).toBeVisible()
     await expect(page.getByText('Date')).toBeVisible()
     await expect(page.getByText('Duration')).toBeVisible()
     await expect(page.getByText('Participants')).toBeVisible()
-    await expect(page.getByText('Fishing Summary')).toBeVisible()
-    await expect(page.getByText('Weather')).toBeVisible()
-    await expect(page.getByText('Flies')).toBeVisible()
-    await expect(page.getByText('Hatches')).toBeVisible()
-    await expect(page.getByText('Notes')).toBeVisible()
+
+    await expect(page.getByRole('heading', { name: 'Budget' })).toBeVisible()
+    const budgetItems = page.locator('input[name^="budget-"][name$="-name"]')
+    await expect(budgetItems.first()).toBeVisible()
+    const budgetItemCount = await budgetItems.count()
+    expect(budgetItemCount).toBeGreaterThan(0)
 
     await expect(
-        page.getByRole('heading', { name: 'Want to save this trip?' }),
+        page.getByRole('heading', { name: 'Packing List' }),
     ).toBeVisible()
+    const packingItems = page.locator('input[name^="packing-"][name$="-name"]')
+    await expect(packingItems.first()).toBeVisible()
+    const packingItemCount = await packingItems.count()
+    expect(packingItemCount).toBeGreaterThan(0)
+
+    await expect(page.getByRole('heading', { name: 'Checklist' })).toBeVisible()
+    const checklistItems = page.locator(
+        'input[placeholder="Add checklist item..."]',
+    )
+    await expect(checklistItems.first()).toBeVisible()
+    const checklistItemCount = await checklistItems.count()
+    expect(checklistItemCount).toBeGreaterThan(0)
+
+    await expect(page.getByRole('heading', { name: 'WEATHER' })).toBeVisible()
     await expect(
-        page.getByText(
-            'Sign up for free to access our trip management tools and save many more trips!',
-        ),
+        page.getByRole('heading', { name: 'RECOMMENDED FLIES' }),
     ).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'HATCHES' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'SUMMARY' })).toBeVisible()
 
     await page.getByRole('link', { name: 'Sign Up Free' }).click()
 
     await expect(page).toHaveURL('/login')
-    await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible()
+    await expect(
+        page.getByRole('heading', { name: 'CONTINUE TO ROAM.FISH' }),
+    ).toBeVisible()
 })

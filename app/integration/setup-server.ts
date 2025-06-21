@@ -1,7 +1,5 @@
 import { GenericContainer, StartedNetwork, Wait } from 'testcontainers'
 
-// TODO: goal: copy the minimum of files from target to enable successful server.
-
 export const setupServer = async ({
     endpoint,
     network,
@@ -28,7 +26,7 @@ export const setupServer = async ({
         .withEnvironment({
             DYNAMODB_ENDPOINT: endpoint,
             TABLE_NAME: 'integration-table',
-            TEST_FLAG_INTEGRATION: 'true',
+            INTEGRATION_TEST_FLAG: 'true',
         })
         .withStartupTimeout(30000)
         .withWaitStrategy(Wait.forListeningPorts())

@@ -19,6 +19,7 @@ export const TripHeader = ({
                     name="tripName"
                     className="w-full neo-header cursor-pointer truncate text-slate-700 bg-stone-100 focus:outline-none hover:bg-stone-200 transition-colors"
                     value={localTripName}
+                    data-testid="trip-name-input"
                     onChange={(e) => setLocalTripName(e.target.value)}
                 />
                 {userId && (
