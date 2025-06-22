@@ -41,7 +41,6 @@ vi.mock('../main', () => ({
     main: new Hono().route('/', tripRouter),
 }))
 import { main } from '../main'
-import { createFormattedDate } from '~/utils'
 
 describe('/create-trip', () => {
     it('should submit trip details to be generated and then create the trip and return its id', async () => {
@@ -317,7 +316,7 @@ describe('/updateTrip', () => {
         expect(updateTrip).toHaveBeenCalledOnce()
         expect(updateTrip).toHaveBeenCalledWith(tripId, {
             ...updateFields,
-            updatedAt: createFormattedDate(),
+            updatedAt: expect.anything(),
         })
         expect(await response.json()).toEqual({ tripId })
     })

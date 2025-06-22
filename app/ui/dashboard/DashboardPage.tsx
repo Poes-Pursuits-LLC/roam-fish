@@ -3,12 +3,13 @@ import { Navbar } from "../Navbar"
 import { UserStatsCards } from "./UserStatsCards"
 import { RecentTrips } from "./RecentTrips"
 import { QuickActions } from "./QuickActions"
-import { useEffect } from "react"
+import { Suspense, useEffect } from "react"
 import { deleteLocalTripId, getLocalTripId } from "~/utils"
 import { useSubmit } from "react-router"
+import { RecentTripsSkeleton } from "./RecentTripsSkeleton"
 
 export const DashboardPage = (loaderData: Route.ComponentProps['loaderData']) => {
-    const { userId, isSubscriber, freeTripCount, userAnalyticsSheet, userRecentTrips } =
+    const { userId, isSubscriber, freeTripCount, userAnalyticsSheet, getRecentTripsPromise } =
         loaderData
     const submit = useSubmit();
 
@@ -41,7 +42,9 @@ export const DashboardPage = (loaderData: Route.ComponentProps['loaderData']) =>
                         }}
                     />
                     <div className="grid lg:grid-cols-2 gap-8">
-                        <RecentTrips userRecentTrips={userRecentTrips} />
+                        <Suspense fallback={<RecentTripsSkeleton />}>
+                            <RecentTrips promise={getRecentTripsPromise} />
+                        </Suspense>
                         <QuickActions />
                     </div>
                 </div>
