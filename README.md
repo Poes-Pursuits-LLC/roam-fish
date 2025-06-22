@@ -2,8 +2,6 @@ DEVELOPER TASKS
 
 3. Testing around sentry exception capturing
 
-4. expand e2e testing to Safari/mobile.
-
 5. Build the error occurred component for our error boundary
 
 6. e2e test around an authed user flow or two.
