@@ -105,3 +105,33 @@ it('should call the updateTrip endpoint with only provided fields', async () => 
         },
     })
 })
+
+it('should throw an error if any error is encountered so that our top-level error boundary can capture it and process it', async () => {
+    const testError = new Error('Test error message')
+    const tripId = 'test-trip-id'
+    const checkList = [{ item: 'Passport', done: false }]
+    const notes = 'Important trip notes'
+
+    const formData = new FormData()
+    formData.append('checkList', JSON.stringify(checkList))
+    formData.append('notes', notes)
+
+    const request = new Request(`http://localhost/trip/${tripId}`, {
+        method: 'POST',
+        body: formData,
+    })
+
+    const actionArgs = {
+        request,
+        params: { tripId },
+    } as Route.ActionArgs
+
+    const mockUpdateTripPost = vi.fn().mockRejectedValue(testError)
+    mockedHc.mockReturnValue({
+        updateTrip: {
+            $post: mockUpdateTripPost,
+        },
+    } as any)
+
+    await expect(tripAction(actionArgs)).rejects.toThrow()
+})

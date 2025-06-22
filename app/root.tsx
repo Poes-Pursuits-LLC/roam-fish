@@ -1,5 +1,4 @@
 import {
-    isRouteErrorResponse,
     Links,
     Meta,
     Outlet,
@@ -12,6 +11,7 @@ import { neobrutalism } from '@clerk/themes'
 import type { Route } from './+types/root'
 import './app.css'
 import * as Sentry from '@sentry/react'
+import { ErrorBoundaryDisplay } from './ui/ErrorBoundaryDisplay'
 
 Sentry.init({
     dsn: 'https://81f4e9f76eb074232d02c47f66858dc5@o4509523849838592.ingest.us.sentry.io/4509523864584192',
@@ -130,13 +130,6 @@ export default function App({ loaderData }: Route.ComponentProps) {
     )
 }
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-    if (isRouteErrorResponse(error)) {
-        // handle not found error
-    } else if (error && error instanceof Error) {
-        console.info('error', error)
-        // Sentry.captureException(error)
-    }
-
-    return <main className="pt-16 p-4 container mx-auto">oops</main>
+export function ErrorBoundary(props: Route.ErrorBoundaryProps) {
+    return <ErrorBoundaryDisplay {...props} />
 }

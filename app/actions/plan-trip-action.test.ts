@@ -196,3 +196,22 @@ it('should create a trip but not update metadata for an unauthenticated user', a
     expect(getUserMock).not.toHaveBeenCalled()
     expect(updateUserMetadataMock).not.toHaveBeenCalled()
 })
+
+it('should throw an error if any error is encountered so that our top-level error boundary can capture it and process it', async () => {
+    const testError = new Error('Test error message')
+    const actionArgs = createMockActionArgs({
+        destinationName: 'London',
+        startDate: '2025-08-01',
+        headcount: '4',
+        duration: 'WEEK_2',
+    })
+    const postMock = vi.fn().mockRejectedValue(testError)
+    mockedHc.mockReturnValue({
+        createTrip: {
+            $post: postMock,
+        },
+    } as unknown as ReturnType<typeof hc>)
+
+
+    await expect(planTripAction(actionArgs)).rejects.toThrow()
+})

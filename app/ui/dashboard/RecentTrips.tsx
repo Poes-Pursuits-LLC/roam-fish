@@ -1,8 +1,11 @@
 import { BookOpen } from 'lucide-react'
+import { use } from 'react'
 import { NavLink } from 'react-router'
 import type { Trip } from '~/core/trip/trip.model'
 
-export const RecentTrips = ({ userRecentTrips }: { userRecentTrips: Trip[] }) => {
+export const RecentTrips = ({ promise }: { promise: Promise<Trip[]> }) => {
+    const recentTrips = use(promise)
+
     return (
         <div className="neo-card bg-stone-100">
             <div className="flex items-center space-x-3 mb-6">
@@ -12,7 +15,7 @@ export const RecentTrips = ({ userRecentTrips }: { userRecentTrips: Trip[] }) =>
                 </h2>
             </div>
             <div className="space-y-4">
-                {userRecentTrips.map((trip) => (
+                {recentTrips.map((trip) => (
                     <div
                         key={trip.tripId}
                         className="border-4 border-black p-4 bg-stone-50"

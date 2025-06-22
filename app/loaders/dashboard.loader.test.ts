@@ -70,7 +70,7 @@ it('should redirect to /login if user is not authenticated', async () => {
     expect(result).toBe(redirectMarker)
 })
 
-it('should return user data including analytics and recent trips for an authenticated premium user', async () => {
+it('should return user data including analytics and recent trips promise for an authenticated premium user', async () => {
     const has = vi.fn().mockReturnValue(true)
     const mockClerkClient = {
         users: {
@@ -131,11 +131,16 @@ it('should return user data including analytics and recent trips for an authenti
         isSubscriber: true,
         freeTripCount: 3,
         userAnalyticsSheet: { trips: 5, destinations: 3 },
-        userRecentTrips: [{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }]
+        getRecentTripsPromise: expect.any(Promise)
     })
+
+    if ('getRecentTripsPromise' in result) {
+        const recentTrips = await result.getRecentTripsPromise
+        expect(recentTrips).toEqual([{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }])
+    }
 })
 
-it('should return user data including analytics and recent trips for an authenticated non-premium user', async () => {
+it('should return user data including analytics and recent trips promise for an authenticated non-premium user', async () => {
     const has = vi.fn().mockReturnValue(false)
     const mockClerkClient = {
         users: {
@@ -197,8 +202,14 @@ it('should return user data including analytics and recent trips for an authenti
         isSubscriber: false,
         freeTripCount: 1,
         userAnalyticsSheet: { trips: 2, destinations: 1 },
-        userRecentTrips: [{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }]
+        getRecentTripsPromise: expect.any(Promise)
     })
+
+    // Verify the promise resolves to the expected data
+    if ('getRecentTripsPromise' in result) {
+        const recentTrips = await result.getRecentTripsPromise
+        expect(recentTrips).toEqual([{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }])
+    }
 })
 
 it('should handle missing freeTripCount in privateMetadata', async () => {
@@ -263,6 +274,19 @@ it('should handle missing freeTripCount in privateMetadata', async () => {
         isSubscriber: false,
         freeTripCount: 0,
         userAnalyticsSheet: { trips: 0, destinations: 0 },
-        userRecentTrips: [{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }]
+        getRecentTripsPromise: expect.any(Promise)
     })
+
+    if ('getRecentTripsPromise' in result) {
+        const recentTrips = await result.getRecentTripsPromise
+        expect(recentTrips).toEqual([{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }])
+    }
+})
+
+it('should throw an error if any error is encountered so that our top-level error boundary can capture it and process it', async () => {
+    const testError = new Error('Test error message')
+
+    mockedGetAuth.mockRejectedValue(testError)
+
+    await expect(dashboardLoader(loaderArgs)).rejects.toThrow('Test error message')
 })

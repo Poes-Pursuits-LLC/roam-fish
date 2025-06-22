@@ -42,16 +42,16 @@ export const Navbar = ({
                                         appearance: {
                                             elements: {
                                                 profileSection__emailAddresses:
-                                                    {
-                                                        display: 'none',
-                                                    },
+                                                {
+                                                    display: 'none',
+                                                },
                                                 profileSection__danger: {
                                                     display: 'none',
                                                 },
                                                 profileSection__connectedAccounts:
-                                                    {
-                                                        display: 'none',
-                                                    },
+                                                {
+                                                    display: 'none',
+                                                },
                                             },
                                         },
                                     }}

@@ -177,14 +177,12 @@ it('should fetch the asked-of amount of trips for a specific user in descending 
         },
     ]
 
-    await Promise.all(
-        trips.map((trip) => {
-            return fetch(`${SERVER_URL}/createTrip`, {
-                method: 'POST',
-                body: JSON.stringify(trip),
-            })
-        }),
-    )
+    for (const trip of trips) {
+        await fetch(`${SERVER_URL}/createTrip`, {
+            method: 'POST',
+            body: JSON.stringify(trip),
+        })
+    }
 
     const userTrips = await fetch(
         `${SERVER_URL}/getUserTrips?userId=${userId}&count=2`,

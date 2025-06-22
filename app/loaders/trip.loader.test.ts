@@ -121,3 +121,13 @@ it('should still return the trip, null for userId, and false for isSubscriber fo
     expect(isSubscriber).toBe(false)
     expect(resultTrip).toEqual(trip)
 })
+
+it('should throw an error if any error is encountered so that our top-level error boundary can capture it and process it', async () => {
+    const testError = new Error('Test error message')
+
+    mockedGetAuth.mockRejectedValue(testError)
+
+    await expect(tripLoader(loaderArgs)).rejects.toThrow('Test error message')
+
+    expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
+})

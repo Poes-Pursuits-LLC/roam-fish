@@ -51,3 +51,13 @@ it('should return null userId and false isSubscriber for unauthenticated visitor
     expect(userId).toBeNull()
     expect(isSubscriber).toBe(false)
 })
+
+it('should throw an error if any error is encountered so that our top-level error boundary can capture it and process it', async () => {
+    const testError = new Error('Test error message')
+
+    mockedGetAuth.mockRejectedValue(testError)
+
+    await expect(billingLoader(loaderArgs)).rejects.toThrow('Test error message')
+
+    expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
+})

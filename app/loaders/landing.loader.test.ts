@@ -103,3 +103,13 @@ it('should still return the destinations promise, null for userId, and false for
     expect(isSubscriber).toBe(false)
     expect(await getDestinationsPromise).toEqual(destinations)
 })
+
+it('should throw an error if any error is encountered so that our top-level error boundary can capture it and process it', async () => {
+    const testError = new Error('Test error message')
+
+    mockedGetAuth.mockRejectedValue(testError)
+
+    await expect(landingLoader(loaderArgs)).rejects.toThrow('Test error message')
+
+    expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
+})

@@ -119,3 +119,13 @@ it('should return trips, userId, and isSubscriber as false for a non-premium use
     expect(getMock).toHaveBeenCalledWith({ query: { userId } })
     expect(resolvedTrips).toEqual(trips)
 })
+
+it('should throw an error if any error is encountered so that our top-level error boundary can capture it and process it', async () => {
+    const testError = new Error('Test error message')
+
+    mockedGetAuth.mockRejectedValue(testError)
+
+    await expect(tripsLoader(loaderArgs)).rejects.toThrow('Test error message')
+
+    expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
+})
