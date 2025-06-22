@@ -6,8 +6,6 @@ import type { Trip } from '~/core/trip/trip.model'
 import { TripDurationEnum, TripStatusEnum } from '~/core/trip/trip.model'
 import { useState } from 'react'
 
-// TODO: this is a really messy test to implement without mocking individual components, but lets give it another go later.
-
 const mockTripAction = vi.fn()
 vi.mock('~/actions/trip.action', () => ({
     tripAction: mockTripAction,
@@ -15,10 +13,11 @@ vi.mock('~/actions/trip.action', () => ({
 
 const mockSubmit = vi.fn()
 vi.mock('react-router', async () => {
-    const { MemoryRouter
+    const { MemoryRouter, NavLink
     } = await vi.importActual('react-router')
     return {
         MemoryRouter,
+        NavLink,
         Form: ({
             children,
             method,

@@ -1,4 +1,4 @@
-import { Clock, Shield, Zap } from 'lucide-react'
+import { Lock, Shield, Zap } from 'lucide-react'
 import { FeatureSet } from '../FeatureSet'
 
 export const BillingFeatureSet = () => {
@@ -6,19 +6,18 @@ export const BillingFeatureSet = () => {
 }
 
 const config = {
-    header: 'Cancel Anytime',
     features: [
+        {
+            icon: Lock,
+            title: 'Get More',
+            description:
+                'Unlock unlimited trips, shared trip management, and more information like licensing requirements and regulations per destination',
+        },
         {
             icon: Shield,
             title: 'Cancel Anytime',
             description:
                 'No long-term commitments. Cancel your subscription whenever you want.',
-        },
-        {
-            icon: Clock,
-            title: '14-Day Free Trial',
-            description:
-                'Try all premium features risk-free. No credit card required.',
         },
         {
             icon: Zap,

@@ -2,7 +2,7 @@ export const FeatureSet = ({
     config,
 }: {
     config: {
-        header: string
+        header?: string
         features: {
             icon: React.ElementType
             title: string
@@ -13,9 +13,11 @@ export const FeatureSet = ({
     return (
         <section className="px-6 py-20">
             <div className="max-w-6xl mx-auto">
-                <h2 className="neo-subheader text-center mb-16">
-                    {config.header}
-                </h2>
+                {config.header && (
+                    <h2 className="neo-subheader text-center mb-16">
+                        {config.header}
+                    </h2>
+                )}
                 <div className="grid md:grid-cols-3 gap-8">
                     {config.features.map((feature, index) => (
                         <div

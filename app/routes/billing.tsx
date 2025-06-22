@@ -5,6 +5,7 @@ import type { Route } from './+types/billing'
 import { billingLoader } from '~/loaders/billing.loader'
 import { BillingFAQ } from '~/ui/billing/BillingFAQ'
 import { BillingHeader } from '~/ui/billing/BillingHeader'
+import { Footer } from '~/ui/landing/Footer'
 
 export const loader = async (args: Route.LoaderArgs) => {
     return await billingLoader(args)
@@ -27,6 +28,7 @@ export default function PricingRoute({ loaderData }: Route.ComponentProps) {
                 </div>
             </div>
             <BillingFAQ />
+            <Footer />
         </div>
     )
 }

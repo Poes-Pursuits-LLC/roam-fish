@@ -4,4 +4,7 @@ DEVELOPER TASKS
 
 9. notification service and generic email template (probably w/ React Email, but we shall see).
 
-10. licensing/regulations card as paid card for premium users.
+
+Technical To-dos
+1. Get Trip Page test to really render all actual components.
+2. Get integration tests around dynamo stream handling.
