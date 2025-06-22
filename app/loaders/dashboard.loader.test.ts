@@ -266,3 +266,11 @@ it('should handle missing freeTripCount in privateMetadata', async () => {
         userRecentTrips: [{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }]
     })
 })
+
+it('should throw an error if any error is encountered so that our top-level error boundary can capture it and process it', async () => {
+    const testError = new Error('Test error message')
+
+    mockedGetAuth.mockRejectedValue(testError)
+
+    await expect(dashboardLoader(loaderArgs)).rejects.toThrow('Test error message')
+})

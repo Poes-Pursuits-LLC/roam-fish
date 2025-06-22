@@ -195,3 +195,13 @@ it('should return undefined freeTripCount if user has no freeTripCount in privat
     expect(isSubscriber).toBe(false)
     expect(resultDestinations).toEqual(destinations)
 })
+
+it('should throw an error if any error is encountered so that our top-level error boundary can capture it and process it', async () => {
+    const testError = new Error('Test error message')
+
+    mockedGetAuth.mockRejectedValue(testError)
+
+    await expect(planTripLoader(loaderArgs)).rejects.toThrow('Test error message')
+
+    expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
+})

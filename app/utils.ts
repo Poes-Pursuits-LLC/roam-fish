@@ -41,7 +41,7 @@ export function debounce<T extends (...args: unknown[]) => void>(
 }
 
 export const createFormattedDate = () => {
-    return new Date().toISOString().slice(0, 10)
+    return new Date().toISOString()
 }
 
 export const getTTL = (hours: number) => {

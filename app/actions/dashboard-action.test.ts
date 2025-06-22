@@ -56,3 +56,23 @@ it('should call the updateTrip endpoint with the provided userId so we can assoc
         },
     })
 })
+
+it('should throw an error if any error is encountered so that our top-level error boundary can capture it and process it', async () => {
+    const testError = new Error('Test error message')
+    const formData = new FormData()
+    const request = new Request(serverUrl, {
+        method: 'POST',
+        body: formData
+    })
+    const actionArgs = {
+        request,
+    } as Route.ActionArgs
+    const mockUpdateTripPost = vi.fn().mockRejectedValue(testError)
+    mockedHc.mockReturnValue({
+        updateTrip: {
+            $post: mockUpdateTripPost,
+        },
+    } as unknown as any)
+
+    await expect(dashboardAction(actionArgs)).rejects.toThrow()
+})
