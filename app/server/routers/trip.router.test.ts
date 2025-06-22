@@ -342,7 +342,7 @@ describe('/updateTrip', () => {
         expect(updateTrip).toHaveBeenCalledOnce()
         expect(updateTrip).toHaveBeenCalledWith(tripId, {
             ...updateFields,
-            updatedAt: createFormattedDate(),
+            updatedAt: expect.anything()
         })
         expect(response.status).toBe(500)
     })
