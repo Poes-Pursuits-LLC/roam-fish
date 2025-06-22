@@ -77,4 +77,4 @@ flowchart TD
 
 **Form → Loading → Trip Display → Sign Up Prompt**
 
-The entire flow takes about 15-20 seconds and requires no account creation, making it perfect for converting visitors into users.
+The entire flow takes about 15-20 seconds and requires no account creation.

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 import { UserStatsCards } from './UserStatsCards'
 
 test('renders an Unlimited amount of free trips if the user is a subscriber', () => {

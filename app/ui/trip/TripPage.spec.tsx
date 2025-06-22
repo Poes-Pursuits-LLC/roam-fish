@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 import { TripPage } from './TripPage'
 import { vi } from 'vitest'
 import type { Trip } from '~/core/trip/trip.model'
@@ -14,30 +14,35 @@ vi.mock('~/actions/trip.action', () => ({
 }))
 
 const mockSubmit = vi.fn()
-vi.mock('react-router', () => ({
-    Form: ({
-        children,
-        method,
-        onSubmit,
-    }: {
-        children: React.ReactNode
-        method?: string
-        onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void
-    }) => (
-        <form
-            data-testid="trip-form"
-            method={method}
-            onSubmit={(e) => {
-                e.preventDefault()
-                const formData = new FormData(e.currentTarget)
-                mockSubmit(formData)
-                if (onSubmit) onSubmit(e)
-            }}
-        >
-            {children}
-        </form>
-    ),
-}))
+vi.mock('react-router', async () => {
+    const { MemoryRouter
+    } = await vi.importActual('react-router')
+    return {
+        MemoryRouter,
+        Form: ({
+            children,
+            method,
+            onSubmit,
+        }: {
+            children: React.ReactNode
+            method?: string
+            onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void
+        }) => (
+            <form
+                data-testid="trip-form"
+                method={method}
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    const formData = new FormData(e.currentTarget)
+                    mockSubmit(formData)
+                    if (onSubmit) onSubmit(e)
+                }}
+            >
+                {children}
+            </form>
+        ),
+    }
+})
 
 vi.mock('../Navbar', () => ({
     Navbar: ({
@@ -141,12 +146,12 @@ vi.mock('./Budget', () => ({
                 prev.map((item) =>
                     item.id === id
                         ? {
-                              ...item,
-                              [field]:
-                                  field === 'price'
-                                      ? value.replace(/[^0-9.]/g, '')
-                                      : value,
-                          }
+                            ...item,
+                            [field]:
+                                field === 'price'
+                                    ? value.replace(/[^0-9.]/g, '')
+                                    : value,
+                        }
                         : item,
                 ),
             )
@@ -216,12 +221,12 @@ vi.mock('./PackingList', () => ({
                 prev.map((item) =>
                     item.id === id
                         ? {
-                              ...item,
-                              [field]:
-                                  field === 'quantity'
-                                      ? value.replace(/[^0-9]/g, '')
-                                      : value,
-                          }
+                            ...item,
+                            [field]:
+                                field === 'quantity'
+                                    ? value.replace(/[^0-9]/g, '')
+                                    : value,
+                        }
                         : item,
                 ),
             )

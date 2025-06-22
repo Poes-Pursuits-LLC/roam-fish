@@ -5,11 +5,17 @@ import { getAuth } from '@clerk/react-router/ssr.server'
 import { redirect } from 'react-router'
 import { createClerkClient } from '@clerk/backend'
 import { hc } from 'hono/client'
+import type { Trip } from '~/core/trip/trip.model'
 
 // Mock types for testing
 type MockAnalyticsResponse = {
     json: () => Promise<{
         userAnalyticsSheet: { trips: number; destinations: number }
+    }>
+}
+type MockUserRecentTripsResponse = {
+    json: () => Promise<{
+        trips: Trip[]
     }>
 }
 
@@ -18,6 +24,11 @@ type MockClient = {
         $get: (args: {
             query: { userId: string }
         }) => Promise<MockAnalyticsResponse>
+    }
+    getUserTrips: {
+        $get: (args: {
+            query: { userId: string, count: string }
+        }) => Promise<MockUserRecentTripsResponse>
     }
 }
 
@@ -59,7 +70,7 @@ it('should redirect to /login if user is not authenticated', async () => {
     expect(result).toBe(redirectMarker)
 })
 
-it('should return user data including analytics for an authenticated premium user', async () => {
+it('should return user data including analytics and recent trips for an authenticated premium user', async () => {
     const has = vi.fn().mockReturnValue(true)
     const mockClerkClient = {
         users: {
@@ -73,10 +84,18 @@ it('should return user data including analytics for an authenticated premium use
             userAnalyticsSheet: { trips: 5, destinations: 3 },
         }),
     }
+    const mockUserRecentTripsResponse: MockUserRecentTripsResponse = {
+        json: vi.fn().mockResolvedValue({
+            trips: [{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }] as unknown as Trip[]
+        })
+    }
     const mockClient: MockClient = {
         analytics: {
             $get: vi.fn().mockResolvedValue(mockAnalyticsResponse),
         },
+        getUserTrips: {
+            $get: vi.fn().mockResolvedValue(mockUserRecentTripsResponse)
+        }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -101,15 +120,22 @@ it('should return user data including analytics for an authenticated premium use
     expect(mockClient.analytics.$get).toHaveBeenCalledWith({
         query: { userId: 'user-123' },
     })
+    expect(mockClient.getUserTrips.$get).toHaveBeenCalledWith({
+        query: {
+            userId: 'user-123',
+            count: '3',
+        }
+    })
     expect(result).toEqual({
         userId: 'user-123',
         isSubscriber: true,
         freeTripCount: 3,
         userAnalyticsSheet: { trips: 5, destinations: 3 },
+        userRecentTrips: [{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }]
     })
 })
 
-it('should return user data including analytics for an authenticated non-premium user', async () => {
+it('should return user data including analytics and recent trips for an authenticated non-premium user', async () => {
     const has = vi.fn().mockReturnValue(false)
     const mockClerkClient = {
         users: {
@@ -123,10 +149,19 @@ it('should return user data including analytics for an authenticated non-premium
             userAnalyticsSheet: { trips: 2, destinations: 1 },
         }),
     }
+    const mockUserRecentTripsResponse: MockUserRecentTripsResponse = {
+        json: vi.fn().mockResolvedValue({
+            trips: [{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }] as unknown as Trip[]
+        })
+    }
+
     const mockClient: MockClient = {
         analytics: {
             $get: vi.fn().mockResolvedValue(mockAnalyticsResponse),
         },
+        getUserTrips: {
+            $get: vi.fn().mockResolvedValue(mockUserRecentTripsResponse)
+        }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -151,11 +186,18 @@ it('should return user data including analytics for an authenticated non-premium
     expect(mockClient.analytics.$get).toHaveBeenCalledWith({
         query: { userId: 'user-456' },
     })
+    expect(mockClient.getUserTrips.$get).toHaveBeenCalledWith({
+        query: {
+            userId: 'user-456',
+            count: '3',
+        }
+    })
     expect(result).toEqual({
         userId: 'user-456',
         isSubscriber: false,
         freeTripCount: 1,
         userAnalyticsSheet: { trips: 2, destinations: 1 },
+        userRecentTrips: [{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }]
     })
 })
 
@@ -173,10 +215,19 @@ it('should handle missing freeTripCount in privateMetadata', async () => {
             userAnalyticsSheet: { trips: 0, destinations: 0 },
         }),
     }
+    const mockUserRecentTripsResponse: MockUserRecentTripsResponse = {
+        json: vi.fn().mockResolvedValue({
+            trips: [{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }] as unknown as Trip[]
+        })
+    }
+
     const mockClient: MockClient = {
         analytics: {
             $get: vi.fn().mockResolvedValue(mockAnalyticsResponse),
         },
+        getUserTrips: {
+            $get: vi.fn().mockResolvedValue(mockUserRecentTripsResponse)
+        }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -191,10 +242,27 @@ it('should handle missing freeTripCount in privateMetadata', async () => {
 
     const result = await dashboardLoader(loaderArgs)
 
+    expect(mockedGetAuth).toHaveBeenCalledWith(loaderArgs)
+    expect(has).toHaveBeenCalledWith({ plan: 'roam_premium' })
+    expect(mockedCreateClerkClient).toHaveBeenCalledWith({
+        secretKey: process.env.CLERK_SECRET_KEY,
+    })
+    expect(mockClerkClient.users.getUser).toHaveBeenCalledWith('user-789')
+    expect(mockedHc).toHaveBeenCalledWith(process.env.SERVER_URL)
+    expect(mockClient.analytics.$get).toHaveBeenCalledWith({
+        query: { userId: 'user-789' },
+    })
+    expect(mockClient.getUserTrips.$get).toHaveBeenCalledWith({
+        query: {
+            userId: 'user-789',
+            count: '3',
+        }
+    })
     expect(result).toEqual({
         userId: 'user-789',
         isSubscriber: false,
         freeTripCount: 0,
         userAnalyticsSheet: { trips: 0, destinations: 0 },
+        userRecentTrips: [{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }]
     })
 })

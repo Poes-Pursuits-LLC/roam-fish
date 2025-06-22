@@ -51,7 +51,7 @@ jobs:
               with:
                   name: playwright-report
                   path: playwright-report/
-                  retention-days: 30
+                  retention-days: 14
 
             - name: Merge develop -> main
               uses: devmasx/merge-branch@master

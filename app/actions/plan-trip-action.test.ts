@@ -1,5 +1,5 @@
 import { it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { planTripAction } from './plan-trip.action'
+import { planTripAction } from './plan-trip-action'
 import type { Route } from '../routes/+types/plan-trip'
 import { createClerkClient } from '@clerk/backend'
 import { hc } from 'hono/client'

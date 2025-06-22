@@ -33,7 +33,7 @@ it('should call the updateTrip endpoint with all form fields when all are provid
     formData.append('checkList', JSON.stringify(checkList))
     formData.append('notes', notes)
 
-    const request = new Request(`http://localhost/trip/${tripId}`, {
+    const request = new Request(`${serverUrl}/trip/${tripId}`, {
         method: 'POST',
         body: formData,
     })

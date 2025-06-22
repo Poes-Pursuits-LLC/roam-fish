@@ -26,7 +26,7 @@ const analyticsRouter = new Hono().get(
         }
 
         return c.json({
-            userAnalyticsSheet: userAnalyticsSheet ?? {},
+            userAnalyticsSheet: userAnalyticsSheet,
         })
     },
 )

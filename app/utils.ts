@@ -53,3 +53,20 @@ export const getTTL = (hours: number) => {
 export const isIntegrationTest = () => {
     return process.env.INTEGRATION_TEST_FLAG === 'true'
 }
+
+export const getLocalTripId = () => {
+    if (typeof window === 'undefined' || !window.localStorage) return null
+    const tripId = localStorage.getItem('roamfish-tripId')
+    if (!tripId) return null
+    return tripId
+}
+
+export const setLocalTripId = (tripId: string) => {
+    if (typeof window === 'undefined' || !window.localStorage) return
+    localStorage.setItem('roamfish-tripId', tripId)
+}
+
+export const deleteLocalTripId = () => {
+    if (typeof window === 'undefined' || !window.localStorage) return
+    localStorage.removeItem('roamfish-tripId')
+}

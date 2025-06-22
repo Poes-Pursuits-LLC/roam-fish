@@ -141,31 +141,39 @@ it('should update a trip', async () => {
     expect(Array.isArray(updatedTrip.checkList)).toBe(true)
 })
 
-it('should fetch trips for a specific user', async () => {
+it('should fetch the asked-of amount of trips for a specific user in descending order', async () => {
     const userId = v4()
     const trips = [
         {
-            startDate: '2026-05-21',
-            duration: TripDurationEnum.Week,
-            userId,
-            status: TripStatusEnum.Generating,
-            destinationName: 'Yellowstone',
-            headcount: '2',
-        },
-        {
-            startDate: '2026-05-21',
-            duration: TripDurationEnum.Week,
-            userId,
-            status: TripStatusEnum.Generating,
-            destinationName: 'Yellowstone',
-            headcount: '2',
-        },
-        {
-            startDate: '2026-05-21',
+            startDate: '2026-05-19',
             duration: TripDurationEnum.Week,
             status: TripStatusEnum.Generating,
-            destinationName: 'Yellowstone',
+            destinationName: 'Iceland',
             headcount: '3',
+        },
+        {
+            startDate: '2026-05-20',
+            duration: TripDurationEnum.Week,
+            userId,
+            status: TripStatusEnum.Generating,
+            destinationName: 'Idaho Falls',
+            headcount: '2',
+        },
+        {
+            startDate: '2026-03-20',
+            duration: TripDurationEnum.Weekend,
+            userId,
+            status: TripStatusEnum.Generating,
+            destinationName: 'Upper Peninsula',
+            headcount: '2',
+        },
+        {
+            startDate: '2026-05-21',
+            duration: TripDurationEnum.Week,
+            userId,
+            status: TripStatusEnum.Generating,
+            destinationName: 'Yellowstone',
+            headcount: '2',
         },
     ]
 
@@ -179,7 +187,7 @@ it('should fetch trips for a specific user', async () => {
     )
 
     const userTrips = await fetch(
-        `${SERVER_URL}/getUserTrips?userId=${userId}`,
+        `${SERVER_URL}/getUserTrips?userId=${userId}&count=2`,
         {
             method: 'GET',
         },
@@ -188,4 +196,5 @@ it('should fetch trips for a specific user', async () => {
         .then((data) => data.trips)
 
     expect(userTrips.length).toEqual(2)
+    expect(userTrips[0].destinationName).toEqual('Yellowstone')
 })

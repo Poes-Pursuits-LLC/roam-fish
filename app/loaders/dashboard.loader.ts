@@ -18,15 +18,21 @@ export const dashboardLoader = async (args: Route.LoaderArgs) => {
     })
     const client = hc<AppType>(process.env.SERVER_URL!)
 
-    const [user, userAnalyticsSheet] = await Promise.all([
+    const [user, userAnalyticsSheet, userRecentTrips] = await Promise.all([
         clerkClient.users.getUser(userId),
         client.analytics
             .$get({ query: { userId } })
             .then((res) => res.json())
             .then((data) => data.userAnalyticsSheet),
+        client.getUserTrips.$get({
+            query: {
+                userId,
+                count: '3',
+            }
+        }).then((response) => response.json()).then((data) => data.trips)
     ])
     const freeTripCount =
         (user.privateMetadata as { freeTripCount: number })?.freeTripCount ?? 0
 
-    return { userId, isSubscriber, freeTripCount, userAnalyticsSheet }
+    return { userId, isSubscriber, freeTripCount, userAnalyticsSheet, userRecentTrips }
 }

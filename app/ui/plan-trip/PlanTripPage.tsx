@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import type { Route } from '../../routes/+types/plan-trip'
 import { BackButton } from '../BackButton'
 import { PlanTripHeader } from './PlanTripHeader'
 import { TripForm } from './TripForm'
 import { TripLoader } from './TripLoader'
+import { getLocalTripId, setLocalTripId } from '~/utils'
 
 export const PlanTripPage = ({
     loaderData,
@@ -14,9 +16,15 @@ export const PlanTripPage = ({
     const { getDestinationsPromise, userId, freeTripCount, isSubscriber } =
         loaderData
     const { tripId } = actionData || { tripId: null }
+    const visitorAlreadyCreatedTrip = Boolean(getLocalTripId())
     const noMoreTrips = Boolean(
-        freeTripCount && freeTripCount >= 3 && !isSubscriber,
-    )
+        freeTripCount && freeTripCount >= 3 && !isSubscriber)
+
+    useEffect(() => {
+        if (!userId && tripId) {
+            setLocalTripId((tripId))
+        }
+    }, [tripId])
 
     return (
         <div className="min-h-screen">
@@ -33,6 +41,9 @@ export const PlanTripPage = ({
                                     promise={getDestinationsPromise}
                                     userId={userId}
                                     noMoreTrips={noMoreTrips}
+                                    visitorAlreadyCreatedTrip={
+                                        visitorAlreadyCreatedTrip
+                                    }
                                 />
                             </div>
                         </div>

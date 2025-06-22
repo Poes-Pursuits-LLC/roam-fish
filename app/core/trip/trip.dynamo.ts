@@ -138,6 +138,10 @@ export const DynamoTrip = () => {
                     required: true,
                     default: () => createFormattedDate(),
                 },
+                expireAt: {
+                    type: 'number',
+                    required: false,
+                },
                 type: {
                     type: 'string',
                     required: true,
