@@ -19,7 +19,7 @@ export function DestinationSelect({
             name="destinationName"
             options={destinations}
             getId={(destination) => destination.destinationId}
-            getLabel={(destination) => destination.name}
+            getLabel={(destination) => `${destination.name}, ${destination.province}, ${destination.country}`}
             getValue={(destination) => destination.name}
             {...props}
         />

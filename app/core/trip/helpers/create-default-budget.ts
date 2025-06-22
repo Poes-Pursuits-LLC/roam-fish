@@ -15,7 +15,7 @@ export const createDefaultBudgetList = (
         {
             id: 'lodging',
             name: 'Lodging',
-            price: `${Number(headcount) * 50 * Number(durationInDays)}`,
+            price: `${50 * Number(durationInDays)}`,
         },
         {
             id: 'food',
@@ -30,7 +30,7 @@ export const createDefaultBudgetList = (
         {
             id: 'activities',
             name: 'Activities',
-            price: `${Number(headcount) * 50 * Number(durationInDays)}`,
+            price: `${Number(headcount) * 20 * Number(durationInDays)}`,
         },
     ]
 }
