@@ -42,7 +42,7 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Browsers
-        run: npx playwright install chromium & npx playwright install webkit
+        run: npx playwright install chromium & npx playwright install webkit --with-deps
 
       - name: Run e2e tests
         run: npm run e2e-tests
