@@ -1,15 +1,20 @@
-import { Cloud, Fish, Target } from 'lucide-react'
+import { Cloud, Fish, Target, Crown } from 'lucide-react'
+import { NavLink } from 'react-router'
 
 export const Tactics = ({
     fishingSummary,
     weather,
     flies,
     hatches,
+    userId,
+    isSubscriber,
 }: {
     fishingSummary: string
     weather: string
     flies: string[]
     hatches: string[]
+    userId: string | null
+    isSubscriber: boolean
 }) => {
     return (
         <div className="neo-card bg-emerald-50 mb-8">
@@ -69,15 +74,66 @@ export const Tactics = ({
                     ))}
                 </div>
 
-                <div className="bg-white p-4 border-2 border-black">
-                    <h3 className="font-bold text-lg text-slate-800 uppercase tracking-wide mb-4">
-                        Summary
-                    </h3>
-                    <p className="text-slate-800 font-semibold leading-relaxed">
-                        {fishingSummary}
+                {renderSummarySection(userId, isSubscriber, fishingSummary)}
+            </div>
+        </div>
+    )
+}
+
+const renderSummarySection = (userId: string | null, isSubscriber: boolean, summary: string) => {
+    if (!userId) {
+        return (
+            <div className="bg-white p-4 border-2 border-black">
+                <h3 className="font-bold text-lg text-slate-800 uppercase tracking-wide mb-4">
+                    Expert Advice
+                </h3>
+                <div className="text-center">
+                    <h4 className="text-lg font-bold text-slate-800 mb-3">
+                        Access Expert Advice
+                    </h4>
+                    <p className="text-sm font-semibold text-slate-700 mb-4">
+                        Sign up for free then become a premium member to access detailed tactics for your destination.
                     </p>
+                    <NavLink to="/login" className="neo-button">
+                        Sign Up Free
+                    </NavLink>
                 </div>
             </div>
+        )
+    }
+
+    if (!isSubscriber) {
+        return (
+            <div className="bg-white p-4 border-2 border-black">
+                <h3 className="font-bold text-lg text-slate-800 uppercase tracking-wide mb-4">
+                    Expert Advice
+                </h3>
+                <div className="text-center">
+                    <div className="flex items-center justify-center mb-3">
+                        <Crown className="w-6 h-6 text-amber-500" />
+                    </div>
+                    <h4 className="text-lg font-bold text-slate-800 mb-3">
+                        Premium Feature
+                    </h4>
+                    <p className="text-sm font-semibold text-slate-700 mb-4">
+                        Upgrade to premium to access detailed tactics for your destination.
+                    </p>
+                    <NavLink to="/billing" className="neo-button">
+                        Upgrade to Premium
+                    </NavLink>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="bg-white p-4 border-2 border-black">
+            <h3 className="font-bold text-lg text-slate-800 uppercase tracking-wide mb-4">
+                Expert Advice
+            </h3>
+            <p className="text-slate-800 font-semibold leading-relaxed">
+                {summary}
+            </p>
         </div>
     )
 }

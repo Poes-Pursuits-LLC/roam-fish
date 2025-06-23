@@ -9,6 +9,7 @@ import { Notes } from './Notes'
 import { Budget } from './Budget'
 import { PackingList } from './PackingList'
 import { Checklist } from './Checklist'
+import { LicensingRegulations } from './LicensingRegulations'
 
 export const TripPage = ({
     loaderData,
@@ -50,7 +51,10 @@ export const TripPage = ({
                                 weather={trip.weather!}
                                 flies={trip.flies!}
                                 hatches={trip.hatches!}
+                                userId={userId}
+                                isSubscriber={isSubscriber}
                             />
+                            <LicensingRegulations userId={userId} isSubscriber={isSubscriber} />
                             <Notes notes={trip.notes ?? ''} />
                         </div>
                     </div>

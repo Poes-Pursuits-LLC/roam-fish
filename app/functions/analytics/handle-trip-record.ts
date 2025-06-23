@@ -9,7 +9,7 @@ export const handleTripRecord = async (record: DynamoDBRecord) => {
         return
     }
 
-    const { userId, duration, destinationName, netCostChange } = tripData
+    const { userId, duration, destinationName, netCostChange, currentBudgetTotal } = tripData
 
     const daysToAdd = getDaysFromDuration(duration)
 
@@ -32,7 +32,7 @@ export const handleTripRecord = async (record: DynamoDBRecord) => {
         await analyticsService.createUserAnalyticsSheet({
             userId,
             totalDaysFishing: daysToAdd,
-            totalTripCost: netCostChange,
+            totalTripCost: currentBudgetTotal,
             tripCount: 1,
             uniqueDestinations: [destinationName],
         })

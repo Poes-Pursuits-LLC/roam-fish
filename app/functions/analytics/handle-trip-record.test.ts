@@ -35,7 +35,8 @@ it('should create new analytics when user analytics sheet does not exist', async
         userId: 'user123',
         duration: TripDurationEnum.Weekend,
         destinationName: 'Lake Tahoe',
-        netCostChange: 500,
+        netCostChange: 0,
+        currentBudgetTotal: 350,
         startDate: '2024-03-20',
     }
     vi.mocked(extractTripData).mockReturnValue(mockTripData)
@@ -43,13 +44,39 @@ it('should create new analytics when user analytics sheet does not exist', async
         .mocked(analyticsService.getUserAnalyticsSheet)
         .mockResolvedValue(null)
 
-    await handleTripRecord(mockRecord)
+    // Mock the record with budget list data
+    const mockRecordWithBudget = {
+        dynamodb: {
+            NewImage: {
+                budgetList: {
+                    L: [
+                        {
+                            M: {
+                                id: { S: '1' },
+                                name: { S: 'Lodging' },
+                                price: { S: '200.00' },
+                            },
+                        },
+                        {
+                            M: {
+                                id: { S: '2' },
+                                name: { S: 'Food' },
+                                price: { S: '150.00' },
+                            },
+                        },
+                    ],
+                },
+            },
+        },
+    } as DynamoDBRecord
+
+    await handleTripRecord(mockRecordWithBudget)
 
     expect(mockGetAnalytics).toHaveBeenCalledWith('user123')
     expect(analyticsService.createUserAnalyticsSheet).toHaveBeenCalledWith({
         userId: 'user123',
         totalDaysFishing: 2,
-        totalTripCost: 500,
+        totalTripCost: 350,
         tripCount: 1,
         uniqueDestinations: ['Lake Tahoe'],
     })
@@ -62,6 +89,7 @@ it('should update existing analytics when user analytics sheet already exists', 
         duration: TripDurationEnum.Weekend,
         destinationName: 'Lake Tahoe',
         netCostChange: 500,
+        currentBudgetTotal: 350,
         startDate: '2024-03-20',
     }
     const existingAnalytics = {

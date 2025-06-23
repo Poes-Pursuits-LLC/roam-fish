@@ -6,7 +6,7 @@ export const LandingFeatureSet = () => {
 }
 
 const config = {
-    header: 'AI-Powered Fly Fishing Trip Planning in 30 Seconds',
+    header: 'You can\'t create or manage fishing trips better than this',
     features: [
         {
             icon: MapPin,
@@ -16,7 +16,7 @@ const config = {
         },
         {
             icon: Fish,
-            title: 'Fishy Information',
+            title: 'Get Fishy',
             description:
                 'Receive expert fly selection, hatch patterns, weather insights, and tactical advice tailored to your trip',
         },
