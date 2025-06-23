@@ -54,7 +54,10 @@ export const TripPage = ({
                                 userId={userId}
                                 isSubscriber={isSubscriber}
                             />
-                            <LicensingRegulations userId={userId} isSubscriber={isSubscriber} />
+                            <LicensingRegulations
+                                userId={userId}
+                                isSubscriber={isSubscriber}
+                            />
                             <Notes notes={trip.notes ?? ''} />
                         </div>
                     </div>

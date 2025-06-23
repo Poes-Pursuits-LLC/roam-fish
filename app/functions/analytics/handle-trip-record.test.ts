@@ -1,10 +1,9 @@
 import { it, expect, vi } from 'vitest'
-import { analyticsService } from '~/core/analytics/analytics.service'
 import { handleTripRecord } from './handle-trip-record'
+import { analyticsService } from '~/core/analytics/analytics.service'
+import { TripStatusEnum, TripDurationEnum } from '~/core/trip/trip.model'
 import type { DynamoDBRecord } from 'aws-lambda'
 import { extractTripData } from './extract-trip-data'
-import type { ExtractedTripData } from './extract-trip-data'
-import { TripDurationEnum } from '~/core/trip/trip.model'
 
 vi.mock('~/core/analytics/analytics.service', () => ({
     analyticsService: {
@@ -14,109 +13,207 @@ vi.mock('~/core/analytics/analytics.service', () => ({
     },
 }))
 vi.mock('./extract-trip-data')
+const mockAnalyticsService = vi.mocked(analyticsService)
+const mockExtractTripData = vi.mocked(extractTripData)
 
-const mockRecord = {} as DynamoDBRecord
-
-it('should short circuit when no userId is present', async () => {
-    const emptyTripData: Partial<ExtractedTripData> = {}
-    vi.mocked(extractTripData).mockReturnValue(
-        emptyTripData as ExtractedTripData,
-    )
-
-    const result = await handleTripRecord(mockRecord)
-
-    expect(analyticsService.createUserAnalyticsSheet).not.toHaveBeenCalled()
-    expect(analyticsService.updateUserAnalyticsSheet).not.toHaveBeenCalled()
-    expect(result).toBeUndefined()
-})
-
-it('should create new analytics when user analytics sheet does not exist', async () => {
-    const mockTripData: ExtractedTripData = {
-        userId: 'user123',
-        duration: TripDurationEnum.Weekend,
-        destinationName: 'Lake Tahoe',
-        netCostChange: 0,
-        currentBudgetTotal: 350,
-        startDate: '2024-03-20',
-    }
-    vi.mocked(extractTripData).mockReturnValue(mockTripData)
-    const mockGetAnalytics = vi
-        .mocked(analyticsService.getUserAnalyticsSheet)
-        .mockResolvedValue(null)
-
-    // Mock the record with budget list data
-    const mockRecordWithBudget = {
+const createMockRecord = (
+    oldStatus: TripStatusEnum,
+    newStatus: TripStatusEnum,
+    userId = 'user123',
+    tripId = 'trip123',
+): DynamoDBRecord =>
+    ({
+        eventName: 'MODIFY',
         dynamodb: {
+            OldImage: {
+                id: { S: tripId },
+                userId: { S: userId },
+                destinationName: { S: 'Yellowstone' },
+                startDate: { S: '2024-06-01' },
+                duration: { S: TripDurationEnum.Weekend },
+                status: { S: oldStatus },
+                budgetList: { L: [] },
+            },
             NewImage: {
-                budgetList: {
-                    L: [
-                        {
-                            M: {
-                                id: { S: '1' },
-                                name: { S: 'Lodging' },
-                                price: { S: '200.00' },
-                            },
-                        },
-                        {
-                            M: {
-                                id: { S: '2' },
-                                name: { S: 'Food' },
-                                price: { S: '150.00' },
-                            },
-                        },
-                    ],
-                },
+                id: { S: tripId },
+                userId: { S: userId },
+                destinationName: { S: 'Yellowstone' },
+                startDate: { S: '2024-06-01' },
+                duration: { S: TripDurationEnum.Weekend },
+                status: { S: newStatus },
+                budgetList: { L: [] },
             },
         },
-    } as DynamoDBRecord
+    }) as DynamoDBRecord
 
-    await handleTripRecord(mockRecordWithBudget)
+it('should count trip when transitioning from Generating to Planned', async () => {
+    const record = createMockRecord(
+        TripStatusEnum.Generating,
+        TripStatusEnum.Planned,
+    )
 
-    expect(mockGetAnalytics).toHaveBeenCalledWith('user123')
-    expect(analyticsService.createUserAnalyticsSheet).toHaveBeenCalledWith({
+    mockExtractTripData.mockReturnValue({
         userId: 'user123',
-        totalDaysFishing: 2,
-        totalTripCost: 350,
-        tripCount: 1,
-        uniqueDestinations: ['Lake Tahoe'],
-    })
-    expect(analyticsService.updateUserAnalyticsSheet).not.toHaveBeenCalled()
-})
-
-it('should update existing analytics when user analytics sheet already exists', async () => {
-    const mockTripData: ExtractedTripData = {
-        userId: 'user123',
+        destinationName: 'Yellowstone',
+        startDate: '2024-06-01',
         duration: TripDurationEnum.Weekend,
-        destinationName: 'Lake Tahoe',
-        netCostChange: 500,
-        currentBudgetTotal: 350,
-        startDate: '2024-03-20',
-    }
-    const existingAnalytics = {
+        status: TripStatusEnum.Planned,
+        oldStatus: TripStatusEnum.Generating,
+        netCostChange: 0,
+        currentBudgetTotal: 0,
+    })
+
+    mockAnalyticsService.getUserAnalyticsSheet.mockResolvedValue({
         userId: 'user123',
-        tripCount: 2,
-        totalDaysFishing: 10,
-        totalTripCost: 1000,
-        type: 'type',
-        uniqueDestinations: ['Previous Lake'],
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as unknown as any
-    vi.mocked(extractTripData).mockReturnValue(mockTripData)
-    const mockGetAnalytics = vi
-        .mocked(analyticsService.getUserAnalyticsSheet)
-        .mockResolvedValue(existingAnalytics)
+        tripCount: 0,
+        totalDaysFishing: 0,
+        totalTripCost: 0,
+        uniqueDestinations: [],
+        type: 'userAnalytics',
+        createdAt: '2024-01-01',
+        updatedAt: '2024-01-01',
+    })
 
-    await handleTripRecord(mockRecord)
+    await handleTripRecord(record)
 
-    expect(mockGetAnalytics).toHaveBeenCalledWith('user123')
-    expect(analyticsService.updateUserAnalyticsSheet).toHaveBeenCalledWith(
+    expect(mockAnalyticsService.updateUserAnalyticsSheet).toHaveBeenCalledWith(
         'user123',
         {
-            tripCount: 3,
-            totalDaysFishing: 12,
-            totalTripCost: 1500,
-            uniqueDestinations: ['Previous Lake', 'Lake Tahoe'],
+            tripCount: 1,
+            totalDaysFishing: 2, // Weekend = 2 days
+            totalTripCost: 0,
+            uniqueDestinations: ['Yellowstone'],
         },
     )
-    expect(analyticsService.createUserAnalyticsSheet).not.toHaveBeenCalled()
+})
+
+it('should NOT count trip when status changes from Planned to Completed', async () => {
+    const record = createMockRecord(
+        TripStatusEnum.Planned,
+        TripStatusEnum.Completed,
+    )
+
+    mockExtractTripData.mockReturnValue({
+        userId: 'user123',
+        destinationName: 'Yellowstone',
+        startDate: '2024-06-01',
+        duration: TripDurationEnum.Weekend,
+        status: TripStatusEnum.Completed,
+        oldStatus: TripStatusEnum.Planned,
+        netCostChange: 0,
+        currentBudgetTotal: 0,
+    })
+
+    mockAnalyticsService.getUserAnalyticsSheet.mockResolvedValue({
+        userId: 'user123',
+        tripCount: 1,
+        totalDaysFishing: 2,
+        totalTripCost: 100,
+        uniqueDestinations: ['Yellowstone'],
+        type: 'userAnalytics',
+        createdAt: '2024-01-01',
+        updatedAt: '2024-01-01',
+    })
+
+    await handleTripRecord(record)
+
+    expect(mockAnalyticsService.updateUserAnalyticsSheet).toHaveBeenCalledWith(
+        'user123',
+        {
+            totalTripCost: 100, // Existing 100 + netCostChange 0 = 100
+        },
+    )
+})
+
+it('should NOT count trip when status changes from Generating to Generating (no change)', async () => {
+    const record = createMockRecord(
+        TripStatusEnum.Generating,
+        TripStatusEnum.Generating,
+    )
+
+    mockExtractTripData.mockReturnValue({
+        userId: 'user123',
+        destinationName: 'Yellowstone',
+        startDate: '2024-06-01',
+        duration: TripDurationEnum.Weekend,
+        status: TripStatusEnum.Generating,
+        oldStatus: TripStatusEnum.Generating,
+        netCostChange: 0,
+        currentBudgetTotal: 0,
+    })
+
+    mockAnalyticsService.getUserAnalyticsSheet.mockResolvedValue({
+        userId: 'user123',
+        tripCount: 0,
+        totalDaysFishing: 0,
+        totalTripCost: 0,
+        uniqueDestinations: [],
+
+        type: 'userAnalytics',
+        createdAt: '2024-01-01',
+        updatedAt: '2024-01-01',
+    })
+
+    await handleTripRecord(record)
+
+    expect(mockAnalyticsService.updateUserAnalyticsSheet).toHaveBeenCalledWith(
+        'user123',
+        {
+            totalTripCost: 0, // Only cost change, no trip count increment
+        },
+    )
+})
+
+it('should create new analytics sheet for new planned trip', async () => {
+    const record = createMockRecord(
+        TripStatusEnum.Generating,
+        TripStatusEnum.Planned,
+    )
+
+    mockExtractTripData.mockReturnValue({
+        userId: 'user123',
+        destinationName: 'Yellowstone',
+        startDate: '2024-06-01',
+        duration: TripDurationEnum.Weekend,
+        status: TripStatusEnum.Planned,
+        oldStatus: TripStatusEnum.Generating,
+        netCostChange: 0,
+        currentBudgetTotal: 0,
+    })
+
+    mockAnalyticsService.getUserAnalyticsSheet.mockResolvedValue(null)
+
+    await handleTripRecord(record)
+
+    expect(mockAnalyticsService.createUserAnalyticsSheet).toHaveBeenCalledWith({
+        userId: 'user123',
+        totalDaysFishing: 2,
+        totalTripCost: 0,
+        tripCount: 1,
+        uniqueDestinations: ['Yellowstone'],
+    })
+})
+
+it('should NOT create analytics sheet for non-planned trip', async () => {
+    const record = createMockRecord(
+        TripStatusEnum.Generating,
+        TripStatusEnum.Generating,
+    )
+
+    mockExtractTripData.mockReturnValue({
+        userId: 'user123',
+        destinationName: 'Yellowstone',
+        startDate: '2024-06-01',
+        duration: TripDurationEnum.Weekend,
+        status: TripStatusEnum.Generating,
+        oldStatus: TripStatusEnum.Generating,
+        netCostChange: 0,
+        currentBudgetTotal: 0,
+    })
+
+    mockAnalyticsService.getUserAnalyticsSheet.mockResolvedValue(null)
+
+    await handleTripRecord(record)
+
+    expect(mockAnalyticsService.createUserAnalyticsSheet).not.toHaveBeenCalled()
 })

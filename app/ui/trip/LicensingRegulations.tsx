@@ -13,7 +13,9 @@ export const LicensingRegulations = ({
             <div className="neo-card bg-stone-50 h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                     <Shield className="w-6 h-6 text-emerald-700" />
-                    <h2 className="neo-subheader text-slate-800">Licensing & Regulations</h2>
+                    <h2 className="neo-subheader text-slate-800">
+                        Licensing & Regulations
+                    </h2>
                 </div>
                 <div className="flex-1 flex items-center justify-center p-4">
                     <div className="text-center">
@@ -21,7 +23,9 @@ export const LicensingRegulations = ({
                             Access Licensing & Regulations
                         </h3>
                         <p className="text-sm font-semibold text-slate-700 mb-4">
-                            Sign up for free then become a premium member to access detailed licensing requirements and fishing regulations for your destination.
+                            Sign up for free then become a premium member to
+                            access detailed licensing requirements and fishing
+                            regulations for your destination.
                         </p>
                         <NavLink to="/login" className="neo-button">
                             Sign Up Free
@@ -37,7 +41,9 @@ export const LicensingRegulations = ({
             <div className="neo-card bg-stone-50 h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                     <Shield className="w-6 h-6 text-emerald-700" />
-                    <h2 className="neo-subheader text-slate-800">Licensing & Regulations</h2>
+                    <h2 className="neo-subheader text-slate-800">
+                        Licensing & Regulations
+                    </h2>
                 </div>
                 <div className="flex-1 flex items-center justify-center p-4">
                     <div className="text-center">
@@ -48,7 +54,9 @@ export const LicensingRegulations = ({
                             Premium Feature
                         </h3>
                         <p className="text-sm font-semibold text-slate-700 mb-4">
-                            Upgrade to premium to access comprehensive licensing requirements and fishing regulations for your destination.
+                            Upgrade to premium to access comprehensive licensing
+                            requirements and fishing regulations for your
+                            destination.
                         </p>
                         <NavLink to="/billing" className="neo-button">
                             Upgrade to Premium
@@ -63,7 +71,9 @@ export const LicensingRegulations = ({
         <div className="neo-card bg-stone-50 h-full flex flex-col">
             <div className="flex items-center gap-3 mb-6">
                 <Shield className="w-6 h-6 text-emerald-700" />
-                <h2 className="neo-subheader text-slate-800">Licensing & Regulations</h2>
+                <h2 className="neo-subheader text-slate-800">
+                    Licensing & Regulations
+                </h2>
             </div>
             <div className="flex-1 flex items-center justify-center p-4">
                 <div className="text-center">
@@ -74,10 +84,12 @@ export const LicensingRegulations = ({
                         Coming Soon
                     </h3>
                     <p className="text-sm font-semibold text-slate-700">
-                        We&apos;re working hard to bring you comprehensive licensing requirements and fishing regulations for this destination. Stay tuned!
+                        We&apos;re working hard to bring you comprehensive
+                        licensing requirements and fishing regulations for this
+                        destination. Stay tuned!
                     </p>
                 </div>
             </div>
         </div>
     )
-} 
+}
