@@ -7,6 +7,7 @@ export type ExtractedTripData = {
     startDate: string
     duration: TripDurationEnum
     netCostChange: number
+    currentBudgetTotal: number
 }
 
 type BudgetItem = {
@@ -52,5 +53,6 @@ export const extractTripData = (
         startDate,
         duration,
         netCostChange,
+        currentBudgetTotal: newTotalCost,
     }
 }

@@ -25,6 +25,7 @@ it('should extract basic trip data correctly', () => {
         startDate: '2024-03-20',
         duration: TripDurationEnum.Weekend,
         netCostChange: 0,
+        currentBudgetTotal: 0,
     })
 })
 
@@ -62,6 +63,7 @@ it('should calculate total cost from budgetList correctly', () => {
 
     const result = extractTripData(tripRecord)
     expect(result?.netCostChange).toBe(245.5)
+    expect(result?.currentBudgetTotal).toBe(245.5)
 })
 
 it('should return null if no userId is present', () => {
@@ -147,6 +149,7 @@ it('should calculate net cost change from budgetList correctly', () => {
         startDate: '2024-03-20',
         duration: TripDurationEnum.Weekend,
         netCostChange: 84.5,
+        currentBudgetTotal: 330.0,
     })
 })
 
@@ -188,6 +191,7 @@ it('should handle missing budgetList in old image', () => {
         startDate: '2024-03-20',
         duration: TripDurationEnum.Weekend,
         netCostChange: 45.5, // New cost - 0 (no old cost) = 45.50
+        currentBudgetTotal: 45.5,
     })
 })
 
@@ -229,5 +233,116 @@ it('should handle missing budgetList in new image', () => {
         startDate: '2024-03-20',
         duration: TripDurationEnum.Weekend,
         netCostChange: -45.5, // 0 (no new cost) - 45.50 (old cost) = -45.50
+        currentBudgetTotal: 0,
+    })
+})
+
+it('should handle identical budgetList in old and new image', () => {
+    const tripRecord = {
+        dynamodb: {
+            OldImage: {
+                tripId: { S: '123' },
+                userId: { S: 'user123' },
+                destinationName: { S: 'Yellowstone' },
+                startDate: { S: '2024-03-20' },
+                duration: { S: TripDurationEnum.Weekend },
+                budgetList: {
+                    L: [
+                        {
+                            M: {
+                                id: { S: '1' },
+                                name: { S: 'Fishing License' },
+                                price: { S: '45.50' },
+                            },
+                        },
+                        {
+                            M: {
+                                id: { S: '2' },
+                                name: { S: 'Lodging' },
+                                price: { S: '200.00' },
+                            },
+                        },
+                    ],
+                },
+            },
+            NewImage: {
+                tripId: { S: '123' },
+                userId: { S: 'user123' },
+                destinationName: { S: 'Yellowstone' },
+                startDate: { S: '2024-03-20' },
+                duration: { S: TripDurationEnum.Weekend },
+                budgetList: {
+                    L: [
+                        {
+                            M: {
+                                id: { S: '1' },
+                                name: { S: 'Fishing License' },
+                                price: { S: '45.50' },
+                            },
+                        },
+                        {
+                            M: {
+                                id: { S: '2' },
+                                name: { S: 'Lodging' },
+                                price: { S: '200.00' },
+                            },
+                        },
+                    ],
+                },
+            },
+        },
+    } as DynamoDBRecord
+
+    const result = extractTripData(tripRecord)
+    expect(result).toEqual({
+        userId: 'user123',
+        destinationName: 'Yellowstone',
+        startDate: '2024-03-20',
+        duration: TripDurationEnum.Weekend,
+        netCostChange: 0, // Same cost in both images = no change
+        currentBudgetTotal: 245.5,
+    })
+})
+
+it('should handle INSERT events (trip creation) correctly', () => {
+    const tripRecord = {
+        dynamodb: {
+            NewImage: {
+                tripId: { S: '123' },
+                type: { S: 'trip' },
+                userId: { S: 'user123' },
+                destinationName: { S: 'Yellowstone' },
+                startDate: { S: '2024-03-20' },
+                duration: { S: TripDurationEnum.Weekend },
+                budgetList: {
+                    L: [
+                        {
+                            M: {
+                                id: { S: '1' },
+                                name: { S: 'Fishing License' },
+                                price: { S: '45.50' },
+                            },
+                        },
+                        {
+                            M: {
+                                id: { S: '2' },
+                                name: { S: 'Lodging' },
+                                price: { S: '200.00' },
+                            },
+                        },
+                    ],
+                },
+            },
+        },
+    } as DynamoDBRecord
+
+    const result = extractTripData(tripRecord)
+    expect(result).toEqual({
+        userId: 'user123',
+        destinationName: 'Yellowstone',
+        startDate: '2024-03-20',
+        duration: TripDurationEnum.Weekend,
+        netCostChange: 245.5, // New cost - 0 (no old cost) = 245.50
+        currentBudgetTotal: 245.5,
     })
 })

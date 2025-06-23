@@ -1,4 +1,4 @@
-import { Cloud, Fish, Target, Crown, Clock } from 'lucide-react'
+import { Cloud, Fish, Target, Crown } from 'lucide-react'
 import { NavLink } from 'react-router'
 
 export const Tactics = ({
