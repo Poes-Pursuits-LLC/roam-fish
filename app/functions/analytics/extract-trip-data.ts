@@ -1,11 +1,13 @@
 import type { DynamoDBRecord } from 'aws-lambda'
-import { TripDurationEnum } from '~/core/trip/trip.model'
+import { TripDurationEnum, TripStatusEnum } from '~/core/trip/trip.model'
 
 export type ExtractedTripData = {
     userId: string
     destinationName: string
     startDate: string
     duration: TripDurationEnum
+    status: TripStatusEnum
+    oldStatus?: TripStatusEnum
     netCostChange: number
     currentBudgetTotal: number
 }
@@ -39,7 +41,7 @@ export const extractTripData = (
     const destinationName = newImage.destinationName.S!
     const startDate = newImage.startDate.S!
     const duration = newImage.duration.S! as TripDurationEnum
-
+    const status = newImage.status.S! as TripStatusEnum
     const oldBudgetList = (oldImage?.budgetList?.L || []) as BudgetItem[]
     const newBudgetList = (newImage.budgetList?.L || []) as BudgetItem[]
 
@@ -52,6 +54,8 @@ export const extractTripData = (
         destinationName,
         startDate,
         duration,
+        status,
+        oldStatus: oldImage?.status.S as TripStatusEnum,
         netCostChange,
         currentBudgetTotal: newTotalCost,
     }

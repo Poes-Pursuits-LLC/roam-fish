@@ -1,7 +1,7 @@
 import type { DynamoDBRecord } from 'aws-lambda'
 import { extractTripData } from './extract-trip-data'
 import { expect, it } from 'vitest'
-import { TripDurationEnum } from '~/core/trip/trip.model'
+import { TripDurationEnum, TripStatusEnum } from '~/core/trip/trip.model'
 
 it('should extract basic trip data correctly', () => {
     const tripRecord = {
@@ -13,6 +13,7 @@ it('should extract basic trip data correctly', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
                 budgetList: { L: [] },
             },
         },
@@ -24,6 +25,7 @@ it('should extract basic trip data correctly', () => {
         destinationName: 'Yellowstone',
         startDate: '2024-03-20',
         duration: TripDurationEnum.Weekend,
+        status: TripStatusEnum.Planned,
         netCostChange: 0,
         currentBudgetTotal: 0,
     })
@@ -39,6 +41,7 @@ it('should calculate total cost from budgetList correctly', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
                 budgetList: {
                     L: [
                         {
@@ -88,6 +91,7 @@ it('should calculate net cost change from budgetList correctly', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
                 budgetList: {
                     L: [
                         {
@@ -113,6 +117,7 @@ it('should calculate net cost change from budgetList correctly', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
                 budgetList: {
                     L: [
                         {
@@ -148,6 +153,8 @@ it('should calculate net cost change from budgetList correctly', () => {
         destinationName: 'Yellowstone',
         startDate: '2024-03-20',
         duration: TripDurationEnum.Weekend,
+        status: TripStatusEnum.Planned,
+        oldStatus: TripStatusEnum.Planned,
         netCostChange: 84.5,
         currentBudgetTotal: 330.0,
     })
@@ -162,6 +169,7 @@ it('should handle missing budgetList in old image', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
             },
             NewImage: {
                 tripId: { S: '123' },
@@ -169,6 +177,7 @@ it('should handle missing budgetList in old image', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
                 budgetList: {
                     L: [
                         {
@@ -190,6 +199,8 @@ it('should handle missing budgetList in old image', () => {
         destinationName: 'Yellowstone',
         startDate: '2024-03-20',
         duration: TripDurationEnum.Weekend,
+        status: TripStatusEnum.Planned,
+        oldStatus: TripStatusEnum.Planned,
         netCostChange: 45.5, // New cost - 0 (no old cost) = 45.50
         currentBudgetTotal: 45.5,
     })
@@ -204,6 +215,7 @@ it('should handle missing budgetList in new image', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
                 budgetList: {
                     L: [
                         {
@@ -222,6 +234,7 @@ it('should handle missing budgetList in new image', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
             },
         },
     } as DynamoDBRecord
@@ -232,6 +245,8 @@ it('should handle missing budgetList in new image', () => {
         destinationName: 'Yellowstone',
         startDate: '2024-03-20',
         duration: TripDurationEnum.Weekend,
+        status: TripStatusEnum.Planned,
+        oldStatus: TripStatusEnum.Planned,
         netCostChange: -45.5, // 0 (no new cost) - 45.50 (old cost) = -45.50
         currentBudgetTotal: 0,
     })
@@ -246,6 +261,7 @@ it('should handle identical budgetList in old and new image', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
                 budgetList: {
                     L: [
                         {
@@ -271,6 +287,7 @@ it('should handle identical budgetList in old and new image', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
                 budgetList: {
                     L: [
                         {
@@ -299,6 +316,8 @@ it('should handle identical budgetList in old and new image', () => {
         destinationName: 'Yellowstone',
         startDate: '2024-03-20',
         duration: TripDurationEnum.Weekend,
+        status: TripStatusEnum.Planned,
+        oldStatus: TripStatusEnum.Planned,
         netCostChange: 0, // Same cost in both images = no change
         currentBudgetTotal: 245.5,
     })
@@ -314,6 +333,7 @@ it('should handle INSERT events (trip creation) correctly', () => {
                 destinationName: { S: 'Yellowstone' },
                 startDate: { S: '2024-03-20' },
                 duration: { S: TripDurationEnum.Weekend },
+                status: { S: TripStatusEnum.Planned },
                 budgetList: {
                     L: [
                         {
@@ -342,6 +362,7 @@ it('should handle INSERT events (trip creation) correctly', () => {
         destinationName: 'Yellowstone',
         startDate: '2024-03-20',
         duration: TripDurationEnum.Weekend,
+        status: TripStatusEnum.Planned,
         netCostChange: 245.5, // New cost - 0 (no old cost) = 245.50
         currentBudgetTotal: 245.5,
     })

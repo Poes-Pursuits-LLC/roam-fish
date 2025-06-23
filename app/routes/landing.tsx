@@ -7,7 +7,7 @@ export function meta() {
         { title: 'Roam.Fish' },
         {
             name: 'description',
-            content: 'The simplest fishing trip planner on the internet',
+            content: 'The simplest fishing planner on the internet',
         },
     ]
 }
