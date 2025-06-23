@@ -5,7 +5,6 @@ import type { ComponentProps, ReactNode } from 'react'
 import { PlanTripPage } from './PlanTripPage'
 import { getLocalTripId, setLocalTripId } from '~/utils'
 
-
 vi.mock('react-router', async () => {
     const { MemoryRouter } = await vi.importActual('react-router')
     return {
@@ -135,7 +134,6 @@ test('Attempts to check local storage to see if a visitor has already made a tri
     })
 })
 
-
 test('Attempts to set the created tripId in local storage so we can later track if a visitor has already created a trip', async () => {
     const tripId = 'tripId'
     vi.mocked(setLocalTripId).mockReturnValue()
@@ -163,14 +161,13 @@ test('Attempts to set the created tripId in local storage so we can later track 
         tripId,
     }
 
-
     render(
         <MemoryRouter initialEntries={['/plan-trip']}>
             <PlanTripPage
                 loaderData={mockLoaderData}
                 actionData={mockActionData}
             />
-        </MemoryRouter>
+        </MemoryRouter>,
     )
 
     expect(setLocalTripId).toHaveBeenCalledWith(tripId)

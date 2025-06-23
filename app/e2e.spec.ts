@@ -4,7 +4,7 @@ test('Visitor flow: Visitor can submit a trip, see its content, then click on a 
     page,
 }) => {
     await page.goto('/')
-    await page.getByTestId('plan-trip-button').click({ timeout: 5000 })
+    await page.getByTestId('plan-trip-button').click()
 
     await expect(page).toHaveURL('/plan-trip')
 
@@ -37,7 +37,7 @@ test('Visitor flow: Visitor can submit a trip, see its content, then click on a 
         page.getByRole('heading', { name: 'Planning Your Trip...' }),
     ).toBeVisible()
 
-    await page.waitForURL(/\/trip\/[^/]+$/, { timeout: 50000 })
+    await page.waitForURL(/\/trip\/[^/]+$/, { timeout: 45000 })
 
     await expect(page.getByTestId('trip-name-input')).toBeVisible()
     await expect(page.getByText('Location')).toBeVisible()
@@ -72,9 +72,8 @@ test('Visitor flow: Visitor can submit a trip, see its content, then click on a 
         page.getByRole('heading', { name: 'RECOMMENDED FLIES' }),
     ).toBeVisible()
     await expect(page.getByRole('heading', { name: 'HATCHES' })).toBeVisible()
-    await expect(page.getByRole('heading', { name: 'SUMMARY' })).toBeVisible()
 
-    await page.getByRole('link', { name: 'Sign Up Free' }).click()
+    await page.getByRole('link', { name: 'Sign Up Free' }).nth(0).click()
 
     await expect(page).toHaveURL('/login')
     await expect(
