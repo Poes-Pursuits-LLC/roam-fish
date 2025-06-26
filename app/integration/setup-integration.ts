@@ -10,6 +10,7 @@ import { setupServer } from './setup-server'
 let network: StartedNetwork | undefined
 let dynamo: StartedTestContainer | undefined
 let server: StartedTestContainer | undefined
+
 const originalEnv = process.env
 
 export const setup = async () => {

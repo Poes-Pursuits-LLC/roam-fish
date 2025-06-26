@@ -6,6 +6,8 @@ export const secret = {
     ClerkPublishableKey: new sst.Secret('ClerkPublishableKey'),
     XAiUrl: new sst.Secret('XAiUrl'),
     XAiApiKey: new sst.Secret('XAiApiKey'),
+    ResendApiKey: new sst.Secret('ResendApiKey'),
+    Environment: new sst.Secret('Environment'),
 }
 
 export const allSecrets = Object.values(secret)

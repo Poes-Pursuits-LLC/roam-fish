@@ -10,8 +10,7 @@ vi.mock('@sentry/react', () => ({
 const mockedCaptureException = vi.mocked(captureException)
 
 vi.mock('react-router', async () => {
-    const { MemoryRouter, NavLink,
-    } = await vi.importActual('react-router')
+    const { MemoryRouter, NavLink } = await vi.importActual('react-router')
 
     return {
         MemoryRouter,
@@ -29,18 +28,23 @@ test('renders a specific route error message when the user navigates to a non-ex
     }
     mockedIsRouteErrorResponse.mockReturnValue(true)
 
-
     render(
         <MemoryRouter initialEntries={['/']}>
             <ErrorBoundaryDisplay {...errorBoundaryProps} />
         </MemoryRouter>,
     )
 
-    expect(screen.getByText('That page doesn\'t exist. Use the link below to return home.')).toBeInTheDocument()
+    expect(
+        screen.getByText(
+            "That page doesn't exist. Use the link below to return home.",
+        ),
+    ).toBeInTheDocument()
     expect(mockedCaptureException).not.toHaveBeenCalled()
 })
 
-test('renders a generic error message when the error is not a route error and captures it with Sentry', () => {
+test('renders a generic error message when the error is not a route error and captures it with Sentry in a production environment', () => {
+    process.env.ENVIRONMENT = 'production'
+
     const errorBoundaryProps = {
         error: Error('Failed to fetch destinations'),
         matches: [],
@@ -54,6 +58,10 @@ test('renders a generic error message when the error is not a route error and ca
         </MemoryRouter>,
     )
 
-    expect(screen.getByText('Something went wrong while loading this page. Don\'t worry, our team has been notified.')).toBeInTheDocument()
+    expect(
+        screen.getByText(
+            "Something went wrong while loading this page. Don't worry, our team has been notified.",
+        ),
+    ).toBeInTheDocument()
     expect(mockedCaptureException).toHaveBeenCalled()
 })
