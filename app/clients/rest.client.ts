@@ -13,7 +13,7 @@ const client = axios.create({})
 
 const get = async <T>(args: RequestArgs): Promise<T | null> => {
     const { data, status } = await client.get(args.url, {
-        headers: args.headers,
+        headers: { 'Content-Type': 'application.json', ...args.headers },
         params: args.params,
         timeout: args.timeout,
         responseType: args.responseType,
@@ -28,7 +28,7 @@ const get = async <T>(args: RequestArgs): Promise<T | null> => {
 
 const post = async <T>(args: RequestArgs): Promise<T> => {
     const { data } = await client.post<T>(args.url, args.body, {
-        headers: args.headers,
+        headers: { 'Content-Type': 'application.json', ...args.headers },
         params: args.params,
         timeout: args.timeout,
         responseType: args.responseType,
@@ -39,7 +39,7 @@ const post = async <T>(args: RequestArgs): Promise<T> => {
 
 const put = async <T>(args: RequestArgs): Promise<T> => {
     const { data } = await client.put<T>(args.url, args.body, {
-        headers: args.headers,
+        headers: { 'Content-Type': 'application.json', ...args.headers },
         params: args.params,
         timeout: args.timeout,
         responseType: args.responseType,
@@ -50,7 +50,7 @@ const put = async <T>(args: RequestArgs): Promise<T> => {
 
 const patch = async <T>(args: RequestArgs): Promise<T> => {
     const { data } = await client.patch<T>(args.url, args.body, {
-        headers: args.headers,
+        headers: { 'Content-Type': 'application.json', ...args.headers },
         params: args.params,
         timeout: args.timeout,
         responseType: args.responseType,
@@ -61,7 +61,7 @@ const patch = async <T>(args: RequestArgs): Promise<T> => {
 
 const deleteRequest = async <T>(args: RequestArgs): Promise<T> => {
     const { data } = await client.delete<T>(args.url, {
-        headers: args.headers,
+        headers: { 'Content-Type': 'application.json', ...args.headers },
         params: args.params,
         timeout: args.timeout,
         responseType: args.responseType,

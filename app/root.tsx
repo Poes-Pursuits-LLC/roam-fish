@@ -1,10 +1,4 @@
-import {
-    Links,
-    Meta,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
-} from 'react-router'
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
 import { rootAuthLoader } from '@clerk/react-router/ssr.server'
 import { ClerkProvider } from '@clerk/react-router'
 import { neobrutalism } from '@clerk/themes'
@@ -13,10 +7,12 @@ import './app.css'
 import * as Sentry from '@sentry/react'
 import { ErrorBoundaryDisplay } from './ui/ErrorBoundaryDisplay'
 
-Sentry.init({
-    dsn: 'https://81f4e9f76eb074232d02c47f66858dc5@o4509523849838592.ingest.us.sentry.io/4509523864584192',
-    sendDefaultPii: true,
-})
+if (process.env.ENVIRONMENT === 'production') {
+    Sentry.init({
+        dsn: 'https://81f4e9f76eb074232d02c47f66858dc5@o4509523849838592.ingest.us.sentry.io/4509523864584192',
+        sendDefaultPii: true,
+    })
+}
 
 export async function loader(args: Route.LoaderArgs) {
     return rootAuthLoader(args)
