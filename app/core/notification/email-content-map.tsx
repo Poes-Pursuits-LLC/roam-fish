@@ -1,19 +1,19 @@
 import { EmailType } from './notification.model'
 import EmailTemplate from './emails/email-template'
-import type { ReactElement } from 'react'
+import { render } from '@react-email/components'
 
 export const emailContentMap = new Map<
     EmailType,
     {
         subject: string
-        html: ReactElement
+        html: string
     }
 >([
     [
         EmailType.Welcome,
         {
             subject: 'Welcome to Roam.Fish!',
-            html: <EmailTemplate message="Welcome to Roam.Fish!" />,
+            html: await render(<EmailTemplate message="Welcome to Roam.Fish!" />),
         },
     ],
 ])
