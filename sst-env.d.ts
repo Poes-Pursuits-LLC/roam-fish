@@ -13,6 +13,15 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "ClerkWebhook": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
+    "ClerkWebhookSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "Environment": {
       "type": "sst.sst.Secret"
       "value": string
