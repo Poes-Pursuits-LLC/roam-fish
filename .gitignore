@@ -8,11 +8,12 @@
 # sst
 .sst
 
-docker
-
+# local development
 seed.ts
-
+docker
+notepad.md
 .env
+
 # Sentry Config File
 .env.sentry-build-plugin
 

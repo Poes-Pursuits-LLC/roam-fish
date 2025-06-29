@@ -1,4 +1,4 @@
-import type {} from '../.sst/platform/config'
+import type { } from '../.sst/platform/config'
 
 export const table = new sst.aws.Dynamo('Table', {
     fields: {
@@ -14,3 +14,7 @@ export const table = new sst.aws.Dynamo('Table', {
     stream: 'new-and-old-images',
     ttl: 'expireAt',
 })
+
+export const outputs = {
+    name: table.name,
+}
