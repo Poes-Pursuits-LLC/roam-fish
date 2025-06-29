@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "local": "sst dev --stage nickpapadakis",
+    "local": "sst dev",
     "dev": "react-router dev",
     "build": "react-router build",
     "email-preview-server": "cd app/core/notification && email dev",

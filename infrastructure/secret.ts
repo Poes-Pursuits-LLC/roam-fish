@@ -1,4 +1,4 @@
-import type {} from '../.sst/platform/config'
+import type { } from '../.sst/platform/config'
 
 export const secret = {
     ServerUrl: new sst.Secret('ServerUrl'),
