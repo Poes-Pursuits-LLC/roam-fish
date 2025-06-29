@@ -32,7 +32,7 @@ const sendEmail = async (email: string, emailType: EmailType) => {
                 url: 'https://api.resend.com/emails',
                 headers: { Authorization: `Bearer ${Resource.ResendApiKey.value}` },
                 body: {
-                    to: email,
+                    to: [email],
                     from: 'Roam.fish <admin@roam.fish>',
                     subject: emailContent!.subject,
                     html: emailContent!.html,

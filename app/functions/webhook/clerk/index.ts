@@ -4,9 +4,10 @@ import { verifyClerkWebhookEvent } from './verify-event'
 
 export const handler = async (event: APIGatewayEvent) => {
     try {
-        console.info(`Clerk webhook handler processing event: ${event}`)
+        console.info(`Clerk webhook handler received event: ${event}`)
         verifyClerkWebhookEvent(event)
         await main(event)
+        console.info(`Clerk webhook handler successfully processed event`)
 
         return {
             statusCode: 200,
@@ -14,7 +15,7 @@ export const handler = async (event: APIGatewayEvent) => {
         }
     } catch (error) {
         console.error(
-            `Error in clerk webhook handler: ${(error as Error)}`,
+            `Error in Clerk webhook handler: ${(error.message)}`,
         )
 
         return {
