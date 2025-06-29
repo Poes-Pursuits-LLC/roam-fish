@@ -4,7 +4,7 @@ import { verifyClerkWebhookEvent } from './verify-event'
 
 export const handler = async (event: APIGatewayEvent) => {
     try {
-        console.info(`Clerk webhook handler received event: ${event}`)
+        console.info(`Clerk webhook handler received event: ${JSON.stringify(event)}`)
         verifyClerkWebhookEvent(event)
         await main(event)
         console.info(`Clerk webhook handler successfully processed event`)

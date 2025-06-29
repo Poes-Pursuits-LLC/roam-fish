@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { it, expect, vi } from 'vitest'
 import { dashboardLoader } from './dashboard.loader'
 import type { Route } from '../routes/+types/dashboard'
@@ -7,7 +9,6 @@ import { createClerkClient } from '@clerk/backend'
 import { hc } from 'hono/client'
 import type { Trip } from '~/core/trip/trip.model'
 
-// Mock types for testing
 type MockAnalyticsResponse = {
     json: () => Promise<{
         userAnalyticsSheet: { trips: number; destinations: number }
@@ -58,7 +59,6 @@ it('should redirect to /login if user is not authenticated', async () => {
     mockedGetAuth.mockResolvedValue({
         userId: null,
         has: vi.fn(),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
     const redirectMarker = { type: 'redirect' } as unknown as Response
     mockedRedirect.mockReturnValue(redirectMarker)
@@ -98,14 +98,11 @@ it('should return user data including analytics and recent trips promise for an 
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockedCreateClerkClient.mockReturnValue(mockClerkClient as any)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockedHc.mockReturnValue(mockClient as any)
     mockedGetAuth.mockResolvedValue({
         userId: 'user-123',
         has,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
 
     const result = await dashboardLoader(loaderArgs)
@@ -169,14 +166,11 @@ it('should return user data including analytics and recent trips promise for an 
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockedCreateClerkClient.mockReturnValue(mockClerkClient as any)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockedHc.mockReturnValue(mockClient as any)
     mockedGetAuth.mockResolvedValue({
         userId: 'user-456',
         has,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
 
     const result = await dashboardLoader(loaderArgs)
@@ -205,7 +199,6 @@ it('should return user data including analytics and recent trips promise for an 
         getRecentTripsPromise: expect.any(Promise)
     })
 
-    // Verify the promise resolves to the expected data
     if ('getRecentTripsPromise' in result) {
         const recentTrips = await result.getRecentTripsPromise
         expect(recentTrips).toEqual([{ tripdId: 'tripIdOne' }, { tripdId: 'tripIdTwo ' }])
@@ -241,14 +234,11 @@ it('should handle missing freeTripCount in privateMetadata', async () => {
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockedCreateClerkClient.mockReturnValue(mockClerkClient as any)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockedHc.mockReturnValue(mockClient as any)
     mockedGetAuth.mockResolvedValue({
         userId: 'user-789',
         has,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
 
     const result = await dashboardLoader(loaderArgs)
