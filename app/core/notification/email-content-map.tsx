@@ -13,7 +13,7 @@ export const emailContentMap = new Map<
         EmailType.Welcome,
         {
             subject: 'Welcome to Roam.Fish!',
-            html: await render(<EmailTemplate message="Welcome to Roam.Fish!" />),
+            html: await render(<EmailTemplate message="Welcome to Roam.Fish! Our goal is to be the simplest fishing planner on the internet. To get started, login below and start creating some free trips!" />),
         },
     ],
 ])

@@ -43,7 +43,7 @@ test('renders a specific route error message when the user navigates to a non-ex
 })
 
 test('renders a generic error message when the error is not a route error and captures it with Sentry in a production environment', () => {
-    process.env.ENVIRONMENT = 'production'
+    process.env.PROD = 'true'
 
     const errorBoundaryProps = {
         error: Error('Failed to fetch destinations'),

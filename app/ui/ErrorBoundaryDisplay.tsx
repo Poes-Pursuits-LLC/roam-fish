@@ -12,7 +12,8 @@ export const ErrorBoundaryDisplay = ({ error }: Route.ErrorBoundaryProps) => {
         !isRouteException &&
         error &&
         error instanceof Error &&
-        process.env.ENVIRONMENT === 'production'
+        import.meta.env.PROD &&
+        typeof window !== 'undefined'
     ) {
         Sentry.captureException(error)
     }

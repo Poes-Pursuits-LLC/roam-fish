@@ -13,6 +13,7 @@ export const loader = async (args: Route.LoaderArgs) => {
 
 export default function PricingRoute({ loaderData }: Route.ComponentProps) {
     const { userId, isSubscriber } = loaderData
+    const redirectUrl = `${import.meta.env.VITE_WEB_URL}/billing?update=true`
 
     return (
         <div className="min-h-screen bg-stone-100">
@@ -24,7 +25,7 @@ export default function PricingRoute({ loaderData }: Route.ComponentProps) {
             <div className="flex flex-col items-center max-w-6xl mx-auto px-6 py-16">
                 <h1 className="neo-subheader mb-8">Available Plans</h1>
                 <div className="neo-card bg-white p-8">
-                    <PricingTable />
+                    <PricingTable newSubscriptionRedirectUrl={redirectUrl} />
                 </div>
             </div>
             <BillingFAQ />

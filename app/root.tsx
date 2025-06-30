@@ -7,7 +7,7 @@ import './app.css'
 import * as Sentry from '@sentry/react'
 import { ErrorBoundaryDisplay } from './ui/ErrorBoundaryDisplay'
 
-if (process.env.ENVIRONMENT === 'production') {
+if (import.meta.env.PROD && typeof window !== 'undefined') {
     Sentry.init({
         dsn: 'https://81f4e9f76eb074232d02c47f66858dc5@o4509523849838592.ingest.us.sentry.io/4509523864584192',
         sendDefaultPii: true,

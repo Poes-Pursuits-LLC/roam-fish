@@ -4,6 +4,7 @@ import type { Route } from '../routes/+types/plan-trip'
 import { createClerkClient } from '@clerk/backend'
 import { hc } from 'hono/client'
 import { getAuth } from '@clerk/react-router/ssr.server'
+import { TripDurationEnum } from '~/core/trip/trip.model'
 
 vi.mock('@clerk/react-router/ssr.server', () => ({
     getAuth: vi.fn(),
@@ -47,13 +48,13 @@ afterEach(() => {
     process.env = originalEnv
 })
 
-it('should create a trip and update user metadata for an authenticated user', async () => {
+it('should create a trip and update user metadata for an authenticated user who is not a subscriber', async () => {
     const userId = 'user-123'
     const tripId = 'trip-456'
     const freeTripCount = 5
     mockedGetAuth.mockResolvedValue({
         userId,
-        has: vi.fn(),
+        has: vi.fn().mockReturnValue(false),
     } as unknown as Awaited<ReturnType<typeof getAuth>>)
     const actionArgs = createMockActionArgs({
         destinationName: 'Paris',
@@ -106,12 +107,12 @@ it('should create a trip and update user metadata for an authenticated user', as
     expect(result).toEqual({ tripId })
 })
 
-it('should create a trip and initialize freeTripCount for a user without it', async () => {
+it('should create a trip and initialize freeTripCount for a user without it who is not a subscriber', async () => {
     const userId = 'user-789'
     const tripId = 'trip-101'
     mockedGetAuth.mockResolvedValue({
         userId,
-        has: vi.fn(),
+        has: vi.fn().mockReturnValue(false),
     } as unknown as Awaited<ReturnType<typeof getAuth>>)
     const actionArgs = createMockActionArgs({
         destinationName: 'Tokyo',
@@ -131,7 +132,7 @@ it('should create a trip and initialize freeTripCount for a user without it', as
     } as unknown as ReturnType<typeof hc>)
 
     const getUserMock = vi.fn().mockResolvedValue({
-        privateMetadata: {}, // No freeTripCount
+        privateMetadata: {},
     })
     const updateUserMetadataMock = vi.fn().mockResolvedValue({})
     mockedCreateClerkClient.mockReturnValue({
@@ -149,17 +150,19 @@ it('should create a trip and initialize freeTripCount for a user without it', as
     })
 })
 
-it('should create a trip but not update metadata for an unauthenticated user', async () => {
-    const tripId = 'trip-unauth-123'
+it('should create a trip but not update metadata for an authenticated user who is a subscriber', async () => {
+    const userId = 'subscriber-123'
+    const tripId = 'trip-subscriber-456'
     mockedGetAuth.mockResolvedValue({
-        userId: null,
-        has: vi.fn(),
+        userId,
+        has: vi.fn().mockReturnValue(true),
     } as unknown as Awaited<ReturnType<typeof getAuth>>)
     const actionArgs = createMockActionArgs({
         destinationName: 'London',
         startDate: '2025-08-01',
         headcount: '4',
-        duration: 'WEEK_2',
+        duration: TripDurationEnum.Weekend,
+        userId,
     })
 
     const postMock = vi.fn().mockResolvedValue({
@@ -189,7 +192,56 @@ it('should create a trip but not update metadata for an unauthenticated user', a
             destinationName: 'London',
             startDate: '2025-08-01',
             headcount: '4',
-            duration: 'WEEK_2',
+            duration: TripDurationEnum.Weekend,
+            userId,
+        },
+    })
+    expect(mockedCreateClerkClient).not.toHaveBeenCalled()
+    expect(getUserMock).not.toHaveBeenCalled()
+    expect(updateUserMetadataMock).not.toHaveBeenCalled()
+})
+
+it('should create a trip but not update metadata for an unauthenticated user', async () => {
+    const tripId = 'trip-unauth-123'
+    mockedGetAuth.mockResolvedValue({
+        userId: null,
+        has: vi.fn().mockReturnValue(false),
+    } as unknown as Awaited<ReturnType<typeof getAuth>>)
+    const actionArgs = createMockActionArgs({
+        destinationName: 'London',
+        startDate: '2025-08-01',
+        headcount: '4',
+        duration: TripDurationEnum.Weekend,
+    })
+
+    const postMock = vi.fn().mockResolvedValue({
+        json: vi.fn().mockResolvedValue({ tripId }),
+    })
+    mockedHc.mockReturnValue({
+        createTrip: {
+            $post: postMock,
+        },
+    } as unknown as ReturnType<typeof hc>)
+
+    const getUserMock = vi.fn().mockResolvedValue({ privateMetadata: {} })
+    const updateUserMetadataMock = vi.fn().mockResolvedValue({})
+    mockedCreateClerkClient.mockReturnValue({
+        users: {
+            getUser: getUserMock,
+            updateUserMetadata: updateUserMetadataMock,
+        },
+    } as unknown as ReturnType<typeof createClerkClient>)
+
+    const result = await planTripAction(actionArgs)
+
+    expect(result).toEqual({ tripId })
+    expect(mockedHc).toHaveBeenCalledWith(serverUrl)
+    expect(postMock).toHaveBeenCalledWith({
+        json: {
+            destinationName: 'London',
+            startDate: '2025-08-01',
+            headcount: '4',
+            duration: TripDurationEnum.Weekend,
         },
     })
     expect(mockedCreateClerkClient).not.toHaveBeenCalled()
@@ -203,7 +255,7 @@ it('should throw an error if any error is encountered so that our top-level erro
         destinationName: 'London',
         startDate: '2025-08-01',
         headcount: '4',
-        duration: 'WEEK_2',
+        duration: TripDurationEnum.Weekend,
     })
     const postMock = vi.fn().mockRejectedValue(testError)
     mockedHc.mockReturnValue({
