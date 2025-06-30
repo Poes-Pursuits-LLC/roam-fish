@@ -18,7 +18,7 @@ export const PlanTripPage = ({
     const { tripId } = actionData || { tripId: null }
     const visitorAlreadyCreatedTrip = Boolean(getLocalTripId())
     const noMoreTrips = Boolean(
-        freeTripCount && freeTripCount >= 3 && !isSubscriber)
+        (freeTripCount ?? 0) >= 3 && !isSubscriber)
 
     useEffect(() => {
         if (!userId && tripId) {

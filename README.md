@@ -5,7 +5,7 @@
 ![Static Badge](https://img.shields.io/badge/mission-be_the_best_fish_planner_on_the_internet-green)
 <br />
 ![GitHub top language](https://img.shields.io/github/languages/top/Poes-Pursuits-LLC/roam-fish)
-![GitHub last commit](https://img.shields.io/github/last-commit/danielmiessler/fabric)
+![GitHub last commit](https://img.shields.io/github/last-commit/Poes-Pursuits-LLC/roam-fish)
 
 <div align="center">
 <p class="align center">

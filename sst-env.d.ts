@@ -47,6 +47,10 @@ declare module "sst" {
       "type": "sst.aws.React"
       "url": string
     }
+    "WebUrl": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "XAiApiKey": {
       "type": "sst.sst.Secret"
       "value": string

@@ -80,10 +80,10 @@ it('should return isSubscriber as false for a non-subscribing user', async () =>
     })
 })
 
-it('should reset a user\'s free trip count to 3 if they are switching back to the free plan from a paid plan', async () => {
+it('should reset free trip count to 0 when user changes to a paid plan so that they will have free trips when/if they change subscriptions back to free or it expires', async () => {
     mockedGetAuth.mockResolvedValue({
         userId: 'user-456',
-        has: vi.fn().mockReturnValue(false),
+        has: vi.fn().mockReturnValue(true),
     } as any)
     const updateUserMetadataMock = vi.fn().mockResolvedValue({})
     mockedCreateClerkClient.mockReturnValue({
@@ -106,19 +106,19 @@ it('should reset a user\'s free trip count to 3 if they are switching back to th
     })
     expect(updateUserMetadataMock).toHaveBeenCalledWith('user-456', {
         privateMetadata: {
-            freeTripCount: 3
+            freeTripCount: 0
         }
     })
     expect(result).toEqual({
         userId: 'user-456',
-        isSubscriber: false,
+        isSubscriber: true,
     })
 })
 
-it('should not reset a user\'s free trip count to 3 if they are switching to a paid plan, as we will do this if they ever decide to switch back to a free plan', async () => {
+it('should not reset free trip count when the user switches to a free plan, as we already did this when they switched to a paid plan in the first place', async () => {
     mockedGetAuth.mockResolvedValue({
         userId: 'user-456',
-        has: vi.fn().mockReturnValue(true),
+        has: vi.fn().mockReturnValue(false),
     } as any)
     const updateUserMetadataMock = vi.fn().mockResolvedValue({})
     mockedCreateClerkClient.mockReturnValue({
@@ -128,7 +128,7 @@ it('should not reset a user\'s free trip count to 3 if they are switching to a p
     } as unknown as ReturnType<typeof createClerkClient>)
     const loaderArgs = {
         request: {
-            url: 'http://www.testurl.com?update'
+            url: 'http://www.testurl.com?update=true'
         }
     } as Route.LoaderArgs
 
@@ -138,7 +138,7 @@ it('should not reset a user\'s free trip count to 3 if they are switching to a p
     expect(updateUserMetadataMock).not.toHaveBeenCalled()
     expect(result).toEqual({
         userId: 'user-456',
-        isSubscriber: true,
+        isSubscriber: false,
     })
 })
 

@@ -13,13 +13,13 @@ export const billingLoader = async (args: Route.LoaderArgs) => {
         const subscriptionUpdated = Boolean(new URL(args.request.url).searchParams.get('update'))
         const isSubscriber = has({ plan: 'roam_premium' })
 
-        if (subscriptionUpdated && !isSubscriber) {
+        if (subscriptionUpdated && isSubscriber) {
             const client = createClerkClient({
                 secretKey: process.env.CLERK_SECRET_KEY,
             })
             await client.users.updateUserMetadata(userId, {
                 privateMetadata: {
-                    freeTripCount: 3
+                    freeTripCount: 0
                 }
             })
         }

@@ -3,6 +3,7 @@ import type { Route } from '../routes/+types/plan-trip'
 import type { AppType } from '~/server/main'
 import { hc } from 'hono/client'
 import { createClerkClient } from '@clerk/backend'
+import { getAuth } from '@clerk/react-router/ssr.server'
 
 export const planTripAction = async (args: Route.ActionArgs) => {
     try {
@@ -15,7 +16,10 @@ export const planTripAction = async (args: Route.ActionArgs) => {
             ? String(formData.get('userId'))
             : null
 
+        const { has } = await getAuth(args)
+        const isSubscriber = has({ plan: 'roam_premium' })
         const client = hc<AppType>(process.env.SERVER_URL!)
+
         const tripId = await client.createTrip
             .$post({
                 json: {
@@ -29,7 +33,7 @@ export const planTripAction = async (args: Route.ActionArgs) => {
             .then((res) => res.json())
             .then((data) => data.tripId)
 
-        if (userId) {
+        if (userId && !isSubscriber) {
             const clerkClient = createClerkClient({
                 secretKey: process.env.CLERK_SECRET_KEY,
             })
