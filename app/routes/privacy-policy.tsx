@@ -174,7 +174,7 @@ export default function PrivacyPolicyPage() {
                             <p className="text-lg leading-relaxed">
                                 If you have any questions about this Privacy
                                 Policy or our privacy practices, please contact
-                                us at privacy@roamfish.com.
+                                us at admin@roam.fish.
                             </p>
                         </section>
 
