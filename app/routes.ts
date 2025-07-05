@@ -10,4 +10,5 @@ export default [
     route('/dashboard', 'routes/dashboard.tsx'),
     route('/trips', 'routes/trips.tsx'),
     route('/billing', 'routes/billing.tsx'),
+    route('/sitemap.xml', 'routes/sitemap.xml.ts'),
 ] satisfies RouteConfig
