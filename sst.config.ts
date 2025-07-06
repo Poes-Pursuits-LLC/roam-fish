@@ -10,6 +10,15 @@ export default $config({
         }
     },
     async run() {
+        const budgetConfig = await import('./infrastructure/configs')
+
+        $transform(sst.aws.Function, (args, _opts, name) => {
+            args.tags ??= {
+                'function:name': `${$app.name}-${$app.stage}-${name}`,
+            }
+            args = { ...args, ...budgetConfig }
+        })
+
         const outputs = {}
 
         const fs = await import('fs')
