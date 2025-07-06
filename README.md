@@ -9,14 +9,12 @@
 
 <div align="center">
 <p class="align center">
-<h4><code>roam.fish</code> is a tool to do stuff and here is its value proposition.</h4>
+<h4><code>roam.fish</code> is a tool to make planning fishing trips as easy as possible so you can focus on the fun part -- fishing!.</h4>
 </p>
 </div>
 
 [What and Why](#what-and-why) •
 [How](#philosophy) •
-[Installation](#installation) •
-[Usage](#usage) •
-[Examples](#examples)
+[Roadmap](#installation)
 
 ##
