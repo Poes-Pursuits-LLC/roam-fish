@@ -1,6 +1,6 @@
-import type { APIGatewayEvent } from "aws-lambda"
-import { EmailType } from "~/core/notification/notification.model"
-import { notificationService } from "~/core/notification/notification.service"
+import type { APIGatewayEvent } from 'aws-lambda'
+import { EmailType } from '~/core/notification/notification.model'
+import { notificationService } from '~/core/notification/notification.service'
 
 export const main = async (event: APIGatewayEvent) => {
     const eventBody = JSON.parse(event?.body ?? '{}')
@@ -9,10 +9,7 @@ export const main = async (event: APIGatewayEvent) => {
 
     await Promise.all([
         notificationService.addToMarketingList(email),
-        notificationService.sendEmail(
-            email,
-            EmailType.Welcome
-        )
+        notificationService.sendEmail(email, EmailType.Welcome),
     ])
 }
 
