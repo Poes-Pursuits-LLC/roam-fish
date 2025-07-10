@@ -53,6 +53,13 @@ jobs:
                   path: playwright-report/
                   retention-days: 7
 
+            - name: Get last commit message
+              run: |
+                  LAST_COMMIT_MSG=$(git log --pretty=%B -n 1 develop)
+                  echo "commit_message<<EOF" >> $GITHUB_OUTPUT
+                  echo "$LAST_COMMIT_MSG" >> $GITHUB_OUTPUT
+                  echo "EOF" >> $GITHUB_OUTPUT
+
             - name: Merge develop -> main
               uses: devmasx/merge-branch@master
               with:
@@ -60,7 +67,7 @@ jobs:
                   from_branch: develop
                   target_branch: main
                   github_token: ${{ secrets.GITHUB_TOKEN }}
-                  message: 'Automated merge from develop to main'
+                  message: 'Automated merge from develop to main: ${{ steps.last-commit.outputs.commit_message }}'
 
             - name: Trigger production deployment
               uses: peter-evans/repository-dispatch@v2
