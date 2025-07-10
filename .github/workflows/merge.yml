@@ -53,11 +53,21 @@ jobs:
                   path: playwright-report/
                   retention-days: 7
 
-            - name: Get last commit message
+            - name: Get commit messages since last merge
+              id: commit-messages
               run: |
-                  LAST_COMMIT_MSG=$(git log --pretty=%B -n 1 develop)
-                  echo "commit_message<<EOF" >> $GITHUB_OUTPUT
-                  echo "$LAST_COMMIT_MSG" >> $GITHUB_OUTPUT
+                  # Get the last commit hash on main branch
+                  git fetch origin main
+                  LAST_MAIN_COMMIT=$(git rev-parse origin/main)
+
+                  # Get all commit messages from develop since the last main commit
+                  COMMIT_MESSAGES=$(git log --pretty=format:"%s" $LAST_MAIN_COMMIT..HEAD)
+
+                  # Escape newlines for GitHub Actions
+                  COMMIT_MESSAGES_ESCAPED=$(echo "$COMMIT_MESSAGES" | sed ':a;N;$!ba;s/\n/\\n/g')
+
+                  echo "commit_messages<<EOF" >> $GITHUB_OUTPUT
+                  echo "$COMMIT_MESSAGES_ESCAPED" >> $GITHUB_OUTPUT
                   echo "EOF" >> $GITHUB_OUTPUT
 
             - name: Merge develop -> main
@@ -67,7 +77,11 @@ jobs:
                   from_branch: develop
                   target_branch: main
                   github_token: ${{ secrets.GITHUB_TOKEN }}
-                  message: 'Automated merge from develop to main: ${{ steps.last-commit.outputs.commit_message }}'
+                  message: |
+                      Automated merge from develop to main
+
+                      Commits included:
+                      ${{ steps.commit-messages.outputs.commit_messages }}
 
             - name: Trigger production deployment
               uses: peter-evans/repository-dispatch@v2
