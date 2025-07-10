@@ -28,7 +28,7 @@ export const setupServer = async ({
             TABLE_NAME: 'integration-table',
             INTEGRATION_TEST_FLAG: 'true',
         })
-        .withStartupTimeout(30000)
+        .withStartupTimeout(60000)
         .withWaitStrategy(Wait.forListeningPorts())
         .withLogConsumer((stream) => {
             stream.on('data', (line) => console.log(line))

@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "local": "sst dev",
+    "get-docs": "mkdir docs && cd ./docs && git clone https://github.com/Poes-Pursuits-LLC/roam-fish.wiki.git",
     "dev": "react-router dev",
     "build": "react-router build",
     "email-preview-server": "cd app/core/notification && email dev",
@@ -17,9 +18,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.828.0",
-    "@aws-sdk/client-dynamodb-streams": "^3.828.0",
     "@aws-sdk/lib-dynamodb": "^3.828.0",
-    "@aws-sdk/util-dynamodb": "^3.828.0",
     "@clerk/backend": "^2.0.0",
     "@clerk/react-router": "^1.4.8",
     "@clerk/themes": "^2.2.48",

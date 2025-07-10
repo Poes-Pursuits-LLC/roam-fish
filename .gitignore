@@ -11,11 +11,9 @@
 # local development
 seed.ts
 docker
-notepad.md
-.env
 
-# Sentry Config File
-.env.sentry-build-plugin
+# docs
+docs
 
 # Playwright
 node_modules/
