@@ -15,6 +15,7 @@ export default defineConfig({
             org: 'roam-fish',
             project: 'roam-fish',
             telemetry: false,
+            authToken: process.env.SENTRY_AUTH_TOKEN,
         }),
     ],
     test: {
@@ -55,6 +56,6 @@ export default defineConfig({
         ],
     },
     build: {
-        sourcemap: true,
+        sourcemap: 'hidden',
     },
 })

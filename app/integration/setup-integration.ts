@@ -26,10 +26,7 @@ export const setup = async () => {
 
     console.info('Setting up table')
     await setupTable(hostEndpoint)
-    console.info(
-        'Table setup completed successfully for endpoint:',
-        hostEndpoint,
-    )
+    console.info('Table setup completed successfully')
 
     console.info('Setting up server')
     server = await setupServer({ endpoint: containerEndpoint, network })
@@ -39,11 +36,7 @@ export const setup = async () => {
     console.info('Integration setup complete')
 }
 
-// TODO: get network to shut down gracefully.
 export const teardown = async () => {
-    console.info('Tearing down network')
-    await new Promise((resolve) => setTimeout(resolve, 500))
-
     await dynamo?.stop()
     await server?.stop()
     process.env = originalEnv

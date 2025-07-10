@@ -20,9 +20,6 @@ export const TripLoader = ({ tripId }: { tripId: string }) => {
                 )
 
                 if (newProgress >= 100) {
-                    console.log(
-                        'Progress reached 100%, setting shouldNavigate to true',
-                    )
                     clearInterval(timer)
                     setShouldNavigate(true)
                     return 100
@@ -32,7 +29,6 @@ export const TripLoader = ({ tripId }: { tripId: string }) => {
         }, INTERVAL)
 
         return () => {
-            console.log('TripLoader unmounting, clearing interval')
             clearInterval(timer)
         }
     }, [])
