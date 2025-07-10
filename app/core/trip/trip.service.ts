@@ -2,7 +2,7 @@ import { DynamoTrip } from './trip.dynamo'
 import type { Trip } from './trip.model'
 import { fetchTripDetails } from './helpers/fetch-trip-details'
 import { postTripDetails } from './helpers/post-trip-details'
-import { getTTL, isIntegrationTest } from '~/utils'
+import { createFormattedDate, getTTL, isIntegrationTest } from '~/utils'
 
 const getTrip = async (tripId: string) => {
     const { data: trip } = await DynamoTrip().get({ tripId }).go()
@@ -26,7 +26,9 @@ const getTripDetails = async (contentId: string) => {
 }
 
 const getUserTrips = async (userId: string, count?: number) => {
-    const { data: trips } = await DynamoTrip().query.byUserId({ userId }).go({ order: 'desc', ...(count && { count }) })
+    const { data: trips } = await DynamoTrip()
+        .query.byUserId({ userId })
+        .go({ order: 'desc', ...(count && { count }) })
     return trips
 }
 
@@ -73,6 +75,7 @@ const updateTrip = async (tripId: string, tripFields: Partial<Trip>) => {
         .patch({ tripId })
         .set({
             ...tripFields,
+            updatedAt: createFormattedDate(),
         })
         .go()
 }

@@ -42,6 +42,7 @@ const tripRouter = new Hono()
                 tripService.getTrip(tripId),
             )
             if (getTripError) {
+                console.error(`Error getting trip: ${getTripError.message}`)
                 throw new HTTPException(500, { message: getTripError.message })
             }
 
@@ -50,6 +51,9 @@ const tripRouter = new Hono()
                     tripService.getTripDetails(trip!.contentId),
                 )
                 if (getTripContentError) {
+                    console.error(
+                        `Error getting trip content: ${getTripContentError.message}`,
+                    )
                     throw new HTTPException(500, {
                         message: getTripContentError.message,
                     })
@@ -63,6 +67,9 @@ const tripRouter = new Hono()
                         }),
                     )
                     if (updateTripError) {
+                        console.error(
+                            `Error updating trip: ${updateTripError.message}`,
+                        )
                         throw new HTTPException(500, {
                             message: updateTripError.message,
                         })
@@ -72,6 +79,9 @@ const tripRouter = new Hono()
                         tripService.getTrip(tripId),
                     )
                     if (getTripError) {
+                        console.error(
+                            `Error getting trip: ${getTripError.message}`,
+                        )
                         throw new HTTPException(500, {
                             message: getTripError.message,
                         })
@@ -90,15 +100,23 @@ const tripRouter = new Hono()
     )
     .get(
         '/getUserTrips',
-        zValidator('query', z.object({ userId: z.string(), count: z.string().optional() })),
+        zValidator(
+            'query',
+            z.object({ userId: z.string(), count: z.string().optional() }),
+        ),
         async (c) => {
             const { userId, count } = c.req.valid('query')
-            console.info('Invoked server.getUserTrips with userId:', userId, count)
+            console.info(
+                'Invoked server.getUserTrips with userId:',
+                userId,
+                count,
+            )
 
             const [trips, getTripsError] = await handleAsync(
                 tripService.getUserTrips(userId, Number(count)),
             )
             if (getTripsError) {
+                console.error(`Error getting trips: ${getTripsError.message}`)
                 throw new HTTPException(500, {
                     message: getTripsError.message,
                 })
@@ -126,6 +144,9 @@ const tripRouter = new Hono()
                 tripService.submitTripDetails(inputs),
             )
             if (submitTripDetailsError) {
+                console.error(
+                    `Error submitting trip details: ${submitTripDetailsError.message}`,
+                )
                 throw new HTTPException(500, {
                     message: submitTripDetailsError.message,
                 })
@@ -145,6 +166,7 @@ const tripRouter = new Hono()
                 }),
             )
             if (createTripError) {
+                console.error(`Error creating trip: ${createTripError.message}`)
                 throw new HTTPException(500, {
                     message: createTripError.message,
                 })
@@ -176,6 +198,7 @@ const tripRouter = new Hono()
                 }),
             )
             if (updateTripError) {
+                console.error(`Error updating trip: ${updateTripError.message}`)
                 throw new HTTPException(500, {
                     message: updateTripError.message,
                 })
