@@ -1,44 +1,51 @@
 @import 'tailwindcss';
 
 :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 248 250 252;
+    --foreground: 30 41 59;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 255 255 255;
+    --card-foreground: 30 41 59;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 255 255 255;
+    --popover-foreground: 30 41 59;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 34 197 94;
+    --primary-foreground: 255 255 255;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 248 250 252;
+    --secondary-foreground: 30 41 59;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 16 185 129;
+    --accent-foreground: 255 255 255;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 239 68 68;
+    --destructive-foreground: 255 255 255;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --ring: 34 197 94;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 248 250 252;
+    --sidebar-foreground: 71 85 105;
+    --sidebar-primary: 30 41 59;
+    --sidebar-primary-foreground: 248 250 252;
+    --sidebar-accent: 241 245 249;
+    --sidebar-accent-foreground: 30 41 59;
+    --sidebar-border: 226 232 240;
+    --sidebar-ring: 34 197 94;
+
+    /* Nature-inspired gradients and colors */
+    --forest-gradient: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    --earth-gradient: linear-gradient(135deg, #92400e 0%, #a3a3a3 100%);
+    --sky-gradient: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+    --nature-shadow: 0 4px 20px rgba(6, 95, 70, 0.1);
+    --nature-shadow-lg: 0 10px 40px rgba(6, 95, 70, 0.15);
 }
 
 * {
@@ -46,13 +53,14 @@
 }
 
 body {
-    background-color: hsl(var(--background) / 1);
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     color: hsl(var(--foreground) / 1);
     font-family:
-        'YOUR_FONT_NAME',
+        'Inter',
         system-ui,
         -apple-system,
         sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
 @layer utilities {
@@ -133,26 +141,148 @@ body {
     }
 }
 
+/* Modern Nature-Inspired Button Styles */
+.nature-button {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium text-white
+           transition-all duration-300 ease-out transform
+           bg-gradient-to-r from-emerald-600 to-emerald-500
+           hover:from-emerald-700 hover:to-emerald-600
+           hover:scale-105 hover:-translate-y-0.5
+           active:scale-95 active:translate-y-0
+           focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2
+           shadow-lg hover:shadow-xl
+           disabled:opacity-60 disabled:pointer-events-none disabled:transform-none;
+    box-shadow: var(--nature-shadow);
+}
+
+.nature-button:hover {
+    box-shadow: var(--nature-shadow-lg);
+}
+
+.nature-button-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium
+           transition-all duration-300 ease-out transform
+           bg-white text-slate-700 border border-slate-200
+           hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900
+           hover:scale-105 hover:-translate-y-0.5
+           active:scale-95 active:translate-y-0
+           focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2
+           shadow-md hover:shadow-lg
+           disabled:opacity-60 disabled:pointer-events-none disabled:transform-none;
+}
+
+.nature-button-earth {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium text-white
+           transition-all duration-300 ease-out transform
+           bg-gradient-to-r from-amber-700 to-orange-600
+           hover:from-amber-800 hover:to-orange-700
+           hover:scale-105 hover:-translate-y-0.5
+           active:scale-95 active:translate-y-0
+           focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2
+           shadow-lg hover:shadow-xl
+           disabled:opacity-60 disabled:pointer-events-none disabled:transform-none;
+}
+
+/* Modern Nature-Inspired Card Styles */
+.nature-card {
+    @apply bg-white rounded-2xl border border-slate-200 p-6
+           transition-all duration-300 ease-out
+           hover:border-slate-300 hover:shadow-lg hover:-translate-y-1
+           shadow-sm;
+    background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%);
+}
+
+.nature-card-elevated {
+    @apply bg-white rounded-2xl border border-slate-200 p-8
+           shadow-xl hover:shadow-2xl
+           transition-all duration-300 ease-out hover:-translate-y-2;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    box-shadow: var(--nature-shadow-lg);
+}
+
+.nature-card-glass {
+    @apply rounded-2xl p-6 border border-white/20
+           backdrop-blur-sm transition-all duration-300;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 32px rgba(6, 95, 70, 0.08);
+}
+
+/* Modern Input Styles */
+.nature-input {
+    @apply w-full px-4 py-3 rounded-xl border border-slate-200 
+           text-slate-900 placeholder-slate-400
+           transition-all duration-200 ease-out
+           focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent
+           hover:border-slate-300
+           bg-white/50 backdrop-blur-sm;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.nature-input:focus {
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+}
+
+/* Modern Typography */
+.nature-header {
+    @apply text-4xl md:text-5xl font-bold text-slate-900 leading-tight;
+    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nature-subheader {
+    @apply text-2xl md:text-3xl font-semibold text-slate-800 leading-snug;
+}
+
+.nature-body {
+    @apply text-base text-slate-600 leading-relaxed;
+}
+
+/* Utility Classes for Nature Theme */
+.nature-gradient-bg {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f8fafc 100%);
+}
+
+.nature-border {
+    @apply border border-slate-200/60;
+}
+
+.nature-shadow {
+    box-shadow: var(--nature-shadow);
+}
+
+.nature-shadow-lg {
+    box-shadow: var(--nature-shadow-lg);
+}
+
+.nature-glass {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Legacy neo-brutalist classes - keeping for gradual migration */
 .neo-button {
-    @apply cursor-pointer rounded-lg border-2 border-black px-4 py-2 font-bold uppercase tracking-wide bg-[#1F513F] text-white transition-all duration-150 ease-in-out shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-0 active:translate-y-0 active:shadow-none;
+    @apply nature-button;
 }
 
 .neo-button-secondary {
-    @apply cursor-pointer rounded-lg border-2 border-black px-4 py-2 font-bold uppercase tracking-wide bg-[#5D453F] text-white transition-all duration-150 ease-in-out shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-0 active:translate-y-0 active:shadow-none;
+    @apply nature-button-secondary;
 }
 
 .neo-card {
-    @apply bg-[#F4F2ED] border-2 border-[#5a3b1b] shadow-[8px_8px_0px_0px_#000000] p-6;
+    @apply nature-card;
 }
 
 .neo-input {
-    @apply border-2 border-[#5a3b1b] px-4 py-2 text-lg font-semibold focus:outline-none focus:shadow-[4px_4px_0px_0px_#000000] transition-shadow;
+    @apply nature-input;
 }
 
 .neo-header {
-    @apply text-4xl md:text-4xl font-black uppercase tracking-tight;
+    @apply nature-header;
 }
 
 .neo-subheader {
-    @apply text-2xl md:text-3xl font-bold uppercase tracking-wide;
+    @apply nature-subheader;
 }
