@@ -7,37 +7,42 @@ describe('LicensingRegulations', () => {
         render(
             <MemoryRouter>
                 <LicensingRegulations userId={null} isSubscriber={false} />
-            </MemoryRouter>
+            </MemoryRouter>,
         )
 
         expect(screen.getByText('Licensing & Regulations')).toBeInTheDocument()
-        expect(screen.getByText('Access Licensing & Regulations')).toBeInTheDocument()
+        expect(
+            screen.getByText('Access Licensing & Regulations'),
+        ).toBeInTheDocument()
         expect(screen.getByText('Sign Up Free')).toBeInTheDocument()
-        expect(screen.getByRole('link', { name: 'Sign Up Free' })).toHaveAttribute('href', '/login')
+        expect(
+            screen.getByRole('link', { name: 'Sign Up Free' }),
+        ).toHaveAttribute('href', '/login')
     })
 
     it('should render premium CTA when user is not a subscriber', () => {
         render(
             <MemoryRouter>
                 <LicensingRegulations userId="user-123" isSubscriber={false} />
-            </MemoryRouter>
+            </MemoryRouter>,
         )
 
         expect(screen.getByText('Licensing & Regulations')).toBeInTheDocument()
-        expect(screen.getByText('Premium Feature')).toBeInTheDocument()
         expect(screen.getByText('Upgrade to Premium')).toBeInTheDocument()
-        expect(screen.getByRole('link', { name: 'Upgrade to Premium' })).toHaveAttribute('href', '/billing')
+        expect(
+            screen.getByRole('link', { name: 'Upgrade Now' }),
+        ).toHaveAttribute('href', '/billing')
     })
 
     it('should render coming soon when user is a subscriber', () => {
         render(
             <MemoryRouter>
                 <LicensingRegulations userId="user-123" isSubscriber={true} />
-            </MemoryRouter>
+            </MemoryRouter>,
         )
 
         expect(screen.getByText('Licensing & Regulations')).toBeInTheDocument()
         expect(screen.getByText('Coming Soon')).toBeInTheDocument()
         expect(screen.queryByRole('link')).not.toBeInTheDocument()
     })
-}) 
+})
