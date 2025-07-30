@@ -69,10 +69,14 @@ export const PackingList = ({ list }: { list: Trip['packingList'] }) => {
     }
 
     return (
-        <div className="neo-card bg-stone-50">
+        <div className="nature-card">
             <div className="flex items-center gap-3 mb-6">
-                <Package className="w-6 h-6 text-emerald-700" />
-                <h2 className="neo-subheader text-slate-800">Packing List</h2>
+                <div className="p-2 bg-emerald-100 rounded-lg">
+                    <Package className="w-5 h-5 text-emerald-700" />
+                </div>
+                <h2 className="nature-subheader text-slate-800">
+                    Packing List
+                </h2>
             </div>
 
             <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
@@ -80,10 +84,10 @@ export const PackingList = ({ list }: { list: Trip['packingList'] }) => {
                     <button
                         key={category}
                         onClick={() => setActiveCategory(category)}
-                        className={`px-4 py-3 font-bold border-2 border-black whitespace-nowrap transition-colors text-base flex-shrink-0 ${
+                        className={`px-4 py-2.5 font-medium rounded-lg whitespace-nowrap transition-all duration-200 text-base flex-shrink-0 ${
                             activeCategory === category
-                                ? 'bg-emerald-500 text-white'
-                                : 'bg-white text-slate-800 hover:bg-stone-50'
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                                : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
                         }`}
                     >
                         {category}
@@ -91,11 +95,11 @@ export const PackingList = ({ list }: { list: Trip['packingList'] }) => {
                 ))}
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
                 {itemsByCategory[activeCategory]?.map((item) => (
                     <div
                         key={item.id}
-                        className="bg-white border-2 border-black p-4"
+                        className="bg-slate-50 rounded-lg border border-slate-200 p-4 hover:bg-slate-100 transition-colors"
                     >
                         <div className="flex items-start gap-3">
                             <Checkbox
@@ -103,11 +107,11 @@ export const PackingList = ({ list }: { list: Trip['packingList'] }) => {
                                 onCheckedChange={() =>
                                     toggleItemPacked(item.id)
                                 }
-                                className="w-6 h-6 border-2 border-black rounded-sm data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 data-[state=checked]:text-white flex-shrink-0 mt-1"
+                                className="w-5 h-5 border-2 border-slate-400 rounded-md data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 data-[state=checked]:text-white flex-shrink-0 mt-1 hover:border-emerald-500 transition-colors"
                             >
                                 <svg
-                                    width="15"
-                                    height="15"
+                                    width="12"
+                                    height="12"
                                     viewBox="0 0 15 15"
                                     fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -121,10 +125,9 @@ export const PackingList = ({ list }: { list: Trip['packingList'] }) => {
                                     />
                                 </svg>
                             </Checkbox>
-                            <div className="flex-1 space-y-3">
+                            <div className="flex-1 min-w-0">
                                 <input
                                     type="text"
-                                    name={`packing-${item.id}-name`}
                                     value={item.name}
                                     onChange={(e) =>
                                         handleItemChange(
@@ -134,7 +137,7 @@ export const PackingList = ({ list }: { list: Trip['packingList'] }) => {
                                         )
                                     }
                                     placeholder="Item name"
-                                    className={`w-full font-semibold bg-transparent focus:outline-none text-lg p-2 border-b border-gray-300 ${
+                                    className={`w-full font-medium bg-transparent focus:outline-none text-base p-2 border-b border-slate-300 focus:border-emerald-500 transition-colors ${
                                         Number(item.quantity) > 0
                                             ? 'line-through text-slate-500'
                                             : 'text-slate-800'
@@ -142,7 +145,6 @@ export const PackingList = ({ list }: { list: Trip['packingList'] }) => {
                                 />
                                 <input
                                     type="text"
-                                    name={`packing-${item.id}-quantity`}
                                     value={item.quantity}
                                     onChange={(e) =>
                                         handleItemChange(
@@ -151,16 +153,16 @@ export const PackingList = ({ list }: { list: Trip['packingList'] }) => {
                                             e.target.value,
                                         )
                                     }
-                                    placeholder="0"
-                                    className="w-full text-base text-slate-600 bg-transparent focus:outline-none p-2 border-b border-gray-300"
+                                    placeholder="Qty"
+                                    className="w-20 text-slate-600 text-sm bg-transparent focus:outline-none cursor-pointer py-1 mt-1 border-b border-slate-300 focus:border-emerald-500"
                                 />
                             </div>
                             <button
                                 type="button"
                                 onClick={() => handleRemoveItem(item.id)}
-                                className="p-3 text-red-600 hover:bg-red-50 rounded-full flex-shrink-0"
+                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg flex-shrink-0 transition-colors"
                             >
-                                <Trash2 className="w-5 h-5" />
+                                <Trash2 className="w-4 h-4" />
                             </button>
                         </div>
                     </div>
@@ -170,17 +172,11 @@ export const PackingList = ({ list }: { list: Trip['packingList'] }) => {
             <button
                 type="button"
                 onClick={handleAddItem}
-                className="neo-button w-full mt-6 flex items-center justify-center gap-2"
+                className="w-full mt-4 p-3 border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:border-emerald-400 hover:text-emerald-600 transition-colors flex items-center justify-center gap-2"
             >
                 <Plus className="w-5 h-5" />
                 Add Packing Item
             </button>
-
-            <input
-                type="hidden"
-                name="packingList"
-                value={JSON.stringify(localPackingList)}
-            />
         </div>
     )
 }

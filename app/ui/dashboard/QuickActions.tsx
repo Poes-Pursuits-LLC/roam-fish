@@ -5,7 +5,7 @@ export const QuickActions = () => {
     return (
         <div className="nature-card">
             <div className="flex items-center space-x-3 mb-6">
-                <div className="p-2 bg-emerald-100 rounded-lg">
+                <div className="p-2 bg-slate-100 rounded-lg">
                     <Settings className="w-6 h-6 text-emerald-700" />
                 </div>
                 <h2 className="nature-subheader text-slate-800">
@@ -17,7 +17,9 @@ export const QuickActions = () => {
                     <button className="nature-button w-full">My Trips</button>
                 </NavLink>
                 <NavLink to="/billing" className="block">
-                    <button className="nature-button-secondary w-full">Billing</button>
+                    <button className="nature-button-earth w-full">
+                        Billing
+                    </button>
                 </NavLink>
             </div>
         </div>

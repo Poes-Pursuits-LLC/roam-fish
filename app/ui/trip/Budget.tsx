@@ -44,13 +44,15 @@ export const Budget = ({ budgetList }: { budgetList: BudgetItem[] }) => {
     }
 
     return (
-        <div className="neo-card bg-stone-50">
+        <div className="nature-card">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
                 <div className="flex items-center gap-3">
-                    <DollarSign className="w-6 h-6 text-emerald-700" />
-                    <h2 className="neo-subheader text-slate-800">Budget</h2>
+                    <div className="p-2 bg-emerald-100 rounded-lg">
+                        <DollarSign className="w-5 h-5 text-emerald-700" />
+                    </div>
+                    <h2 className="nature-subheader text-slate-800">Budget</h2>
                 </div>
-                <div className="sm:ml-auto bg-emerald-400 text-black px-3 py-2 font-bold border-2 border-black text-center sm:text-left">
+                <div className="sm:ml-auto bg-emerald-100 text-emerald-800 px-4 py-2 font-semibold rounded-lg border border-emerald-200 text-center sm:text-left">
                     Total: ${total}
                 </div>
             </div>
@@ -59,7 +61,7 @@ export const Budget = ({ budgetList }: { budgetList: BudgetItem[] }) => {
                 {localBudgetList.map((item) => (
                     <div
                         key={item.id}
-                        className="p-4 bg-white border-2 border-black hover:bg-stone-100 transition-colors"
+                        className="p-4 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
                     >
                         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                             <div className="flex-1 min-w-0">
@@ -75,7 +77,7 @@ export const Budget = ({ budgetList }: { budgetList: BudgetItem[] }) => {
                                         )
                                     }
                                     placeholder="Item name"
-                                    className="w-full font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer text-base sm:text-lg py-2"
+                                    className="w-full font-semibold text-slate-800 bg-transparent focus:outline-none cursor-pointer text-base sm:text-lg py-2 border-b border-slate-300 focus:border-emerald-500"
                                 />
                                 <input
                                     type="text"
@@ -89,15 +91,15 @@ export const Budget = ({ budgetList }: { budgetList: BudgetItem[] }) => {
                                         )
                                     }
                                     placeholder="0.00"
-                                    className="w-full text-slate-600 text-sm sm:text-base bg-transparent focus:outline-none cursor-pointer py-1"
+                                    className="w-full text-slate-600 text-sm sm:text-base bg-transparent focus:outline-none cursor-pointer py-1 mt-1"
                                 />
                             </div>
                             <button
                                 type="button"
                                 onClick={() => handleRemoveItem(item.id)}
-                                className="p-3 text-red-600 hover:bg-red-50 rounded-full self-start sm:self-center"
+                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg self-start sm:self-center transition-colors"
                             >
-                                <Trash2 className="w-5 h-5" />
+                                <Trash2 className="w-4 h-4" />
                             </button>
                         </div>
                     </div>
@@ -107,18 +109,11 @@ export const Budget = ({ budgetList }: { budgetList: BudgetItem[] }) => {
             <button
                 type="button"
                 onClick={handleAddItem}
-                className="neo-button w-full mt-6 flex items-center justify-center gap-2"
+                className="w-full mt-4 p-3 border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:border-emerald-400 hover:text-emerald-600 transition-colors flex items-center justify-center gap-2"
             >
                 <Plus className="w-5 h-5" />
                 Add Budget Item
             </button>
-
-            {/* Hidden input to capture the entire budget list as JSON */}
-            <input
-                type="hidden"
-                name="budgetList"
-                value={JSON.stringify(localBudgetList)}
-            />
         </div>
     )
 }

@@ -24,14 +24,17 @@ export const Navbar = ({
                     <div className="flex items-center space-x-4">
                         <NavLink
                             to="/plan-trip"
-                            className="nature-button-secondary"
+                            className="nature-button-earth"
                             data-testid="plan-trip-button"
                         >
                             Plan Trip
                         </NavLink>
                         {userId ? (
                             <div className="flex items-center space-x-4">
-                                <NavLink to="/dashboard" className="nature-button">
+                                <NavLink
+                                    to="/dashboard"
+                                    className="nature-button"
+                                >
                                     Dashboard
                                 </NavLink>
                                 <UserButton
@@ -42,26 +45,23 @@ export const Navbar = ({
                                         appearance: {
                                             elements: {
                                                 profileSection__emailAddresses:
-                                                {
-                                                    display: 'none',
-                                                },
+                                                    {
+                                                        display: 'none',
+                                                    },
                                                 profileSection__danger: {
                                                     display: 'none',
                                                 },
                                                 profileSection__connectedAccounts:
-                                                {
-                                                    display: 'none',
-                                                },
+                                                    {
+                                                        display: 'none',
+                                                    },
                                             },
                                         },
                                     }}
                                 />
                             </div>
                         ) : (
-                            <NavLink
-                                to="/login"
-                                className="nature-button"
-                            >
+                            <NavLink to="/login" className="nature-button">
                                 Login
                             </NavLink>
                         )}

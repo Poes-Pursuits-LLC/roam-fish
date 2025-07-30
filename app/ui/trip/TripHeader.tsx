@@ -17,7 +17,7 @@ export const TripHeader = ({
             <div className="flex justify-between gap-2 flex-col sm:flex-row">
                 <input
                     name="tripName"
-                    className="w-full neo-header cursor-pointer truncate text-slate-700 bg-stone-100 focus:outline-none hover:bg-stone-200 transition-colors"
+                    className="w-full nature-header cursor-pointer truncate text-slate-700 bg-slate-50 focus:outline-none hover:bg-slate-100 transition-colors rounded-lg px-4 py-2"
                     value={localTripName}
                     data-testid="trip-name-input"
                     onChange={(e) => setLocalTripName(e.target.value)}
@@ -26,7 +26,7 @@ export const TripHeader = ({
                     <button
                         type="submit"
                         disabled={!canEditTrip}
-                        className="neo-button bg-slate-700 text-white rounded-lg px-4 py-2 text-sm"
+                        className="nature-button-earth px-4 py-2 text-sm"
                     >
                         Save Changes
                     </button>

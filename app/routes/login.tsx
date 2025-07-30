@@ -13,7 +13,7 @@ export function meta() {
 
 export default function LoginPage() {
     return (
-        <div className="min-h-screen flex items-center justify-center px-6">
+        <div className="min-h-screen nature-gradient-bg flex items-center justify-center px-6">
             <div className="w-full max-w-md">
                 <BackButton />
                 <SignIn
@@ -25,13 +25,13 @@ export default function LoginPage() {
                     appearance={{
                         elements: {
                             footer: 'hidden',
-                            formButtonPrimary: 'neo-button-for-login',
-                            input: 'neo-input',
-                            label: 'block text-lg font-bold mb-2 uppercase tracking-wide text-slate-800',
-                            headerTitle: 'neo-subheader text-slate-800 mb-2',
-                            headerSubtitle:
-                                'text-lg font-semibold text-slate-700',
-                            formFieldErrorText: 'text-destructive',
+                            formButtonPrimary: 'nature-button w-full',
+                            input: 'nature-input',
+                            label: 'block text-base font-medium mb-2 text-slate-700',
+                            headerTitle: 'nature-subheader text-slate-800 mb-2',
+                            headerSubtitle: 'nature-body',
+                            formFieldErrorText: 'text-red-600',
+                            card: 'nature-card-elevated',
                         },
                     }}
                 />

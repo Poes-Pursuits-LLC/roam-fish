@@ -74,10 +74,14 @@ export const TravelDetails = ({
     }, [])
 
     return (
-        <div className="neo-card bg-stone-50 mb-8">
+        <div className="nature-card mb-8">
             <div className="flex items-center gap-3 mb-6">
-                <MapPin className="w-6 h-6 text-emerald-700" />
-                <h2 className="neo-subheader text-slate-800">Travel Details</h2>
+                <div className="p-2 bg-emerald-100 rounded-lg">
+                    <MapPin className="w-5 h-5 text-emerald-700" />
+                </div>
+                <h2 className="nature-subheader text-slate-800">
+                    Travel Details
+                </h2>
             </div>
             <div className="flex items-center gap-2">
                 <Plane className="w-5 h-5 text-stone-700" />

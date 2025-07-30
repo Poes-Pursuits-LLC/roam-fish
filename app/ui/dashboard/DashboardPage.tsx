@@ -1,24 +1,31 @@
-import type { Route } from "../../routes/+types/dashboard"
-import { Navbar } from "../Navbar"
-import { UserStatsCards } from "./UserStatsCards"
-import { RecentTrips } from "./RecentTrips"
-import { QuickActions } from "./QuickActions"
-import { Suspense, useEffect } from "react"
-import { deleteLocalTripId, getLocalTripId } from "~/utils"
-import { useSubmit } from "react-router"
-import { RecentTripsSkeleton } from "./RecentTripsSkeleton"
+import type { Route } from '../../routes/+types/dashboard'
+import { Navbar } from '../Navbar'
+import { UserStatsCards } from './UserStatsCards'
+import { RecentTrips } from './RecentTrips'
+import { QuickActions } from './QuickActions'
+import { Suspense, useEffect } from 'react'
+import { deleteLocalTripId, getLocalTripId } from '~/utils'
+import { useSubmit } from 'react-router'
+import { RecentTripsSkeleton } from './RecentTripsSkeleton'
 
-export const DashboardPage = (loaderData: Route.ComponentProps['loaderData']) => {
-    const { userId, isSubscriber, freeTripCount, userAnalyticsSheet, getRecentTripsPromise } =
-        loaderData
-    const submit = useSubmit();
+export const DashboardPage = (
+    loaderData: Route.ComponentProps['loaderData'],
+) => {
+    const {
+        userId,
+        isSubscriber,
+        freeTripCount,
+        userAnalyticsSheet,
+        getRecentTripsPromise,
+    } = loaderData
+    const submit = useSubmit()
 
     useEffect(() => {
         const localTripId = getLocalTripId()
         if (localTripId) {
             submit(
                 { userId, tripId: localTripId },
-                { action: "/dashboard", method: "post" }
+                { action: '/dashboard', method: 'post' },
             )
             deleteLocalTripId()
         }
@@ -37,7 +44,8 @@ export const DashboardPage = (loaderData: Route.ComponentProps['loaderData']) =>
                                 userAnalyticsSheet?.totalDaysFishing ?? 0,
                             uniqueDestinations:
                                 userAnalyticsSheet?.uniqueDestinations ?? [],
-                            totalTripCost: userAnalyticsSheet?.totalTripCost ?? 0,
+                            totalTripCost:
+                                userAnalyticsSheet?.totalTripCost ?? 0,
                             tripCount: userAnalyticsSheet?.tripCount ?? 0,
                         }}
                     />

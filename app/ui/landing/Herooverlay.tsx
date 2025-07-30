@@ -16,7 +16,7 @@ export const HeroOverlay = () => {
                 </NavLink>
                 <button
                     onClick={() => scrollToElement('destinations')}
-                    className="nature-button-secondary"
+                    className="nature-button-earth"
                 >
                     Explore Destinations
                 </button>

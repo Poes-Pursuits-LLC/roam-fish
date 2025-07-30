@@ -38,7 +38,7 @@ export const Trips = ({ promise }: { promise: Promise<Trip[]> }) => {
     return (
         <div className="nature-card">
             <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-emerald-100 rounded-lg">
+                <div className="p-2 bg-slate-100 rounded-lg">
                     <Fish className="w-5 h-5 text-emerald-700" />
                 </div>
                 <h2 className="nature-subheader text-slate-800">Your Trips</h2>

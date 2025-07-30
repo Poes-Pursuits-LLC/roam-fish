@@ -51,9 +51,9 @@ export const Destinations = (
     }, [searchTerm, debouncedFilter])
 
     return (
-        <section id="destinations" className="px-6 py-20">
+        <section id="destinations" className="px-6 py-20 nature-gradient-bg">
             <div className="max-w-7xl mx-auto">
-                <h2 className="neo-subheader text-center mb-16 text-slate-800">
+                <h2 className="nature-subheader text-center mb-16 text-slate-800">
                     Popular Fishing Destinations
                 </h2>
                 <div className="max-w-4xl mx-auto text-center mb-16">
@@ -64,22 +64,22 @@ export const Destinations = (
                                 placeholder="Search by location..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="neo-input h-full text-xl pr-32 bg-stone-50 flex w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                                className="nature-input text-lg"
                             />
                         </div>
                     </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {displayDestinations
                         .slice(0, 6)
                         .map((destination, index) => (
                             <div
                                 onClick={() => navigate('/plan-trip')}
                                 key={index}
-                                className="neo-card group cursor-pointer hover:translate-x-2 hover:translate-y-2 transition-transform bg-stone-50 flex flex-col"
+                                className="nature-card group cursor-pointer flex flex-col"
                             >
-                                <div className="aspect-video mb-4 border-4 border-black overflow-hidden">
+                                <div className="aspect-video mb-4 rounded-lg overflow-hidden">
                                     <img
                                         src={destination.imageUrl}
                                         alt={destination.name}
@@ -88,28 +88,34 @@ export const Destinations = (
                                 </div>
 
                                 <div className="flex flex-col flex-grow">
-                                    <div className="flex justify-between items-start mb-3">
-                                        <h3 className="text-xl font-bold uppercase tracking-wide text-slate-800">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <h3 className="text-xl font-semibold text-slate-800">
                                             {destination.name}
                                         </h3>
                                     </div>
 
-                                    <div className="flex items-center space-x-2 mb-3">
-                                        <MapPin className="w-5 h-5 text-emerald-700" />
-                                        <span className="font-semibold text-slate-700">
-                                            {destination.province}
-                                        </span>
-                                    </div>
+                                    <div className="space-y-3 mb-6">
+                                        <div className="flex items-center space-x-3">
+                                            <div className="p-1.5 bg-emerald-100 rounded-lg">
+                                                <MapPin className="w-4 h-4 text-emerald-700" />
+                                            </div>
+                                            <span className="font-medium text-slate-700">
+                                                {destination.province}
+                                            </span>
+                                        </div>
 
-                                    <div className="flex items-center space-x-2 mb-4">
-                                        <Fish className="w-5 h-5 text-emerald-700" />
-                                        <span className="font-semibold text-slate-700">
-                                            {destination.country}
-                                        </span>
+                                        <div className="flex items-center space-x-3">
+                                            <div className="p-1.5 bg-emerald-100 rounded-lg">
+                                                <Fish className="w-4 h-4 text-emerald-700" />
+                                            </div>
+                                            <span className="font-medium text-slate-700">
+                                                {destination.country}
+                                            </span>
+                                        </div>
                                     </div>
 
                                     <div className="mt-auto">
-                                        <button className="neo-button w-full bg-slate-700 text-white border-black">
+                                        <button className="nature-button w-full">
                                             View Details
                                         </button>
                                     </div>
@@ -124,9 +130,9 @@ export const Destinations = (
 
 export const DestinationsFallback = () => {
     return (
-        <section id="destinations" className="px-6 py-20 bg-emerald-50">
+        <section id="destinations" className="px-6 py-20 nature-gradient-bg">
             <div className="max-w-7xl mx-auto">
-                <h2 className="neo-subheader text-center mb-16 text-slate-800">
+                <h2 className="nature-subheader text-center mb-16 text-slate-800">
                     Popular Fishing Destinations
                 </h2>
                 <div className="max-w-4xl mx-auto text-center mb-16">
@@ -136,35 +142,41 @@ export const DestinationsFallback = () => {
                                 type="text"
                                 placeholder="Search by location..."
                                 disabled
-                                className="neo-input h-full text-xl pr-32 bg-stone-50 flex w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                                className="nature-input text-lg opacity-50"
                             />
                         </div>
                     </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[...Array(6)].map((_, index) => (
                         <div
                             key={index}
-                            className="neo-card group bg-stone-50 flex flex-col animate-pulse cursor-wait"
+                            className="nature-card group flex flex-col animate-pulse cursor-wait"
                         >
-                            <div className="aspect-video mb-4 border-4 border-black overflow-hidden bg-stone-200 flex items-center justify-center">
-                                <div className="w-3/4 h-3/4 bg-stone-300 rounded-md" />
+                            <div className="aspect-video mb-4 rounded-lg overflow-hidden bg-slate-200 flex items-center justify-center">
+                                <div className="w-3/4 h-3/4 bg-slate-300 rounded-md" />
                             </div>
                             <div className="flex flex-col flex-grow">
-                                <div className="flex justify-between items-start mb-3">
-                                    <div className="h-6 w-2/3 bg-stone-300 rounded mb-2" />
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="h-6 w-2/3 bg-slate-300 rounded mb-2" />
                                 </div>
-                                <div className="flex items-center space-x-2 mb-3">
-                                    <MapPin className="w-5 h-5 text-emerald-200" />
-                                    <div className="h-4 w-1/3 bg-stone-300 rounded" />
-                                </div>
-                                <div className="flex items-center space-x-2 mb-4">
-                                    <Fish className="w-5 h-5 text-emerald-200" />
-                                    <div className="h-4 w-1/3 bg-stone-300 rounded" />
+                                <div className="space-y-3 mb-6">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="p-1.5 bg-slate-200 rounded-lg">
+                                            <MapPin className="w-4 h-4 text-slate-400" />
+                                        </div>
+                                        <div className="h-4 w-1/3 bg-slate-300 rounded" />
+                                    </div>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="p-1.5 bg-slate-200 rounded-lg">
+                                            <Fish className="w-4 h-4 text-slate-400" />
+                                        </div>
+                                        <div className="h-4 w-1/3 bg-slate-300 rounded" />
+                                    </div>
                                 </div>
                                 <div className="mt-auto">
-                                    <div className="neo-button w-full bg-slate-300 text-transparent border-black h-10" />
+                                    <div className="nature-button w-full bg-slate-300 text-transparent h-10" />
                                 </div>
                             </div>
                         </div>
