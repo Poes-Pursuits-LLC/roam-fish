@@ -39,5 +39,6 @@ export const setup = async () => {
 export const teardown = async () => {
     await dynamo?.stop()
     await server?.stop()
+    await network?.stop()
     process.env = originalEnv
 }
