@@ -41,29 +41,26 @@ export const TripLoader = ({ tripId }: { tripId: string }) => {
 
     return (
         <div className="flex justify-center">
-            <div className="neo-card max-w-lg w-full text-center">
+            <div className="nature-card-elevated max-w-lg w-full text-center">
                 <div className="mb-8">
-                    <h2 className="neo-subheader text-slate-800 mb-4">
+                    <h2 className="nature-subheader text-slate-800 mb-4">
                         Planning Your Trip...
                     </h2>
-                    <p className="text-lg font-semibold text-slate-700">
+                    <p className="nature-body text-lg">
                         Please do not refresh your browser
                     </p>
                 </div>
 
                 <div className="space-y-6 mb-8">
-                    <div className="space-y-3">
-                        <Progress
-                            value={progress}
-                            className="h-8 bg-stone-200 border-2 border-black"
-                        />
-                        <p className="text-2xl font-bold text-slate-700">
+                    <div className="space-y-4">
+                        <Progress value={progress} className="h-3" />
+                        <p className="text-2xl font-semibold text-slate-700">
                             {Math.round(progress)}%
                         </p>
                     </div>
 
                     <div className="space-y-2">
-                        <p className="text-lg font-semibold text-slate-600">
+                        <p className="nature-body text-lg">
                             {progress < 30 && 'Analyzing fishing conditions...'}
                             {progress >= 30 &&
                                 progress < 60 &&

@@ -6,10 +6,10 @@ const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61578296994498'
 export const FooterSocials = () => {
     return (
         <div>
-            <h3 className="text-xl font-bold uppercase tracking-wide mb-4 text-[#1F513F]">
+            <h3 className="text-lg font-semibold mb-4 text-slate-800">
                 Connect
             </h3>
-            <ul className="space-y-2 font-semibold">
+            <ul className="space-y-2">
                 <li>
                     <NavLink
                         to={INSTAGRAM_URL}

@@ -2,7 +2,7 @@ import { BookOpen } from 'lucide-react'
 
 export const RecentTripsSkeleton = () => {
     return (
-        <div className="neo-card bg-stone-100">
+        <div className="nature-card">
             <div className="flex items-center space-x-3 mb-6">
                 <BookOpen className="w-8 h-8 text-emerald-700" />
                 <h2 className="text-2xl font-bold uppercase tracking-wide text-slate-800">
@@ -30,4 +30,4 @@ export const RecentTripsSkeleton = () => {
             <div className="w-full mt-6 h-12 bg-stone-200 rounded animate-pulse border-2 border-black" />
         </div>
     )
-} 
+}

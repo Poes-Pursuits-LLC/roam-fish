@@ -16,15 +16,17 @@ export default function PricingRoute({ loaderData }: Route.ComponentProps) {
     const redirectUrl = `${import.meta.env.VITE_WEB_URL}/billing?update=true`
 
     return (
-        <div className="min-h-screen bg-stone-100">
+        <div className="min-h-screen nature-gradient-bg">
             <Navbar userId={userId} isSubscriber={isSubscriber} />
             <BillingHeader />
-            <div className="border-b-4 border-black bg-white">
+            <div className="border-b nature-border bg-white">
                 <BillingFeatureSet />
             </div>
             <div className="flex flex-col items-center max-w-6xl mx-auto px-6 py-16">
-                <h1 className="neo-subheader mb-8">Available Plans</h1>
-                <div className="neo-card bg-white p-8">
+                <h1 className="nature-subheader mb-8 text-slate-800">
+                    Available Plans
+                </h1>
+                <div className="nature-card-elevated w-full max-w-4xl">
                     <PricingTable newSubscriptionRedirectUrl={redirectUrl} />
                 </div>
             </div>

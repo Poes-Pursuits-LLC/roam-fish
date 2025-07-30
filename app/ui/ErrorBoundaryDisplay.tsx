@@ -19,16 +19,18 @@ export const ErrorBoundaryDisplay = ({ error }: Route.ErrorBoundaryProps) => {
     }
 
     return (
-        <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
-            <div className="neo-card max-w-md w-full text-center">
+        <div className="min-h-screen nature-gradient-bg flex items-center justify-center p-4">
+            <div className="nature-card-elevated max-w-md w-full text-center">
                 <div className="mb-6">
-                    <h1 className="neo-header text-red-400 mb-2">Oops!</h1>
-                    <p className="text-lg font-semibold text-slate-700">
+                    <h1 className="text-4xl font-bold text-red-500 mb-2">
+                        Oops!
+                    </h1>
+                    <p className="nature-body text-lg">
                         We encountered an unexpected issue
                     </p>
                 </div>
-                <p className="text-slate-600 mb-8">{displayMessage}</p>
-                <NavLink to="/" className="neo-button">
+                <p className="nature-body mb-8">{displayMessage}</p>
+                <NavLink to="/" className="nature-button">
                     Return Home
                 </NavLink>
             </div>

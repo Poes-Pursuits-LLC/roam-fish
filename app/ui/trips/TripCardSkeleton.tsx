@@ -1,6 +1,6 @@
 export const TripCardSkeleton = () => {
     return (
-        <div className="neo-card group bg-stone-50 flex flex-col animate-pulse">
+        <div className="nature-card group flex flex-col animate-pulse">
             <div className="flex flex-col flex-grow">
                 <div className="flex justify-between items-start mb-3">
                     <div className="h-7 w-2/3 bg-stone-200 rounded" />

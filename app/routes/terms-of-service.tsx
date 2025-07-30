@@ -16,14 +16,14 @@ export default function TermsPage() {
         <div className="min-h-screen flex items-center justify-center px-6 py-8">
             <div className="w-full max-w-4xl">
                 <BackButton />
-                <div className="neo-card">
-                    <h1 className="neo-header text-slate-800 mb-6">
+                <div className="nature-card">
+                    <h1 className="nature-header text-slate-800 mb-6">
                         Terms of Service
                     </h1>
 
                     <div className="space-y-6 text-slate-700">
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 1. Acceptance of Terms
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -36,7 +36,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 2. Description of Service
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -49,7 +49,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 3. User Accounts
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -62,7 +62,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 4. User Conduct
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -89,7 +89,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 5. Privacy Policy
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -100,7 +100,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 6. Intellectual Property
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -113,7 +113,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 7. Limitation of Liability
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -128,7 +128,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 8. Termination
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -142,7 +142,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 9. Changes to Terms
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -155,7 +155,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 10. Contact Information
                             </h2>
                             <p className="text-lg leading-relaxed">

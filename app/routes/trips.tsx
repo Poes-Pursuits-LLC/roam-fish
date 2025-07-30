@@ -25,7 +25,7 @@ export default function TripsRoute({ loaderData }: Route.ComponentProps) {
                 <div className="max-w-6xl mx-auto">
                     <div className="flex items-center justify-between mb-12">
                         <div>
-                            <h1 className="neo-header text-slate-800 mb-4">
+                            <h1 className="nature-header text-slate-800 mb-4">
                                 Your Trips
                             </h1>
                             <p className="text-xl font-semibold text-slate-700">

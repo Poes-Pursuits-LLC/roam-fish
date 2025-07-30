@@ -11,10 +11,10 @@ export const FeatureSet = ({
     }
 }) => {
     return (
-        <section className="px-6 py-20">
+        <section className="px-6 py-20 nature-gradient-bg">
             <div className="max-w-6xl mx-auto">
                 {config.header && (
-                    <h2 className="neo-subheader text-center mb-16">
+                    <h2 className="nature-subheader text-center mb-16 text-slate-800">
                         {config.header}
                     </h2>
                 )}
@@ -22,15 +22,15 @@ export const FeatureSet = ({
                     {config.features.map((feature, index) => (
                         <div
                             key={index}
-                            className="neo-card text-center bg-amber-50"
+                            className="nature-card text-center group hover:scale-105 transition-transform duration-300"
                         >
-                            <feature.icon className="w-16 h-16 mx-auto mb-4 transform rotate-3 text-[#1F513F]" />
-                            <h3 className="text-2xl font-bold mb-4 uppercase tracking-wide">
+                            <div className="p-4 bg-slate-100 rounded-2xl w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+                                <feature.icon className="w-10 h-10 text-emerald-700" />
+                            </div>
+                            <h3 className="text-xl font-semibold mb-4 text-slate-800">
                                 {feature.title}
                             </h3>
-                            <p className="text-lg font-semibold text-slate-700">
-                                {feature.description}
-                            </p>
+                            <p className="nature-body">{feature.description}</p>
                         </div>
                     ))}
                 </div>

@@ -36,27 +36,29 @@ export const Checklist = ({ checkList }: { checkList: ChecklistItem[] }) => {
     }
 
     return (
-        <div className="neo-card bg-stone-50">
+        <div className="nature-card">
             <div className="flex items-center gap-3 mb-6">
-                <ClipboardCheck className="w-6 h-6 text-emerald-700" />
-                <h2 className="neo-subheader text-slate-800">Checklist</h2>
+                <div className="p-2 bg-emerald-100 rounded-lg">
+                    <ClipboardCheck className="w-5 h-5 text-emerald-700" />
+                </div>
+                <h2 className="nature-subheader text-slate-800">Checklist</h2>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
                 {items.map((item) => (
                     <div
                         key={item.id}
-                        className="bg-white border-2 border-black p-4"
+                        className="bg-slate-50 rounded-lg border border-slate-200 p-4 hover:bg-slate-100 transition-colors"
                     >
                         <div className="flex items-start gap-3 min-w-0">
                             <Checkbox
                                 checked={item.completed}
                                 onCheckedChange={() => toggleItem(item.id)}
-                                className="w-6 h-6 border-2 border-black rounded-sm data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 data-[state=checked]:text-white flex-shrink-0 mt-1"
+                                className="w-5 h-5 border-2 border-slate-400 rounded-md data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 data-[state=checked]:text-white flex-shrink-0 mt-1 hover:border-emerald-500 transition-colors"
                             >
                                 <svg
-                                    width="15"
-                                    height="15"
+                                    width="12"
+                                    height="12"
                                     viewBox="0 0 15 15"
                                     fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +79,7 @@ export const Checklist = ({ checkList }: { checkList: ChecklistItem[] }) => {
                                     handleItemChange(item.id, e.target.value)
                                 }
                                 placeholder="Add checklist item..."
-                                className={`flex-1 min-w-0 font-semibold bg-transparent focus:outline-none text-lg p-2 border-b border-gray-300 ${
+                                className={`flex-1 min-w-0 font-medium bg-transparent focus:outline-none text-base p-2 border-b border-slate-300 focus:border-emerald-500 transition-colors ${
                                     item.completed
                                         ? 'line-through text-slate-500'
                                         : 'text-slate-800'
@@ -86,9 +88,9 @@ export const Checklist = ({ checkList }: { checkList: ChecklistItem[] }) => {
                             <button
                                 type="button"
                                 onClick={() => handleRemoveItem(item.id)}
-                                className="p-3 text-red-600 hover:bg-red-50 rounded-full flex-shrink-0"
+                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg flex-shrink-0 transition-colors"
                             >
-                                <Trash2 className="w-5 h-5" />
+                                <Trash2 className="w-4 h-4" />
                             </button>
                         </div>
                     </div>
@@ -98,17 +100,11 @@ export const Checklist = ({ checkList }: { checkList: ChecklistItem[] }) => {
             <button
                 type="button"
                 onClick={handleAddItem}
-                className="neo-button w-full mt-6 flex items-center justify-center gap-2"
+                className="w-full mt-4 p-3 border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:border-emerald-400 hover:text-emerald-600 transition-colors flex items-center justify-center gap-2"
             >
                 <Plus className="w-5 h-5" />
                 Add Checklist Item
             </button>
-
-            <input
-                type="hidden"
-                name="checkList"
-                value={JSON.stringify(items)}
-            />
         </div>
     )
 }

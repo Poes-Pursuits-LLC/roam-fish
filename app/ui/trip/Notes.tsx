@@ -1,12 +1,20 @@
+import { BookOpen } from 'lucide-react'
 import { useState } from 'react'
 
 export const Notes = ({ notes }: { notes: string }) => {
     const [localNotes, setLocalNotes] = useState(notes)
 
     return (
-        <div className="neo-card bg-stone-50 mt-8">
+        <div className="nature-card mt-8">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="neo-subheader text-slate-800">Trip Notes</h2>
+                <div className="flex items-center gap-3">
+                    <div className="p-2 bg-emerald-100 rounded-lg">
+                        <BookOpen className="w-5 h-5 text-emerald-700" />
+                    </div>
+                    <h2 className="nature-subheader text-slate-800">
+                        Trip Notes
+                    </h2>
+                </div>
             </div>
 
             <textarea
