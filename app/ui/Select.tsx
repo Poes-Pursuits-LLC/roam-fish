@@ -28,7 +28,7 @@ export function Select<T>({
     return (
         <div className="w-full">
             {label && (
-                <label className="block text-lg font-bold mb-2 uppercase tracking-wide text-slate-800">
+                <label className="block text-base font-medium mb-2 text-slate-700">
                     {label}
                 </label>
             )}
@@ -46,8 +46,8 @@ export function Select<T>({
                         if (selected) onChange(selected)
                     }}
                     className={cn(
-                        'neo-input w-full text-lg',
-                        error && 'border-red-500',
+                        'nature-input text-base',
+                        error && 'border-red-300 focus:ring-red-500',
                         className,
                     )}
                     {...props}
@@ -67,7 +67,7 @@ export function Select<T>({
                 </select>
             </div>
             {error && (
-                <p className="mt-2 text-sm font-medium text-destructive">
+                <p className="mt-2 text-sm font-medium text-red-600">
                     {error}
                 </p>
             )}

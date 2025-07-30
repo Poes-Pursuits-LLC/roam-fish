@@ -3,7 +3,7 @@ import { TripCardSkeleton } from './TripCardSkeleton'
 
 export const TripsSkeleton = () => {
     return (
-        <div className="neo-card bg-stone-50">
+        <div className="nature-card">
             <div className="flex items-center gap-3 mb-6">
                 <Fish className="w-6 h-6 text-emerald-200" />
                 <div className="h-8 w-32 bg-stone-200 rounded animate-pulse" />

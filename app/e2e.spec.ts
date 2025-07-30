@@ -54,7 +54,8 @@ test('Visitor flow: Visitor can submit a trip, see its content, then click on a 
     await expect(
         page.getByRole('heading', { name: 'Packing List' }),
     ).toBeVisible()
-    const packingItems = page.locator('input[name^="packing-"][name$="-name"]')
+
+    const packingItems = page.locator('input[placeholder="Item name"]')
     await expect(packingItems.first()).toBeVisible()
     const packingItemCount = await packingItems.count()
     expect(packingItemCount).toBeGreaterThan(0)

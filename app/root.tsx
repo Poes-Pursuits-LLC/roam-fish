@@ -1,7 +1,6 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
 import { rootAuthLoader } from '@clerk/react-router/ssr.server'
 import { ClerkProvider } from '@clerk/react-router'
-import { neobrutalism } from '@clerk/themes'
 import type { Route } from './+types/root'
 import './app.css'
 import * as Sentry from '@sentry/react'
@@ -19,15 +18,10 @@ export async function loader(args: Route.LoaderArgs) {
 }
 
 export const links: Route.LinksFunction = () => [
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
     {
-        rel: 'preconnect',
-        href: 'https://fonts.gstatic.com',
-        crossOrigin: 'anonymous',
-    },
-    {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Manrope:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
+        rel: 'icon',
+        type: 'image/svg+xml',
+        href: '/favicon.svg',
     },
 ]
 
@@ -43,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Meta />
                 <Links />
             </head>
-            <body className="bg-stone-50">
+            <body>
                 {children}
                 <ScrollRestoration />
                 <Scripts />
@@ -57,65 +51,63 @@ export default function App({ loaderData }: Route.ComponentProps) {
         <ClerkProvider
             loaderData={loaderData}
             appearance={{
-                baseTheme: neobrutalism,
                 elements: {
                     avatarBox: {
                         width: '2.5rem',
                         height: '2.5rem',
                     },
                     card: {
-                        backgroundColor: '#F4F2ED',
+                        backgroundColor: 'white',
+                        borderRadius: '1rem',
+                        border: '1px solid #e5e7eb',
+                        boxShadow: '0 4px 20px rgba(6, 95, 70, 0.1)',
                     },
                     formButtonPrimary: {
-                        backgroundColor: '#1F513F',
+                        backgroundColor:
+                            'linear-gradient(to right, #059669, #10b981)',
                         color: 'white',
-                        border: '2px solid black',
-                        borderRadius: '8px',
-                        padding: '12px 24px',
-                        fontWeight: 'bold',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        boxShadow: '4px 4px 0px 0px #000000',
-                        transition: 'all 150ms ease-in-out',
+                        border: 'none',
+                        borderRadius: '0.75rem',
+                        padding: '0.75rem 1.5rem',
+                        fontWeight: '500',
+                        boxShadow: '0 4px 20px rgba(6, 95, 70, 0.1)',
+                        transition: 'all 0.3s ease-out',
                         '&:hover': {
-                            backgroundColor: '#2a6b54',
-                            transform: 'translate(4px, 4px)',
-                            boxShadow: 'none',
+                            backgroundColor:
+                                'linear-gradient(to right, #047857, #059669)',
+                            transform: 'scale(1.05) translateY(-2px)',
+                            boxShadow: '0 10px 40px rgba(6, 95, 70, 0.15)',
                         },
                         '&:active': {
-                            transform: 'translate(0px, 0px)',
-                            boxShadow: 'none',
+                            transform: 'scale(0.95) translateY(0)',
                         },
                         '&:focus': {
                             outline: 'none',
-                            boxShadow:
-                                '0 0 0 2px #1F513F, 0 0 0 4px white, 4px 4px 0px 0px #000000',
+                            boxShadow: '0 0 0 2px #10b981, 0 0 0 4px white',
                         },
                     },
                     pricingTableCardFooterButton: {
-                        backgroundColor: '#1F513F',
+                        backgroundColor:
+                            'linear-gradient(to right, #059669, #10b981)',
                         color: 'white',
-                        border: '2px solid black',
-                        borderRadius: '8px',
-                        padding: '12px 24px',
-                        fontWeight: 'bold',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        boxShadow: '4px 4px 0px 0px #000000',
-                        transition: 'all 150ms ease-in-out',
+                        border: 'none',
+                        borderRadius: '0.75rem',
+                        padding: '0.75rem 1.5rem',
+                        fontWeight: '500',
+                        boxShadow: '0 4px 20px rgba(6, 95, 70, 0.1)',
+                        transition: 'all 0.3s ease-out',
                         '&:hover': {
-                            backgroundColor: '#2a6b54',
-                            transform: 'translate(4px, 4px)',
-                            boxShadow: 'none',
+                            backgroundColor:
+                                'linear-gradient(to right, #047857, #059669)',
+                            transform: 'scale(1.05) translateY(-2px)',
+                            boxShadow: '0 10px 40px rgba(6, 95, 70, 0.15)',
                         },
                         '&:active': {
-                            transform: 'translate(0px, 0px)',
-                            boxShadow: 'none',
+                            transform: 'scale(0.95) translateY(0)',
                         },
                         '&:focus': {
                             outline: 'none',
-                            boxShadow:
-                                '0 0 0 2px #1F513F, 0 0 0 4px white, 4px 4px 0px 0px #000000',
+                            boxShadow: '0 0 0 2px #10b981, 0 0 0 4px white',
                         },
                     },
                 },

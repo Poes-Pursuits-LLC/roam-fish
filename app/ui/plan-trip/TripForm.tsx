@@ -22,13 +22,17 @@ export const TripForm = ({
     const [headcount, setHeadcount] = useState('')
 
     return (
-        <div className="neo-card">
-            <h2 className="neo-subheader mb-6 text-black">Trip Details</h2>
+        <div className="nature-card">
+            <h2 className="nature-subheader mb-6 text-slate-800">
+                Trip Details
+            </h2>
             <Form action="/plan-trip" method="post" className="space-y-6">
                 <input type="hidden" name="userId" value={userId ?? ''} />
                 <div>
-                    <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
-                        <MapPin className="w-5 h-5" />
+                    <label className="flex items-center gap-3 text-base font-medium mb-2 text-slate-700">
+                        <div className="p-1.5 bg-emerald-100 rounded-lg">
+                            <MapPin className="w-4 h-4 text-emerald-700" />
+                        </div>
                         Destination
                     </label>
                 </div>
@@ -39,8 +43,10 @@ export const TripForm = ({
                     required
                 />
                 <div>
-                    <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
-                        <Calendar className="w-5 h-5" />
+                    <label className="flex items-center gap-3 text-base font-medium mb-2 text-slate-700">
+                        <div className="p-1.5 bg-emerald-100 rounded-lg">
+                            <Calendar className="w-4 h-4 text-emerald-700" />
+                        </div>
                         Date
                     </label>
                     <input
@@ -48,35 +54,41 @@ export const TripForm = ({
                         name="startDate"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
-                        className="neo-input w-full"
+                        className="nature-input w-full"
                         required
                     />
                 </div>
 
-                <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
-                    <Users className="w-5 h-5" />
-                    Headcount
-                </label>
-                <input
-                    type="number"
-                    name="headcount"
-                    value={headcount}
-                    onChange={(e) => setHeadcount(e.target.value)}
-                    className="neo-input w-full"
-                    placeholder="Enter number of travelers"
-                    required
-                />
+                <div>
+                    <label className="flex items-center gap-3 text-base font-medium mb-2 text-slate-700">
+                        <div className="p-1.5 bg-emerald-100 rounded-lg">
+                            <Users className="w-4 h-4 text-emerald-700" />
+                        </div>
+                        Headcount
+                    </label>
+                    <input
+                        type="number"
+                        name="headcount"
+                        value={headcount}
+                        onChange={(e) => setHeadcount(e.target.value)}
+                        className="nature-input w-full"
+                        placeholder="Enter number of travelers"
+                        required
+                    />
+                </div>
 
                 <div>
-                    <label className="flex items-center gap-2 text-lg font-bold mb-2 uppercase tracking-wide">
-                        <Clock className="w-5 h-5" />
+                    <label className="flex items-center gap-3 text-base font-medium mb-2 text-slate-700">
+                        <div className="p-1.5 bg-emerald-100 rounded-lg">
+                            <Clock className="w-4 h-4 text-emerald-700" />
+                        </div>
                         Duration
                     </label>
                     <select
                         value={duration}
                         name="duration"
                         onChange={(e) => setDuration(e.target.value)}
-                        className="neo-input w-full"
+                        className="nature-input w-full"
                         required
                     >
                         {Object.values(TripDurationEnum).map((duration) => (
@@ -91,12 +103,12 @@ export const TripForm = ({
                     if (noMoreTrips) {
                         return (
                             <div className="flex flex-col gap-4">
-                                <div className="text-red-400 text-lg">
+                                <div className="text-red-600 nature-body text-lg">
                                     You have reached your free trip limit.
                                     Subscribe to get access to more!
                                 </div>
                                 <NavLink to="/billing">
-                                    <button className="neo-button w-full text-black bg-red-400 text-xl py-4">
+                                    <button className="nature-button w-full text-xl py-4">
                                         Subscribe
                                     </button>
                                 </NavLink>
@@ -107,12 +119,12 @@ export const TripForm = ({
                     if (visitorAlreadyCreatedTrip) {
                         return (
                             <div className="flex flex-col gap-4">
-                                <div className="text-red-400 text-lg">
+                                <div className="text-red-600 nature-body text-lg">
                                     You have already created a free trip. Sign
                                     up to create more!
                                 </div>
                                 <NavLink to="/login">
-                                    <button className="neo-button w-full text-black bg-red-400 text-xl py-4">
+                                    <button className="nature-button w-full text-xl py-4">
                                         Sign Up Free
                                     </button>
                                 </NavLink>
@@ -123,7 +135,7 @@ export const TripForm = ({
                     return (
                         <button
                             type="submit"
-                            className="neo-button w-full text-black text-xl py-4"
+                            className="nature-button w-full text-xl py-4"
                         >
                             Generate Trip Plan
                         </button>

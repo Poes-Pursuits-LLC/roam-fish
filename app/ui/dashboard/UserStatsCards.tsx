@@ -17,7 +17,7 @@ export const UserStatsCards = ({
     return (
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {stats.map((stat, index) => (
-                <div key={index} className="neo-card bg-amber-50 text-center">
+                <div key={index} className="nature-card text-center">
                     <stat.icon className="w-12 h-12 mx-auto mb-3 text-emerald-700" />
                     <div className="text-3xl font-black text-slate-800 mb-1">
                         {stat.value}

@@ -7,10 +7,12 @@ export const RecentTrips = ({ promise }: { promise: Promise<Trip[]> }) => {
     const recentTrips = use(promise)
 
     return (
-        <div className="neo-card bg-stone-100">
-            <div className="flex items-center space-x-3 mb-6">
-                <BookOpen className="w-8 h-8 text-emerald-700" />
-                <h2 className="text-2xl font-bold uppercase tracking-wide text-slate-800">
+        <div className="nature-card">
+            <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-slate-100 rounded-lg">
+                    <BookOpen className="w-5 h-5 text-emerald-700" />
+                </div>
+                <h2 className="nature-subheader text-slate-800">
                     Recent Trips
                 </h2>
             </div>
@@ -18,25 +20,28 @@ export const RecentTrips = ({ promise }: { promise: Promise<Trip[]> }) => {
                 {recentTrips.map((trip) => (
                     <div
                         key={trip.tripId}
-                        className="border-4 border-black p-4 bg-stone-50"
+                        className="bg-slate-50 rounded-lg border border-slate-200 p-4 hover:bg-slate-100 transition-colors"
                     >
                         <div className="flex justify-between items-start mb-2">
                             <h3 className="text-lg font-bold text-slate-800">
                                 {trip.destinationName}
                             </h3>
                             <span className="text-sm font-semibold text-slate-600">
-                                {new Date(trip.startDate).toLocaleDateString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric'
-                                })}
+                                {new Date(trip.startDate).toLocaleDateString(
+                                    'en-US',
+                                    {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                    },
+                                )}
                             </span>
                         </div>
                         <div className="flex justify-between items-center">
                             <span className="font-semibold text-slate-700">
                                 {trip.duration}
                             </span>
-                            <span className="bg-emerald-400 text-black px-2 py-1 text-sm font-bold border-2 border-black">
+                            <span className="bg-emerald-100 text-emerald-800 px-3 py-1 text-sm font-semibold rounded-lg border border-emerald-200">
                                 {trip.status}
                             </span>
                         </div>
@@ -45,7 +50,7 @@ export const RecentTrips = ({ promise }: { promise: Promise<Trip[]> }) => {
             </div>
 
             <NavLink to="/plan-trip">
-                <button className="neo-button w-full mt-6 bg-emerald-600 text-white border-black">
+                <button className="nature-button w-full mt-6">
                     Plan New Trip
                 </button>
             </NavLink>

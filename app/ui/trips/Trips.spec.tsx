@@ -73,14 +73,8 @@ test('renders upcoming trips and past trips in distinct tabs', async () => {
     expect(screen.getByText('Test Destination 2')).toBeInTheDocument()
     expect(screen.queryByText('Test Destination')).not.toBeInTheDocument()
 
-    expect(pastTripsTab).toHaveClass('bg-emerald-600')
-    expect(upcomingTab).not.toHaveClass('bg-amber-400')
-
     fireEvent.click(upcomingTab)
 
     expect(screen.getByText('Test Destination')).toBeInTheDocument()
     expect(screen.queryByText('Test Destination 2')).not.toBeInTheDocument()
-
-    expect(upcomingTab).toHaveClass('bg-amber-400')
-    expect(pastTripsTab).not.toHaveClass('bg-emerald-600')
 })

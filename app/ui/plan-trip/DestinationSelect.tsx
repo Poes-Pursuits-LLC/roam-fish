@@ -19,7 +19,9 @@ export function DestinationSelect({
             name="destinationName"
             options={destinations}
             getId={(destination) => destination.destinationId}
-            getLabel={(destination) => `${destination.name}, ${destination.province}, ${destination.country}`}
+            getLabel={(destination) =>
+                `${destination.name}, ${destination.province}, ${destination.country}`
+            }
             getValue={(destination) => destination.name}
             {...props}
         />
@@ -45,7 +47,7 @@ export function SuspendedDestinationSelect({
     fallback = (
         <div className="w-full">
             <div className="relative">
-                <div className="neo-input w-full text-lg bg-stone-50 animate-pulse">
+                <div className="nature-input w-full text-lg bg-stone-50 animate-pulse">
                     <div className="h-6 w-3/4 bg-stone-200 rounded" />
                 </div>
             </div>

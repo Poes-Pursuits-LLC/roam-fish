@@ -16,14 +16,14 @@ export default function PrivacyPolicyPage() {
         <div className="min-h-screen flex items-center justify-center px-6 py-8">
             <div className="w-full max-w-4xl">
                 <BackButton />
-                <div className="neo-card">
-                    <h1 className="neo-header text-slate-800 mb-6">
+                <div className="nature-card">
+                    <h1 className="nature-header text-slate-800 mb-6">
                         Privacy Policy
                     </h1>
 
                     <div className="space-y-6 text-slate-700">
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 1. Information We Collect
                             </h2>
                             <p className="text-lg leading-relaxed mb-3">
@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 2. How We Use Your Information
                             </h2>
                             <p className="text-lg leading-relaxed mb-3">
@@ -63,7 +63,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 3. Information Sharing
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -77,7 +77,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 4. Data Security
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -91,7 +91,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 5. Cookies and Tracking
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -104,7 +104,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 6. Third-Party Services
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -117,7 +117,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 7. Children&rsquo;s Privacy
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -131,7 +131,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 8. Your Rights
                             </h2>
                             <p className="text-lg leading-relaxed mb-3">
@@ -154,7 +154,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 9. Changes to This Policy
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -168,7 +168,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="neo-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-slate-800 mb-3">
                                 10. Contact Us
                             </h2>
                             <p className="text-lg leading-relaxed">
