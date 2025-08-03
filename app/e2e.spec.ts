@@ -29,9 +29,13 @@ test('Visitor flow: Visitor can submit a trip with random fishing style, see its
     await page.fill('input[name="startDate"]', tomorrowString)
     await page.fill('input[name="headcount"]', '2')
 
-    const fishingStyles = [FishingStyleEnum.FlyFishing, FishingStyleEnum.SpinFishing]
-    const selectedFishingStyle = fishingStyles[Math.floor(Math.random() * fishingStyles.length)]
-    await page.locator(`input[name="fishingStyle"][value="${selectedFishingStyle}"]`).check()
+    const fishingStyles = [
+        FishingStyleEnum.FlyFishing,
+        FishingStyleEnum.SpinFishing,
+    ]
+    const selectedFishingStyle =
+        fishingStyles[Math.floor(Math.random() * fishingStyles.length)]
+    await page.locator(`label:has-text("${selectedFishingStyle}")`).click()
 
     await page.click('button[type="submit"]')
 
@@ -79,22 +83,30 @@ test('Visitor flow: Visitor can submit a trip with random fishing style, see its
         await expect(
             page.getByRole('heading', { name: 'RECOMMENDED FLIES' }),
         ).toBeVisible()
-        await expect(page.getByRole('heading', { name: 'HATCHES' })).toBeVisible()
+        await expect(
+            page.getByRole('heading', { name: 'HATCHES' }),
+        ).toBeVisible()
         // Should not show spin fishing content
         await expect(
             page.getByRole('heading', { name: 'RECOMMENDED LURES' }),
         ).not.toBeVisible()
-        await expect(page.getByRole('heading', { name: 'TECHNIQUES' })).not.toBeVisible()
+        await expect(
+            page.getByRole('heading', { name: 'TECHNIQUES' }),
+        ).not.toBeVisible()
     } else {
         await expect(
             page.getByRole('heading', { name: 'RECOMMENDED LURES' }),
         ).toBeVisible()
-        await expect(page.getByRole('heading', { name: 'TECHNIQUES' })).toBeVisible()
+        await expect(
+            page.getByRole('heading', { name: 'TECHNIQUES' }),
+        ).toBeVisible()
 
         await expect(
             page.getByRole('heading', { name: 'RECOMMENDED FLIES' }),
         ).not.toBeVisible()
-        await expect(page.getByRole('heading', { name: 'HATCHES' })).not.toBeVisible()
+        await expect(
+            page.getByRole('heading', { name: 'HATCHES' }),
+        ).not.toBeVisible()
     }
 
     await page.getByRole('link', { name: 'Sign Up Free' }).nth(0).click()
