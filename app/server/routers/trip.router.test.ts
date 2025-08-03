@@ -7,10 +7,12 @@ import {
     TripDurationEnum,
     TripStatusEnum,
     type Trip,
+    FishingStyleEnum,
 } from '~/core/trip/trip.model'
 import { createDefaultPackingList } from '~/core/trip/helpers/create-default-packing-list'
 import { createDefaultBudgetList } from '~/core/trip/helpers/create-default-budget'
 import { createDefaultCheckList } from '~/core/trip/helpers/create-defaultcheckList'
+import { promptService } from '~/core/prompt/prompt.service'
 
 vi.mock('~/core/trip/trip.service.ts', () => ({
     tripService: {
@@ -20,6 +22,11 @@ vi.mock('~/core/trip/trip.service.ts', () => ({
         submitTripDetails: vi.fn(),
         getTripDetails: vi.fn(),
         updateTrip: vi.fn(),
+    },
+}))
+vi.mock('~/core/prompt/prompt.service.ts', () => ({
+    promptService: {
+        getPromptContent: vi.fn(),
     },
 }))
 vi.mock('~/core/trip/helpers/create-default-packing-list', () => {
@@ -43,7 +50,7 @@ vi.mock('../main', () => ({
 import { main } from '../main'
 
 describe('/create-trip', () => {
-    it('should submit trip details to be generated and then create the trip and return its id', async () => {
+    it('should get prompt content, submit trip details to be generated and then create the trip and return its id', async () => {
         const client = testClient(main)
         const inputs = {
             startDate: '2027-04-12',
@@ -54,6 +61,7 @@ describe('/create-trip', () => {
         }
         const tripId = 'tripId'
         const contentId = 'contentId'
+        const promptContent = 'Fly fishing prompt content'
         const packingList = [
             {
                 id: '1',
@@ -74,6 +82,9 @@ describe('/create-trip', () => {
             { id: '2', name: 'Buy car rental', completed: false },
         ]
 
+        const getPromptContent = vi
+            .mocked(promptService.getPromptContent)
+            .mockResolvedValue(promptContent)
         const submitTripDetails = vi
             .mocked(tripService.submitTripDetails)
             .mockResolvedValue(contentId)
@@ -88,8 +99,13 @@ describe('/create-trip', () => {
             json: inputs,
         })
 
+        expect(getPromptContent).toHaveBeenCalledOnce()
+        expect(getPromptContent).toHaveBeenCalledWith(FishingStyleEnum.FlyFishing)
         expect(submitTripDetails).toHaveBeenCalledOnce()
-        expect(submitTripDetails).toHaveBeenCalledWith(inputs)
+        expect(submitTripDetails).toHaveBeenCalledWith({
+            prompt: promptContent,
+            ...inputs,
+        })
         expect(createTrip).toHaveBeenCalledOnce()
         expect(createTrip).toHaveBeenCalledWith({
             ...inputs,
@@ -112,6 +128,7 @@ describe('/create-trip', () => {
         }
         const tripId = 'tripId'
         const contentId = 'contentId'
+        const promptContent = 'Fly fishing prompt content'
         const packingList = [
             {
                 id: '1',
@@ -121,6 +138,9 @@ describe('/create-trip', () => {
             },
         ]
 
+        const getPromptContent = vi
+            .mocked(promptService.getPromptContent)
+            .mockResolvedValue(promptContent)
         const submitTripDetails = vi
             .mocked(tripService.submitTripDetails)
             .mockResolvedValue(contentId)
@@ -133,8 +153,13 @@ describe('/create-trip', () => {
             json: inputs,
         })
 
+        expect(getPromptContent).toHaveBeenCalledOnce()
+        expect(getPromptContent).toHaveBeenCalledWith(FishingStyleEnum.FlyFishing)
         expect(submitTripDetails).toHaveBeenCalledOnce()
-        expect(submitTripDetails).toHaveBeenCalledWith(inputs)
+        expect(submitTripDetails).toHaveBeenCalledWith({
+            prompt: promptContent,
+            ...inputs,
+        })
         expect(createTrip).toHaveBeenCalledOnce()
         expect(createTrip).toHaveBeenCalledWith({
             ...inputs,
@@ -145,7 +170,8 @@ describe('/create-trip', () => {
         expect(await response.json()).toEqual({ tripId })
     })
 
-    it('should throw an http exception and return a 500 status code if an error occurs', async () => {
+
+    it('should throw an http exception and return a 500 status code if create trip error occurs', async () => {
         const client = testClient(main)
         const inputs = {
             startDate: '2027-04-12',
@@ -153,17 +179,61 @@ describe('/create-trip', () => {
             destinationName: 'Central Pennsylvania',
             duration: TripDurationEnum.Week,
         }
+        const contentId = 'contentId'
+        const promptContent = 'Fly fishing prompt content'
+        const packingList = [
+            {
+                id: '1',
+                category: '1',
+                name: '1',
+                quantity: '1',
+            },
+        ]
+        const budgetList = [
+            {
+                id: '1',
+                name: '1',
+                price: '1',
+            },
+        ]
+        const checkList = [
+            { id: '1', name: 'Buy plane tickets', completed: false },
+            { id: '2', name: 'Buy car rental', completed: false },
+        ]
 
+        const getPromptContent = vi
+            .mocked(promptService.getPromptContent)
+            .mockResolvedValue(promptContent)
         const submitTripDetails = vi
             .mocked(tripService.submitTripDetails)
-            .mockRejectedValue(new Error('Error'))
+            .mockResolvedValue(contentId)
+        const createTrip = vi
+            .mocked(tripService.createTrip)
+            .mockRejectedValue(new Error('Create trip error'))
+        vi.mocked(createDefaultPackingList).mockReturnValue(packingList)
+        vi.mocked(createDefaultBudgetList).mockReturnValue(budgetList)
+        vi.mocked(createDefaultCheckList).mockReturnValue(checkList)
 
         const response = await client.createTrip.$post({
             json: inputs,
         })
 
+        expect(getPromptContent).toHaveBeenCalledOnce()
+        expect(getPromptContent).toHaveBeenCalledWith(FishingStyleEnum.FlyFishing)
         expect(submitTripDetails).toHaveBeenCalledOnce()
-        expect(submitTripDetails).toHaveBeenCalledWith(inputs)
+        expect(submitTripDetails).toHaveBeenCalledWith({
+            prompt: promptContent,
+            ...inputs,
+        })
+        expect(createTrip).toHaveBeenCalledOnce()
+        expect(createTrip).toHaveBeenCalledWith({
+            ...inputs,
+            contentId,
+            packingList,
+            budgetList,
+            checkList,
+            status: TripStatusEnum.Generating,
+        })
         expect(response.status).toBe(500)
     })
 })

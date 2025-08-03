@@ -11,6 +11,7 @@ export interface Trip {
     contentId: string
     startDate: string
     type: string
+    fishingStyle?: FishingStyleEnum
     duration: TripDurationEnum
     name?: string
     userId?: string
@@ -43,6 +44,11 @@ export interface ChecklistItem {
     id: string
     name: string
     completed: boolean
+}
+
+export enum FishingStyleEnum {
+    FlyFishing = 'Fly Fishing',
+    SpinFishing = 'Spin Fishing',
 }
 
 export enum TripStatusEnum {
@@ -96,6 +102,7 @@ export const TripSchema = z.object({
     contentId: z.string(),
     startDate: z.string(),
     type: z.string(),
+    fishingStyle: z.nativeEnum(FishingStyleEnum).optional(),
     duration: z.nativeEnum(TripDurationEnum),
     createdAt: z.string(),
     updatedAt: z.string(),

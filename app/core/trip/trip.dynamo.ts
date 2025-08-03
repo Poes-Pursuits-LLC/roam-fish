@@ -3,7 +3,7 @@ import { Resource } from 'sst'
 import { getDynamoClient } from '~/clients/table.client'
 import { createFormattedDate } from '~/utils'
 import { nanoid } from 'nanoid'
-import { TripDurationEnum, TripStatusEnum } from './trip.model'
+import { FishingStyleEnum, TripDurationEnum, TripStatusEnum } from './trip.model'
 
 export const DynamoTrip = () => {
     const client = getDynamoClient()
@@ -13,7 +13,7 @@ export const DynamoTrip = () => {
         {
             model: {
                 entity: 'trip',
-                version: '2',
+                version: '3',
                 service: 'trip',
             },
             attributes: {
@@ -146,6 +146,11 @@ export const DynamoTrip = () => {
                     type: 'string',
                     required: true,
                     default: () => 'trip',
+                },
+                fishingStyle: {
+                    type: [...Object.values(FishingStyleEnum)] as const,
+                    required: false,
+                    default: () => FishingStyleEnum.FlyFishing,
                 },
             },
             indexes: {

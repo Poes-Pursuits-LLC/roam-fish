@@ -17,13 +17,13 @@ export default function TermsPage() {
             <div className="w-full max-w-4xl">
                 <BackButton />
                 <div className="nature-card">
-                    <h1 className="nature-header text-slate-800 mb-6">
+                    <h1 className="nature-header text-gray-800 mb-6">
                         Terms of Service
                     </h1>
 
-                    <div className="space-y-6 text-slate-700">
+                    <div className="space-y-6 text-gray-700">
                         <section>
-                            <h2 className="nature-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-gray-800 mb-3">
                                 1. Acceptance of Terms
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -36,7 +36,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="nature-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-gray-800 mb-3">
                                 2. Description of Service
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -49,7 +49,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="nature-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-gray-800 mb-3">
                                 3. User Accounts
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -62,7 +62,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="nature-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-gray-800 mb-3">
                                 4. User Conduct
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -89,7 +89,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="nature-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-gray-800 mb-3">
                                 5. Privacy Policy
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -100,7 +100,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="nature-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-gray-800 mb-3">
                                 6. Intellectual Property
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -113,7 +113,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="nature-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-gray-800 mb-3">
                                 7. Limitation of Liability
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -128,7 +128,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="nature-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-gray-800 mb-3">
                                 8. Termination
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -142,7 +142,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="nature-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-gray-800 mb-3">
                                 9. Changes to Terms
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -155,7 +155,7 @@ export default function TermsPage() {
                         </section>
 
                         <section>
-                            <h2 className="nature-subheader text-slate-800 mb-3">
+                            <h2 className="nature-subheader text-gray-800 mb-3">
                                 10. Contact Information
                             </h2>
                             <p className="text-lg leading-relaxed">
@@ -165,8 +165,8 @@ export default function TermsPage() {
                             </p>
                         </section>
 
-                        <div className="mt-8 pt-6 border-t-2 border-slate-300">
-                            <p className="text-sm text-slate-600">
+                        <div className="mt-8 pt-6 border-t-2 border-gray-300">
+                            <p className="text-sm text-gray-600">
                                 Last updated: {new Date().toLocaleDateString()}
                             </p>
                         </div>

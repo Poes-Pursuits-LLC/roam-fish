@@ -29,8 +29,8 @@ export const InfoCards = ({
 
             <div className="nature-card">
                 <div className="flex items-center gap-3 mb-2">
-                    <div className="p-1.5 bg-amber-100 rounded-lg">
-                        <Calendar className="w-4 h-4 text-amber-700" />
+                    <div className="p-1.5 bg-emerald-100 rounded-lg">
+                        <Calendar className="w-4 h-4 text-emerald-700" />
                     </div>
                     <span className="font-semibold text-slate-800">Date</span>
                 </div>
@@ -39,8 +39,8 @@ export const InfoCards = ({
 
             <div className="nature-card">
                 <div className="flex items-center gap-3 mb-2">
-                    <div className="p-1.5 bg-amber-100 rounded-lg">
-                        <Clock className="w-4 h-4 text-amber-700" />
+                    <div className="p-1.5 bg-emerald-100 rounded-lg">
+                        <Clock className="w-4 h-4 text-emerald-700" />
                     </div>
                     <span className="font-semibold text-slate-800">
                         Duration
