@@ -31,7 +31,7 @@ test('Visitor flow: Visitor can submit a trip with random fishing style, see its
 
     const fishingStyles = [FishingStyleEnum.FlyFishing, FishingStyleEnum.SpinFishing]
     const selectedFishingStyle = fishingStyles[Math.floor(Math.random() * fishingStyles.length)]
-    await page.locator(`input[value="${selectedFishingStyle}"]`).check()
+    await page.locator(`input[name="fishingStyle"][value="${selectedFishingStyle}"]`).check()
 
     await page.click('button[type="submit"]')
 
