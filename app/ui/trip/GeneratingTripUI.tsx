@@ -1,20 +1,18 @@
 import { InfoCards } from './Trip.InfoCards'
 
-interface GeneratingTripUIProps {
-    tripName?: string
-    destinationName: string
-    startDate: string
-    duration: string
-    headcount: string
-}
-
 export const GeneratingTripUI = ({
     tripName,
     destinationName,
     startDate,
     duration,
     headcount,
-}: GeneratingTripUIProps) => {
+}: {
+    tripName?: string
+    destinationName: string
+    startDate: string
+    duration: string
+    headcount: string
+}) => {
     return (
         <div className="min-h-screen bg-stone-100">
             <div className="px-4 sm:px-6 py-4 sm:py-8">
@@ -24,14 +22,14 @@ export const GeneratingTripUI = ({
                             {tripName || `Trip to ${destinationName}`}
                         </h1>
                     </div>
-                    
+
                     <InfoCards
                         destinationName={destinationName}
                         date={startDate}
                         duration={duration}
                         participants={headcount}
                     />
-                    
+
                     <div className="mt-12 bg-white rounded-lg shadow-sm p-8 text-center">
                         <div className="animate-pulse">
                             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
@@ -41,20 +39,17 @@ export const GeneratingTripUI = ({
                                 </svg>
                             </div>
                         </div>
-                        
+
                         <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                            Your trip is being generated
+                            Your trip is not quite ready yet.
                         </h2>
-                        <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                            Our AI is crafting the perfect fishing trip details for you. This usually takes 10-30 seconds.
-                        </p>
-                        
+
                         <div className="bg-blue-50 rounded-lg p-4 max-w-sm mx-auto">
                             <p className="text-sm text-blue-800">
                                 <strong>Tip:</strong> Refresh this page in a few moments to see your complete trip details.
                             </p>
                         </div>
-                        
+
                         <button
                             onClick={() => window.location.reload()}
                             className="mt-6 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"

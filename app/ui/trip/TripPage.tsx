@@ -20,11 +20,7 @@ export const TripPage = ({
 }) => {
     const { trip, userId, isSubscriber } = loaderData
     const canEditTrip = Boolean(userId)
-
-    // Check if trip is still being generated or if AI content is missing
-    const isGenerating = trip.status === TripStatusEnum.Generating || 
-        !trip.airport || !trip.cities || !trip.fishingSummary || 
-        !trip.weather || !trip.flies || !trip.hatches
+    const isGenerating = trip.status === TripStatusEnum.Generating
 
     if (isGenerating) {
         return (
