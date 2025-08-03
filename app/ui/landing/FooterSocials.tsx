@@ -13,7 +13,7 @@ export const FooterSocials = () => {
                 <li>
                     <NavLink
                         to={INSTAGRAM_URL}
-                        className="hover:text-emerald-600"
+                        className="text-slate-600 hover:text-emerald-600 transition-colors"
                     >
                         Instagram
                     </NavLink>
@@ -21,7 +21,7 @@ export const FooterSocials = () => {
                 <li>
                     <NavLink
                         to={FACEBOOK_URL}
-                        className="hover:text-emerald-600"
+                        className="text-slate-600 hover:text-emerald-600 transition-colors"
                     >
                         Facebook
                     </NavLink>

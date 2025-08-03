@@ -22,7 +22,7 @@ export const Notes = ({ notes }: { notes: string }) => {
                 value={localNotes}
                 onChange={(e) => setLocalNotes(e.target.value)}
                 placeholder="Add trip notes..."
-                className="w-full h-48 text-slate-800 font-semibold leading-relaxed bg-white p-4 border-2 border-black focus:outline-none cursor-pointer hover:bg-stone-100 transition-colors resize-none"
+                className="w-full h-48 text-slate-800 font-semibold leading-relaxed bg-white p-4 border border-slate-200 focus:outline-none cursor-pointer hover:bg-slate-50 transition-colors resize-none rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
             />
 
             <input type="hidden" name="notes" value={localNotes} />

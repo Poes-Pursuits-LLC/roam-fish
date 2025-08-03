@@ -125,8 +125,8 @@ const renderSummarySection = (
                 </h3>
                 <div className="text-center">
                     <div className="flex items-center justify-center mb-3">
-                        <div className="p-2 bg-amber-100 rounded-lg">
-                            <Crown className="w-5 h-5 text-amber-600" />
+                        <div className="p-2 bg-emerald-100 rounded-lg">
+                            <Crown className="w-5 h-5 text-emerald-600" />
                         </div>
                     </div>
                     <h4 className="text-lg font-semibold text-slate-800 mb-3">
