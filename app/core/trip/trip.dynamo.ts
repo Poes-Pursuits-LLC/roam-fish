@@ -67,6 +67,20 @@ export const DynamoTrip = () => {
                         type: 'string',
                     },
                 },
+                lures: {
+                    type: 'list',
+                    required: false,
+                    items: {
+                        type: 'string',
+                    },
+                },
+                techniques: {
+                    type: 'list',
+                    required: false,
+                    items: {
+                        type: 'string',
+                    },
+                },
                 fishingSummary: {
                     type: 'string',
                     required: false,

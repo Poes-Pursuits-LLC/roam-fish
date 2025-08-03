@@ -20,6 +20,8 @@ export interface Trip {
     notes?: string
     flies?: string[]
     hatches?: string[]
+    lures?: string[]
+    techniques?: string[]
     weather?: string
     fishingSummary?: string
     createdAt: string
@@ -93,6 +95,8 @@ export const TripSchema = z.object({
     notes: z.string().optional(),
     flies: z.array(z.string()).optional(),
     hatches: z.array(z.string()).optional(),
+    lures: z.array(z.string()).optional(),
+    techniques: z.array(z.string()).optional(),
     weather: z.string().optional(),
     fishingSummary: z.string().optional(),
     packingList: z.array(PackingListItemSchema),
