@@ -2,8 +2,9 @@ import { Resource } from 'sst'
 import z from 'zod'
 import { restClient } from '~/clients/rest.client'
 import { zodResponseFormat } from 'openai/helpers/zod'
+import { FishingStyleEnum } from '~/core/trip/trip.model'
 
-const ZResponseFormat = z.object({
+const ZFlyFishingResponseFormat = z.object({
     name: z.string(),
     cities: z.array(z.string()),
     airport: z.string(),
@@ -13,12 +14,34 @@ const ZResponseFormat = z.object({
     fishingSummary: z.string(),
 })
 
+const ZSpinFishingResponseFormat = z.object({
+    name: z.string(),
+    cities: z.array(z.string()),
+    airport: z.string(),
+    weather: z.string(),
+    lures: z.array(z.string()),
+    techniques: z.array(z.string()),
+    fishingSummary: z.string(),
+})
+
+const getResponseFormat = (fishingStyle: FishingStyleEnum) => {
+    switch (fishingStyle) {
+        case FishingStyleEnum.FlyFishing:
+            return ZFlyFishingResponseFormat
+        case FishingStyleEnum.SpinFishing:
+            return ZSpinFishingResponseFormat
+        default:
+            return ZFlyFishingResponseFormat
+    }
+}
+
 export const postTripDetails = async (inputs: {
     destinationName: string
     startDate: string
     duration: string
     headcount: string
     prompt: string
+    fishingStyle?: FishingStyleEnum
 }) => {
     const response = await restClient.post<{ request_id: string }>({
         url: `${Resource.XAiUrl.value}/chat/completions`,
@@ -47,7 +70,7 @@ export const postTripDetails = async (inputs: {
             ],
             deferred: true,
             response_format: zodResponseFormat(
-                ZResponseFormat,
+                getResponseFormat(inputs.fishingStyle || FishingStyleEnum.FlyFishing),
                 'tripContentResponse',
             ),
         },

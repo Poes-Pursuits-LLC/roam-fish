@@ -53,6 +53,56 @@ it('should be able to create and retrieve a trip', async () => {
     expect(fetchedTrip.fishingStyle).toBe(FishingStyleEnum.FlyFishing)
 })
 
+it('should be able to create and retrieve a spin fishing trip', async () => {
+    const createTripArgs = {
+        startDate: '2026-05-21',
+        duration: TripDurationEnum.Week,
+        userId: 'user123',
+        status: TripStatusEnum.Generating,
+        destinationName: 'Lake Superior',
+        headcount: '2',
+        fishingStyle: FishingStyleEnum.SpinFishing,
+    }
+
+    const returnedTripId = await fetch(`${SERVER_URL}/createTrip`, {
+        method: 'POST',
+        body: JSON.stringify(createTripArgs),
+    })
+        .then((res) => res.json())
+        .then((data) => data.tripId)
+
+    const fetchedTrip = await fetch(
+        `${SERVER_URL}/getTrip?tripId=${returnedTripId}`,
+        {
+            method: 'GET',
+        },
+    )
+        .then((response) => response.json())
+        .then((data) => data.trip)
+
+    expect(returnedTripId).toBeDefined()
+    expect(fetchedTrip).toBeDefined()
+    expect(fetchedTrip.tripId).toBe(returnedTripId)
+    expect(fetchedTrip.startDate).toBe('2026-05-21')
+    expect(fetchedTrip.duration).toBe(TripDurationEnum.Week)
+    expect(fetchedTrip.userId).toBe('user123')
+    expect(fetchedTrip.status).toBe(TripStatusEnum.Planned)
+    expect(fetchedTrip.destinationName).toBe('Lake Superior')
+    expect(fetchedTrip.headcount).toBe('2')
+    expect(fetchedTrip.airport).toBeDefined()
+    expect(Array.isArray(fetchedTrip.cities)).toBe(true)
+    expect(Array.isArray(fetchedTrip.lures)).toBe(true)
+    expect(Array.isArray(fetchedTrip.techniques)).toBe(true)
+    expect(fetchedTrip.weather).toBeDefined()
+    expect(fetchedTrip.fishingSummary).toBeDefined()
+    expect(fetchedTrip.notes).toBeDefined()
+    expect(fetchedTrip.contentId).toBeDefined()
+    expect(Array.isArray(fetchedTrip.packingList)).toBe(true)
+    expect(Array.isArray(fetchedTrip.budgetList)).toBe(true)
+    expect(Array.isArray(fetchedTrip.checkList)).toBe(true)
+    expect(fetchedTrip.fishingStyle).toBe(FishingStyleEnum.SpinFishing)
+})
+
 it('should still create a trip if no userId is provided, as this means it is a visitor trying the app', async () => {
     const createTripArgs = {
         startDate: '2026-05-21',
