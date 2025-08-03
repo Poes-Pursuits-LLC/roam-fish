@@ -353,6 +353,22 @@ vi.mock('./Tactics', () => ({
     ),
 }))
 
+vi.mock('./LicensingRegulations', () => ({
+    LicensingRegulations: ({
+        userId,
+        isSubscriber,
+    }: {
+        userId: string | null
+        isSubscriber: boolean
+    }) => (
+        <div data-testid="licensing-regulations">
+            <span>Licensing regulations component</span>
+            <span>{userId ? 'User logged in' : 'User not logged in'}</span>
+            <span>{isSubscriber ? 'Subscriber' : 'Not subscriber'}</span>
+        </div>
+    ),
+}))
+
 vi.mock('./Notes', () => ({
     Notes: ({ notes }: { notes: string }) => {
         const [localNotes, setLocalNotes] = useState(notes)
@@ -374,6 +390,27 @@ vi.mock('./Notes', () => ({
             </div>
         )
     },
+}))
+
+vi.mock('./GeneratingTripUI', () => ({
+    GeneratingTripUI: ({
+        tripName,
+        destinationName,
+    }: {
+        tripName?: string
+        destinationName: string
+        startDate: string
+        duration: string
+        headcount: string
+    }) => (
+        <div data-testid="generating-trip-ui">
+            <h1>{tripName || `Trip to ${destinationName}`}</h1>
+            <p>Your trip is being generated</p>
+            <p>Our AI is crafting the perfect fishing trip details for you. This usually takes 10-30 seconds.</p>
+            <span>{destinationName}</span>
+            <button onClick={() => window.location.reload()}>Refresh Page</button>
+        </div>
+    ),
 }))
 
 const createMockTrip = (overrides: Partial<Trip> = {}): Trip => ({
@@ -526,4 +563,69 @@ test('should submit the loaded trip data for all fields that are not changed alo
     expect(submittedFormData.get('packingList')).toBe(
         JSON.stringify(defaultLoaderData.trip.packingList),
     )
+})
+
+test('should display generating UI when trip status is Generating', async () => {
+    const generatingTrip = createMockTrip({
+        status: TripStatusEnum.Generating,
+    })
+    
+    const generatingLoaderData = {
+        ...defaultLoaderData,
+        trip: generatingTrip,
+    }
+
+    render(
+        <MemoryRouter>
+            <TripPage loaderData={generatingLoaderData} />
+        </MemoryRouter>,
+    )
+
+    // Should see navbar
+    expect(screen.getByTestId('navbar')).toBeInTheDocument()
+
+    // Should see generating message
+    expect(screen.getByText('Your trip is being generated')).toBeInTheDocument()
+    expect(screen.getByText(/Our AI is crafting the perfect fishing trip details/)).toBeInTheDocument()
+    
+    // Should see basic trip info
+    expect(screen.getByText('Yellowstone')).toBeInTheDocument()
+    
+    // Should see refresh button
+    expect(screen.getByText('Refresh Page')).toBeInTheDocument()
+
+    // Should NOT see the full trip details
+    expect(screen.queryByTestId('trip-header')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('travel-details')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('tactics')).not.toBeInTheDocument()
+})
+
+test('should display generating UI when AI-generated fields are missing', async () => {
+    const incompleteTrip = createMockTrip({
+        status: TripStatusEnum.Planned,
+        airport: undefined,
+        cities: undefined,
+        fishingSummary: undefined,
+        weather: undefined,
+        flies: undefined,
+        hatches: undefined,
+    })
+    
+    const incompleteLoaderData = {
+        ...defaultLoaderData,
+        trip: incompleteTrip,
+    }
+
+    render(
+        <MemoryRouter>
+            <TripPage loaderData={incompleteLoaderData} />
+        </MemoryRouter>,
+    )
+
+    // Should see generating UI even though status is Planned
+    expect(screen.getByText('Your trip is being generated')).toBeInTheDocument()
+    
+    // Should NOT see the full trip details that require AI-generated content
+    expect(screen.queryByTestId('travel-details')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('tactics')).not.toBeInTheDocument()
 })
