@@ -49,8 +49,11 @@ export const TripPage = ({
                             <Tactics
                                 fishingSummary={trip.fishingSummary!}
                                 weather={trip.weather!}
-                                flies={trip.flies!}
-                                hatches={trip.hatches!}
+                                flies={trip.flies}
+                                hatches={trip.hatches}
+                                lures={trip.lures}
+                                techniques={trip.techniques}
+                                fishingStyle={trip.fishingStyle}
                                 userId={userId}
                                 isSubscriber={isSubscriber}
                             />

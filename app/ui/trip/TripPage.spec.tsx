@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router'
 import { TripPage } from './TripPage'
 import { vi } from 'vitest'
 import type { Trip } from '~/core/trip/trip.model'
-import { TripDurationEnum, TripStatusEnum } from '~/core/trip/trip.model'
+import { TripDurationEnum, TripStatusEnum, FishingStyleEnum } from '~/core/trip/trip.model'
 import { useState } from 'react'
 
 const mockTripAction = vi.fn()
@@ -338,17 +338,26 @@ vi.mock('./Tactics', () => ({
         weather,
         flies,
         hatches,
+        lures,
+        techniques,
+        fishingStyle,
     }: {
         fishingSummary: string
         weather: string
-        flies: string
-        hatches: string
+        flies?: string[]
+        hatches?: string[]
+        lures?: string[]
+        techniques?: string[]
+        fishingStyle?: string
     }) => (
         <div data-testid="tactics">
-            <span>{fishingSummary}</span>
-            <span>{weather}</span>
-            <span>{flies}</span>
-            <span>{hatches}</span>
+            <span data-testid="fishing-summary">{fishingSummary}</span>
+            <span data-testid="weather">{weather}</span>
+            <span data-testid="fishing-style">{fishingStyle}</span>
+            {flies && <span data-testid="flies">{flies.join(', ')}</span>}
+            {hatches && <span data-testid="hatches">{hatches.join(', ')}</span>}
+            {lures && <span data-testid="lures">{lures.join(', ')}</span>}
+            {techniques && <span data-testid="techniques">{techniques.join(', ')}</span>}
         </div>
     ),
 }))
@@ -394,9 +403,38 @@ const createMockTrip = (overrides: Partial<Trip> = {}): Trip => ({
     weather: 'Sunny, 70°F',
     flies: ['Adams', 'Elk Hair Caddis'],
     hatches: ['Mayfly hatch at dusk'],
+    fishingStyle: FishingStyleEnum.FlyFishing,
     notes: 'Bring extra leaders',
     status: TripStatusEnum.Planned,
     contentId: 'content-123',
+    type: 'fishing',
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01',
+    ...overrides,
+})
+
+const createMockSpinFishingTrip = (overrides: Partial<Trip> = {}): Trip => ({
+    tripId: 'test-spin-trip-1',
+    name: 'Test Spin Fishing Trip',
+    destinationName: 'Lake Michigan',
+    startDate: '2024-07-01',
+    duration: TripDurationEnum.Weekend,
+    headcount: '3',
+    airport: 'ORD',
+    cities: ['Chicago', 'Milwaukee'],
+    budgetList: [{ id: '1', name: 'Boat Rental', price: '150' }],
+    packingList: [
+        { id: '1', category: 'Equipment', name: 'Spinning Rod', quantity: '1' },
+    ],
+    checkList: [{ id: '1', name: 'Book boat', completed: false }],
+    fishingSummary: 'Great bass fishing',
+    weather: 'Partly cloudy, 75°F',
+    lures: ['Spinner', 'Crankbait', 'Jig'],
+    techniques: ['Jigging', 'Trolling', 'Casting'],
+    fishingStyle: FishingStyleEnum.SpinFishing,
+    notes: 'Bring extra line',
+    status: TripStatusEnum.Planned,
+    contentId: 'content-456',
     type: 'fishing',
     createdAt: '2024-01-01',
     updatedAt: '2024-01-01',
@@ -526,4 +564,76 @@ test('should submit the loaded trip data for all fields that are not changed alo
     expect(submittedFormData.get('packingList')).toBe(
         JSON.stringify(defaultLoaderData.trip.packingList),
     )
+})
+
+test('should render fly fishing trip with appropriate tactics data', () => {
+    const flyFishingLoaderData = {
+        trip: createMockTrip(),
+        userId: 'user-123',
+        isSubscriber: true,
+    }
+
+    render(
+        <MemoryRouter>
+            <TripPage loaderData={flyFishingLoaderData} />
+        </MemoryRouter>,
+    )
+
+    const tactics = screen.getByTestId('tactics')
+    expect(tactics).toBeInTheDocument()
+
+    expect(screen.getByTestId('fishing-style')).toHaveTextContent(FishingStyleEnum.FlyFishing)
+    expect(screen.getByTestId('flies')).toHaveTextContent('Adams, Elk Hair Caddis')
+    expect(screen.getByTestId('hatches')).toHaveTextContent('Mayfly hatch at dusk')
+
+    // Should not show spin fishing data
+    expect(screen.queryByTestId('lures')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('techniques')).not.toBeInTheDocument()
+})
+
+test('should render spin fishing trip with appropriate tactics data', () => {
+    const spinFishingLoaderData = {
+        trip: createMockSpinFishingTrip(),
+        userId: 'user-123',
+        isSubscriber: true,
+    }
+
+    render(
+        <MemoryRouter>
+            <TripPage loaderData={spinFishingLoaderData} />
+        </MemoryRouter>,
+    )
+
+    const tactics = screen.getByTestId('tactics')
+    expect(tactics).toBeInTheDocument()
+
+    expect(screen.getByTestId('fishing-style')).toHaveTextContent(FishingStyleEnum.SpinFishing)
+    expect(screen.getByTestId('lures')).toHaveTextContent('Spinner, Crankbait, Jig')
+    expect(screen.getByTestId('techniques')).toHaveTextContent('Jigging, Trolling, Casting')
+
+    // Should not show fly fishing data
+    expect(screen.queryByTestId('flies')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('hatches')).not.toBeInTheDocument()
+})
+
+test('should handle trip without fishing style (backward compatibility)', () => {
+    const legacyTrip = createMockTrip({ fishingStyle: undefined })
+    const legacyLoaderData = {
+        trip: legacyTrip,
+        userId: 'user-123',
+        isSubscriber: true,
+    }
+
+    render(
+        <MemoryRouter>
+            <TripPage loaderData={legacyLoaderData} />
+        </MemoryRouter>,
+    )
+
+    const tactics = screen.getByTestId('tactics')
+    expect(tactics).toBeInTheDocument()
+
+    // Should still show fly fishing data as default
+    expect(screen.getByTestId('flies')).toHaveTextContent('Adams, Elk Hair Caddis')
+    expect(screen.getByTestId('hatches')).toHaveTextContent('Mayfly hatch at dusk')
 })

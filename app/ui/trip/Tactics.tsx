@@ -1,18 +1,25 @@
 import { Cloud, Fish, Target, Crown } from 'lucide-react'
 import { NavLink } from 'react-router'
+import { FishingStyleEnum } from '~/core/trip/trip.model'
 
 export const Tactics = ({
     fishingSummary,
     weather,
     flies,
     hatches,
+    lures,
+    techniques,
+    fishingStyle,
     userId,
     isSubscriber,
 }: {
     fishingSummary: string
     weather: string
-    flies: string[]
-    hatches: string[]
+    flies?: string[]
+    hatches?: string[]
+    lures?: string[]
+    techniques?: string[]
+    fishingStyle?: FishingStyleEnum
     userId: string | null
     isSubscriber: boolean
 }) => {
@@ -40,49 +47,99 @@ export const Tactics = ({
                     <p className="nature-body">{weather}</p>
                 </div>
 
-                <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="p-1.5 bg-slate-200 rounded-lg">
-                            <Target className="w-4 h-4 text-slate-600" />
-                        </div>
-                        <h3 className="font-semibold text-lg text-slate-800">
-                            Recommended Flies
-                        </h3>
-                    </div>
-                    <div className="space-y-2">
-                        {flies.map((fly, index) => (
-                            <div
-                                key={index}
-                                className="flex items-center gap-3"
-                            >
-                                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                                <span className="nature-body">{fly}</span>
+                {fishingStyle === FishingStyleEnum.FlyFishing ? (
+                    <>
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-1.5 bg-slate-200 rounded-lg">
+                                    <Target className="w-4 h-4 text-slate-600" />
+                                </div>
+                                <h3 className="font-semibold text-lg text-slate-800">
+                                    Recommended Flies
+                                </h3>
                             </div>
-                        ))}
-                    </div>
-                </div>
+                            <div className="space-y-2">
+                                {flies?.map((fly, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-center gap-3"
+                                    >
+                                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                        <span className="nature-body">{fly}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
 
-                <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="p-1.5 bg-slate-200 rounded-lg">
-                            <Target className="w-4 h-4 text-slate-600" />
-                        </div>
-                        <h3 className="font-semibold text-lg text-slate-800">
-                            Hatches
-                        </h3>
-                    </div>
-                    <div className="space-y-2">
-                        {hatches.map((hatch, index) => (
-                            <div
-                                key={index}
-                                className="flex items-center gap-3"
-                            >
-                                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                                <span className="nature-body">{hatch}</span>
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-1.5 bg-slate-200 rounded-lg">
+                                    <Target className="w-4 h-4 text-slate-600" />
+                                </div>
+                                <h3 className="font-semibold text-lg text-slate-800">
+                                    Hatches
+                                </h3>
                             </div>
-                        ))}
-                    </div>
-                </div>
+                            <div className="space-y-2">
+                                {hatches?.map((hatch, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-center gap-3"
+                                    >
+                                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                        <span className="nature-body">{hatch}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-1.5 bg-slate-200 rounded-lg">
+                                    <Target className="w-4 h-4 text-slate-600" />
+                                </div>
+                                <h3 className="font-semibold text-lg text-slate-800">
+                                    Recommended Lures
+                                </h3>
+                            </div>
+                            <div className="space-y-2">
+                                {lures?.map((lure, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-center gap-3"
+                                    >
+                                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                        <span className="nature-body">{lure}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-1.5 bg-slate-200 rounded-lg">
+                                    <Target className="w-4 h-4 text-slate-600" />
+                                </div>
+                                <h3 className="font-semibold text-lg text-slate-800">
+                                    Techniques
+                                </h3>
+                            </div>
+                            <div className="space-y-2">
+                                {techniques?.map((technique, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-center gap-3"
+                                    >
+                                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                        <span className="nature-body">{technique}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </>
+                )}
 
                 {renderSummarySection(userId, isSubscriber, fishingSummary)}
             </div>
