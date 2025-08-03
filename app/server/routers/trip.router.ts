@@ -50,7 +50,7 @@ const tripRouter = new Hono()
 
             if (trip!.status === TripStatusEnum.Generating) {
                 const [tripContent, getTripContentError] = await handleAsync(
-                    tripService.getTripDetails(trip!.contentId),
+                    tripService.getTripDetails(trip!.contentId, trip!.fishingStyle),
                 )
                 if (getTripContentError) {
                     console.error(
@@ -136,14 +136,16 @@ const tripRouter = new Hono()
                 duration: z.nativeEnum(TripDurationEnum),
                 headcount: z.string(),
                 userId: z.string().optional(),
+                fishingStyle: z.nativeEnum(FishingStyleEnum).optional(),
             }),
         ),
         async (c) => {
             const inputs = c.req.valid('json')
             console.info('Invoked server.createTrip with inputs:', inputs)
 
+            const fishingStyle = inputs.fishingStyle || FishingStyleEnum.FlyFishing
             const [prompt, getPromptContentError] = await handleAsync(
-                promptService.getPromptContent(FishingStyleEnum.FlyFishing),
+                promptService.getPromptContent(fishingStyle),
             )
             if (getPromptContentError) {
                 console.error(
@@ -158,6 +160,7 @@ const tripRouter = new Hono()
                 tripService.submitTripDetails({
                     prompt: prompt!,
                     ...inputs,
+                    fishingStyle,
                 }),
             )
             if (submitTripDetailsError) {
@@ -174,6 +177,7 @@ const tripRouter = new Hono()
                     ...inputs,
                     contentId: contentId!,
                     status: TripStatusEnum.Generating,
+                    fishingStyle,
                     packingList: createDefaultPackingList(inputs.headcount),
                     budgetList: createDefaultBudgetList(
                         inputs.headcount,

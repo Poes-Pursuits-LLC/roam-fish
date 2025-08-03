@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { MapPin, Calendar, Clock, Users } from 'lucide-react'
 import type { Destination } from '~/core/destination/destination.model'
 import { Form, NavLink } from 'react-router'
-import { TripDurationEnum } from '~/core/trip/trip.model'
+import { TripDurationEnum, FishingStyleEnum } from '~/core/trip/trip.model'
 import { SuspendedDestinationSelect } from './DestinationSelect'
+import { StyleRadio } from './StyleRadio'
 
 export const TripForm = ({
     promise,
@@ -20,6 +21,7 @@ export const TripForm = ({
     const [startDate, setStartDate] = useState('')
     const [duration, setDuration] = useState('')
     const [headcount, setHeadcount] = useState('')
+    const [fishingStyle, setFishingStyle] = useState<FishingStyleEnum>(FishingStyleEnum.FlyFishing)
 
     return (
         <div className="nature-card">
@@ -28,6 +30,7 @@ export const TripForm = ({
             </h2>
             <Form action="/plan-trip" method="post" className="space-y-6">
                 <input type="hidden" name="userId" value={userId ?? ''} />
+                <input type="hidden" name="fishingStyle" value={fishingStyle} />
                 <div>
                     <label className="flex items-center gap-3 text-base font-medium mb-2 text-slate-700">
                         <div className="p-1.5 bg-emerald-100 rounded-lg">
@@ -98,6 +101,12 @@ export const TripForm = ({
                         ))}
                     </select>
                 </div>
+
+                <StyleRadio
+                    value={fishingStyle}
+                    onChange={setFishingStyle}
+                    required
+                />
 
                 {(() => {
                     if (noMoreTrips) {

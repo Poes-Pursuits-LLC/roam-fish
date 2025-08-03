@@ -4,7 +4,7 @@ import type { Route } from '../routes/+types/plan-trip'
 import { createClerkClient } from '@clerk/backend'
 import { hc } from 'hono/client'
 import { getAuth } from '@clerk/react-router/ssr.server'
-import { TripDurationEnum } from '~/core/trip/trip.model'
+import { TripDurationEnum, FishingStyleEnum } from '~/core/trip/trip.model'
 
 vi.mock('@clerk/react-router/ssr.server', () => ({
     getAuth: vi.fn(),
@@ -61,6 +61,7 @@ it('should create a trip and update user metadata for an authenticated user who 
         startDate: '2025-01-01',
         headcount: '2',
         duration: 'DAYS_3_5',
+        fishingStyle: FishingStyleEnum.FlyFishing,
         userId,
     })
 
@@ -94,6 +95,7 @@ it('should create a trip and update user metadata for an authenticated user who 
             startDate: '2025-01-01',
             headcount: '2',
             duration: 'DAYS_3_5',
+            fishingStyle: FishingStyleEnum.FlyFishing,
             userId,
         },
     })
@@ -119,6 +121,7 @@ it('should create a trip and initialize freeTripCount for a user without it who 
         startDate: '2025-06-15',
         headcount: '1',
         duration: 'WEEK_1',
+        fishingStyle: FishingStyleEnum.SpinFishing,
         userId,
     })
 
@@ -162,6 +165,7 @@ it('should create a trip but not update metadata for an authenticated user who i
         startDate: '2025-08-01',
         headcount: '4',
         duration: TripDurationEnum.Weekend,
+        fishingStyle: FishingStyleEnum.FlyFishing,
         userId,
     })
 
@@ -193,6 +197,7 @@ it('should create a trip but not update metadata for an authenticated user who i
             startDate: '2025-08-01',
             headcount: '4',
             duration: TripDurationEnum.Weekend,
+            fishingStyle: FishingStyleEnum.FlyFishing,
             userId,
         },
     })
@@ -212,6 +217,7 @@ it('should create a trip but not update metadata for an unauthenticated user', a
         startDate: '2025-08-01',
         headcount: '4',
         duration: TripDurationEnum.Weekend,
+        fishingStyle: FishingStyleEnum.FlyFishing,
     })
 
     const postMock = vi.fn().mockResolvedValue({
@@ -242,6 +248,7 @@ it('should create a trip but not update metadata for an unauthenticated user', a
             startDate: '2025-08-01',
             headcount: '4',
             duration: TripDurationEnum.Weekend,
+            fishingStyle: FishingStyleEnum.FlyFishing,
         },
     })
     expect(mockedCreateClerkClient).not.toHaveBeenCalled()
@@ -256,6 +263,7 @@ it('should throw an error if any error is encountered so that our top-level erro
         startDate: '2025-08-01',
         headcount: '4',
         duration: TripDurationEnum.Weekend,
+        fishingStyle: FishingStyleEnum.FlyFishing,
     })
     const postMock = vi.fn().mockRejectedValue(testError)
     mockedHc.mockReturnValue({

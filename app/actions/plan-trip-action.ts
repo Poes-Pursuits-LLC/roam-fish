@@ -1,4 +1,4 @@
-import type { TripDurationEnum } from '~/core/trip/trip.model'
+import type { TripDurationEnum, FishingStyleEnum } from '~/core/trip/trip.model'
 import type { Route } from '../routes/+types/plan-trip'
 import type { AppType } from '~/server/main'
 import { hc } from 'hono/client'
@@ -12,6 +12,7 @@ export const planTripAction = async (args: Route.ActionArgs) => {
         const startDate = String(formData.get('startDate'))
         const headcount = String(formData.get('headcount'))
         const duration = String(formData.get('duration')) as TripDurationEnum
+        const fishingStyle = String(formData.get('fishingStyle')) as FishingStyleEnum
         const userId = formData.get('userId')
             ? String(formData.get('userId'))
             : null
@@ -27,6 +28,7 @@ export const planTripAction = async (args: Route.ActionArgs) => {
                     startDate,
                     headcount,
                     duration,
+                    fishingStyle,
                     ...(userId && { userId }),
                 },
             })

@@ -1,5 +1,6 @@
 import { DynamoTrip } from './trip.dynamo'
 import type { Trip } from './trip.model'
+import { FishingStyleEnum } from './trip.model'
 import { fetchTripDetails } from './helpers/fetch-trip-details'
 import { postTripDetails } from './helpers/post-trip-details'
 import { createFormattedDate, getTTL, isIntegrationTest } from '~/utils'
@@ -9,16 +10,28 @@ const getTrip = async (tripId: string) => {
     return trip
 }
 
-const getTripDetails = async (contentId: string) => {
+const getTripDetails = async (contentId: string, fishingStyle?: FishingStyleEnum) => {
     if (isIntegrationTest()) {
-        return {
+        const baseDetails = {
             fishingSummary: 'fishingSummary',
             weather: 'weather',
-            flies: ['fly1', 'fly2', 'fly3'],
-            hatches: ['hatch1', 'hatch2', 'hatch3'],
             notes: 'notes',
             airport: 'airport',
             cities: ['city1', 'city2', 'city3'],
+        }
+        
+        if (fishingStyle === FishingStyleEnum.SpinFishing) {
+            return {
+                ...baseDetails,
+                lures: ['lure1', 'lure2', 'lure3'],
+                techniques: ['technique1', 'technique2', 'technique3'],
+            }
+        }
+        
+        return {
+            ...baseDetails,
+            flies: ['fly1', 'fly2', 'fly3'],
+            hatches: ['hatch1', 'hatch2', 'hatch3'],
         }
     }
     const tripDetails = await fetchTripDetails(contentId)
@@ -45,6 +58,7 @@ const createTrip = async (
         | 'packingList'
         | 'budgetList'
         | 'checkList'
+        | 'fishingStyle'
     >,
 ) => {
     const { data } = await DynamoTrip()
@@ -62,6 +76,7 @@ const submitTripDetails = async (inputs: {
     startDate: string
     duration: string
     headcount: string
+    fishingStyle?: FishingStyleEnum
 }) => {
     if (isIntegrationTest()) {
         return 'contentId'
