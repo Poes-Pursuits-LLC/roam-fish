@@ -16,9 +16,9 @@ vi.mock('sst', () => ({
 }))
 
 const inputs = {
+    prompt: 'Fly fishing prompt content',
     destinationName: 'Yellowstone',
     startDate: '2024-06-01',
-    endDate: '2024-06-07',
     headcount: '2',
     duration: 'Weekend',
 }
@@ -36,7 +36,15 @@ it('should use the rest client to make a post request to the xAi completion endp
             body: expect.objectContaining({
                 messages: expect.arrayContaining([
                     expect.objectContaining({
-                        content: JSON.stringify(inputs),
+                        content: expect.stringContaining(inputs.prompt),
+                    }),
+                    expect.objectContaining({
+                        content: JSON.stringify({
+                            destinationName: 'Yellowstone',
+                            startDate: '2024-06-01',
+                            duration: 'Weekend',
+                            headcount: '2',
+                        }),
                     }),
                 ]),
             }),

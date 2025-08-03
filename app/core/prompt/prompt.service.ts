@@ -1,49 +1,19 @@
 import { DynamoPrompt } from './prompt.dynamo'
+import { FishingStyleEnum } from '../trip/trip.model'
 import type { Prompt } from './prompt.model'
-import { createFormattedDate, getTTL } from '~/utils'
 
-const getPrompt = async (promptId: string) => {
-    const { data: prompt } = await DynamoPrompt().get({ promptId }).go()
-    return prompt
+const getPromptContent = async (fishingStyle: FishingStyleEnum) => {
+    const { data: prompt } = await DynamoPrompt().get({ fishingStyle }).go()
+    return prompt?.content ?? null
 }
 
-const getUserPrompts = async (userId: string, count?: number) => {
-    const { data: prompts } = await DynamoPrompt()
-        .query.byUserId({ userId })
-        .go({ order: 'desc', ...(count && { count }) })
-    return prompts
-}
-
-const createPrompt = async (
-    prompt: Pick<Prompt, 'content' | 'userId'>,
-) => {
-    const { data } = await DynamoPrompt()
-        .put({
-            ...prompt,
-            ...(process.env.CICD_WEB_URL && { expireAt: getTTL(1) }),
-        })
-        .go()
-    return data.promptId
-}
-
-const updatePrompt = async (promptId: string, promptFields: Partial<Prompt>) => {
+const createPrompt = async (prompt: Pick<Prompt, 'content' | 'fishingStyle'>) => {
     await DynamoPrompt()
-        .patch({ promptId })
-        .set({
-            ...promptFields,
-            updatedAt: createFormattedDate(),
-        })
+        .put(prompt)
         .go()
-}
-
-const deletePrompt = async (promptId: string) => {
-    await DynamoPrompt().delete({ promptId }).go()
 }
 
 export const promptService = {
-    getPrompt,
-    getUserPrompts,
+    getPromptContent,
     createPrompt,
-    updatePrompt,
-    deletePrompt,
 }

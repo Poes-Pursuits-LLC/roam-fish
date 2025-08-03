@@ -7,11 +7,13 @@ import {
     TripDurationEnum,
     TripStatusEnum,
     TripSchema,
+    FishingStyleEnum,
 } from '~/core/trip/trip.model'
 import { createDefaultPackingList } from '~/core/trip/helpers/create-default-packing-list'
 import { HTTPException } from 'hono/http-exception'
 import { createDefaultBudgetList } from '~/core/trip/helpers/create-default-budget'
 import { createDefaultCheckList } from '~/core/trip/helpers/create-defaultcheckList'
+import { promptService } from '~/core/prompt/prompt.service'
 
 const updatableTripFields = TripSchema.pick({
     name: true,
@@ -140,8 +142,23 @@ const tripRouter = new Hono()
             const inputs = c.req.valid('json')
             console.info('Invoked server.createTrip with inputs:', inputs)
 
+            const [prompt, getPromptContentError] = await handleAsync(
+                promptService.getPromptContent(FishingStyleEnum.FlyFishing),
+            )
+            if (getPromptContentError) {
+                console.error(
+                    `Error getting prompt content: ${getPromptContentError.message}`,
+                )
+                throw new HTTPException(500, {
+                    message: getPromptContentError.message,
+                })
+            }
+
             const [contentId, submitTripDetailsError] = await handleAsync(
-                tripService.submitTripDetails(inputs),
+                tripService.submitTripDetails({
+                    prompt: prompt!,
+                    ...inputs,
+                }),
             )
             if (submitTripDetailsError) {
                 console.error(

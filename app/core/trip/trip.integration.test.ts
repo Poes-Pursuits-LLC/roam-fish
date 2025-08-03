@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest'
-import { TripDurationEnum, TripStatusEnum } from './trip.model'
+import { FishingStyleEnum, TripDurationEnum, TripStatusEnum } from './trip.model'
 import { v4 } from 'uuid'
 
 const SERVER_URL = `http://localhost:${process.env.SERVER_PORT}`
@@ -50,6 +50,7 @@ it('should be able to create and retrieve a trip', async () => {
     expect(Array.isArray(fetchedTrip.packingList)).toBe(true)
     expect(Array.isArray(fetchedTrip.budgetList)).toBe(true)
     expect(Array.isArray(fetchedTrip.checkList)).toBe(true)
+    expect(fetchedTrip.fishingStyle).toBe(FishingStyleEnum.FlyFishing)
 })
 
 it('should still create a trip if no userId is provided, as this means it is a visitor trying the app', async () => {

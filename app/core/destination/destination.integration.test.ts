@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid'
 
 const SERVER_URL = `http://localhost:${process.env.SERVER_PORT}`
 
-it('should retrieve all destinations from DynamoDB', async () => {
+it('should retrieve all destinations', async () => {
     const testDestinations: Destination[] = [
         {
             destinationId: nanoid(),

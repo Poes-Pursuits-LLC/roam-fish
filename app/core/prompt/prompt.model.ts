@@ -1,18 +1,10 @@
-import z from 'zod'
+import { FishingStyleEnum } from '../trip/trip.model'
 
 export interface Prompt {
     promptId: string
     content: string
-    userId?: string
+    fishingStyle: FishingStyleEnum
     createdAt: string
     updatedAt: string
     expireAt?: number
-}
-
-export const PromptSchema = z.object({
-    promptId: z.string(),
-    content: z.string(),
-    userId: z.string().optional(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
-})
+}   

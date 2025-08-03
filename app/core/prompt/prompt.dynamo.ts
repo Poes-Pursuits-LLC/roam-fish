@@ -2,7 +2,8 @@ import { Entity } from 'electrodb'
 import { nanoid } from 'nanoid'
 import { Resource } from 'sst'
 import { getDynamoClient } from '~/clients/table.client'
-import { createFormattedDate, getTTL } from '~/utils'
+import { createFormattedDate } from '~/utils'
+import { FishingStyleEnum } from '../trip/trip.model'
 
 export const DynamoPrompt = () => {
     const client = getDynamoClient()
@@ -21,13 +22,14 @@ export const DynamoPrompt = () => {
                     required: true,
                     default: () => nanoid().toLowerCase(),
                 },
+                fishingStyle: {
+                    type: [...Object.values(FishingStyleEnum)] as const,
+                    required: true,
+                    default: () => FishingStyleEnum.FlyFishing,
+                },
                 content: {
                     type: 'string',
                     required: true,
-                },
-                userId: {
-                    type: 'string',
-                    required: false,
                 },
                 createdAt: {
                     type: 'string',
@@ -45,19 +47,14 @@ export const DynamoPrompt = () => {
                 },
                 type: {
                     type: 'string',
-                    required: true,
+                    required: false,
                     default: () => 'prompt',
                 },
             },
             indexes: {
                 primary: {
-                    pk: { field: 'pk', composite: ['promptId'] },
+                    pk: { field: 'pk', composite: ['fishingStyle'] },
                     sk: { field: 'sk', composite: [] },
-                },
-                byUserId: {
-                    index: 'gsi1pk-gsi1sk-index',
-                    pk: { field: 'gsi1pk', composite: ['userId'] },
-                    sk: { field: 'gsi1sk', composite: ['createdAt'] },
                 },
             },
         },

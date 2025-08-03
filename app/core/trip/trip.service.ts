@@ -57,6 +57,7 @@ const createTrip = async (
 }
 
 const submitTripDetails = async (inputs: {
+    prompt: string
     destinationName: string
     startDate: string
     duration: string
