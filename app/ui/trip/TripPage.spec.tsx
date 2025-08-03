@@ -353,6 +353,22 @@ vi.mock('./Tactics', () => ({
     ),
 }))
 
+vi.mock('./LicensingRegulations', () => ({
+    LicensingRegulations: ({
+        userId,
+        isSubscriber,
+    }: {
+        userId: string | null
+        isSubscriber: boolean
+    }) => (
+        <div data-testid="licensing-regulations">
+            <span>Licensing regulations component</span>
+            <span>{userId ? 'User logged in' : 'User not logged in'}</span>
+            <span>{isSubscriber ? 'Subscriber' : 'Not subscriber'}</span>
+        </div>
+    ),
+}))
+
 vi.mock('./Notes', () => ({
     Notes: ({ notes }: { notes: string }) => {
         const [localNotes, setLocalNotes] = useState(notes)
@@ -526,4 +542,26 @@ test('should submit the loaded trip data for all fields that are not changed alo
     expect(submittedFormData.get('packingList')).toBe(
         JSON.stringify(defaultLoaderData.trip.packingList),
     )
+})
+
+test('should display generating UI when trip status is Generating', async () => {
+    const generatingTrip = createMockTrip({
+        status: TripStatusEnum.Generating,
+    })
+
+    const generatingLoaderData = {
+        ...defaultLoaderData,
+        trip: generatingTrip,
+    }
+
+    render(
+        <MemoryRouter>
+            <TripPage loaderData={generatingLoaderData} />
+        </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Your trip is not quite ready yet.')).toBeInTheDocument()
+    expect(screen.getByText('Yellowstone')).toBeInTheDocument()
+    expect(screen.getByText('Refresh Page')).toBeInTheDocument()
+    expect(screen.queryByTestId('tactics')).not.toBeInTheDocument()
 })

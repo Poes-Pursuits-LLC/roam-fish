@@ -10,6 +10,8 @@ import { Budget } from './Budget'
 import { PackingList } from './PackingList'
 import { Checklist } from './Checklist'
 import { LicensingRegulations } from './LicensingRegulations'
+import { GeneratingTripUI } from './GeneratingTripUI'
+import { TripStatusEnum } from '~/core/trip/trip.model'
 
 export const TripPage = ({
     loaderData,
@@ -18,6 +20,22 @@ export const TripPage = ({
 }) => {
     const { trip, userId, isSubscriber } = loaderData
     const canEditTrip = Boolean(userId)
+    const isGenerating = trip.status === TripStatusEnum.Generating
+
+    if (isGenerating) {
+        return (
+            <>
+                <Navbar userId={userId} isSubscriber={isSubscriber} />
+                <GeneratingTripUI
+                    tripName={trip.name}
+                    destinationName={trip.destinationName}
+                    startDate={trip.startDate}
+                    duration={trip.duration}
+                    headcount={trip.headcount}
+                />
+            </>
+        )
+    }
 
     return (
         <div className="min-h-screen bg-stone-100">
