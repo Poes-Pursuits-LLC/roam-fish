@@ -12,6 +12,8 @@ permissions:
 jobs:
     merge-to-main:
         runs-on: ubuntu-latest
+        env:
+            CICD_WEB_URL: ${{ secrets.CICD_WEB_URL }}
         steps:
             - name: Checkout develop branch
               uses: actions/checkout@v4
@@ -52,8 +54,6 @@ jobs:
             - name: Install Playwright Browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               run: npx playwright install chromium & npx playwright install webkit --with-deps
-              env:
-                  CICD_WEB_URL: ${{ secrets.CICD_WEB_URL }}
 
             - name: Run e2e tests
               run: npm run e2e-tests
