@@ -10,7 +10,10 @@ const getTrip = async (tripId: string) => {
     return trip
 }
 
-const getTripDetails = async (contentId: string, fishingStyle?: FishingStyleEnum) => {
+const getTripDetails = async (
+    contentId: string,
+    fishingStyle?: FishingStyleEnum,
+) => {
     if (isIntegrationTest()) {
         const baseDetails = {
             fishingSummary: 'fishingSummary',
@@ -19,7 +22,7 @@ const getTripDetails = async (contentId: string, fishingStyle?: FishingStyleEnum
             airport: 'airport',
             cities: ['city1', 'city2', 'city3'],
         }
-        
+
         if (fishingStyle === FishingStyleEnum.SpinFishing) {
             return {
                 ...baseDetails,
@@ -27,7 +30,7 @@ const getTripDetails = async (contentId: string, fishingStyle?: FishingStyleEnum
                 techniques: ['technique1', 'technique2', 'technique3'],
             }
         }
-        
+
         return {
             ...baseDetails,
             flies: ['fly1', 'fly2', 'fly3'],
@@ -61,6 +64,13 @@ const createTrip = async (
         | 'fishingStyle'
     >,
 ) => {
+    console.log('=== TTL Debug ===')
+    console.log('CICD_WEB_URL:', process.env.CICD_WEB_URL)
+    console.log('CICD_WEB_URL type:', typeof process.env.CICD_WEB_URL)
+    console.log('CICD_WEB_URL truthy check:', !!process.env.CICD_WEB_URL)
+    console.log('TTL value:', process.env.CICD_WEB_URL ? getTTL(1) : 'NOT SET')
+    console.log('================')
+
     const { data } = await DynamoTrip()
         .put({
             ...trip,

@@ -12,8 +12,6 @@ permissions:
 jobs:
     merge-to-main:
         runs-on: ubuntu-latest
-        env:
-            CICD_WEB_URL: ${{ secrets.CICD_WEB_URL }}
         steps:
             - name: Checkout develop branch
               uses: actions/checkout@v4
@@ -31,6 +29,16 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-npm-
 
+            - name: Cache Playwright browsers
+              uses: actions/cache@v3
+              id: playwright-cache
+              with:
+                  path: |
+                      ~/.cache/ms-playwright
+                  key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-playwright-
+
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
@@ -42,7 +50,10 @@ jobs:
               run: npm ci
 
             - name: Install Playwright Browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
               run: npx playwright install chromium & npx playwright install webkit --with-deps
+              env:
+                  CICD_WEB_URL: ${{ secrets.CICD_WEB_URL }}
 
             - name: Run e2e tests
               run: npm run e2e-tests
