@@ -50,7 +50,10 @@ const tripRouter = new Hono()
 
             if (trip!.status === TripStatusEnum.Generating) {
                 const [tripContent, getTripContentError] = await handleAsync(
-                    tripService.getTripDetails(trip!.contentId, trip!.fishingStyle),
+                    tripService.getTripDetails(
+                        trip!.contentId,
+                        trip!.fishingStyle,
+                    ),
                 )
                 if (getTripContentError) {
                     console.error(
@@ -143,7 +146,8 @@ const tripRouter = new Hono()
             const inputs = c.req.valid('json')
             console.info('Invoked server.createTrip with inputs:', inputs)
 
-            const fishingStyle = inputs.fishingStyle || FishingStyleEnum.FlyFishing
+            const fishingStyle =
+                inputs.fishingStyle || FishingStyleEnum.FlyFishing
             const [prompt, getPromptContentError] = await handleAsync(
                 promptService.getPromptContent(fishingStyle),
             )
@@ -165,10 +169,10 @@ const tripRouter = new Hono()
             )
             if (submitTripDetailsError) {
                 console.error(
-                    `Error submitting trip details: ${submitTripDetailsError.message}`,
+                    `Error submitting trip details: ${JSON.stringify(submitTripDetailsError)}`,
                 )
                 throw new HTTPException(500, {
-                    message: submitTripDetailsError.message,
+                    message: JSON.stringify(submitTripDetailsError),
                 })
             }
 
