@@ -24,17 +24,6 @@ const ZSpinFishingResponseFormat = z.object({
     fishingSummary: z.string(),
 })
 
-const getResponseFormat = (fishingStyle: FishingStyleEnum) => {
-    switch (fishingStyle) {
-        case FishingStyleEnum.FlyFishing:
-            return ZFlyFishingResponseFormat
-        case FishingStyleEnum.SpinFishing:
-            return ZSpinFishingResponseFormat
-        default:
-            return ZFlyFishingResponseFormat
-    }
-}
-
 export const postTripDetails = async (inputs: {
     destinationName: string
     startDate: string
@@ -43,6 +32,7 @@ export const postTripDetails = async (inputs: {
     prompt: string
     fishingStyle?: FishingStyleEnum
 }) => {
+    console.info('debug inputs', inputs)
     const response = await restClient.post<{ request_id: string }>({
         url: `${Resource.XAiUrl.value}/chat/completions`,
         headers: {
@@ -70,12 +60,28 @@ export const postTripDetails = async (inputs: {
             ],
             deferred: true,
             response_format: zodResponseFormat(
-                getResponseFormat(inputs.fishingStyle || FishingStyleEnum.FlyFishing),
+                getResponseFormat(
+                    inputs.fishingStyle || FishingStyleEnum.FlyFishing,
+                ),
                 'tripContentResponse',
             ),
         },
     })
+    console.info('debug response', response)
 
     const contentId = response.request_id
     return contentId
 }
+
+// Helpers
+const getResponseFormat = (fishingStyle: FishingStyleEnum) => {
+    switch (fishingStyle) {
+        case FishingStyleEnum.FlyFishing:
+            return ZFlyFishingResponseFormat
+        case FishingStyleEnum.SpinFishing:
+            return ZSpinFishingResponseFormat
+        default:
+            return ZFlyFishingResponseFormat
+    }
+}
+// Helpers
